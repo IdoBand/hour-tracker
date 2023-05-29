@@ -5,17 +5,16 @@ import { flexCenter } from '@/util/mixin';
 import { NextSVG } from '@/util/icons'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { signInUser } from '@/redux/userSlice';
-import { FormProps } from '../dashboard/interface';
+
 interface TextLineInputProps {
     name: string
-    defaultValue: string
+    label: string
     type?: 'text' | 'password'
     isRequired: boolean
     autoComplete?: string
 }
 
-
-const SignIn = ({actionOnSubmit}: FormProps) => {
+const SignIn = (actionOnSubmit: any) => {
     const [signUp, setSignUp] = useState<boolean>(false)
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
     const user = useAppSelector(state => state.userSlice)
@@ -32,7 +31,7 @@ const SignIn = ({actionOnSubmit}: FormProps) => {
     }
 
     const TextLineInput = 
-        ({name, defaultValue, type='text', isRequired, autoComplete}: TextLineInputProps) => {
+        ({name, label, type='text', isRequired, autoComplete}: TextLineInputProps) => {
             return(
                 <div className='w-full relative py-2'>
                     <input 
@@ -48,7 +47,7 @@ const SignIn = ({actionOnSubmit}: FormProps) => {
                         peer-valid:translate-x-2 peer-valid:-translate-y-3 peer-valid:bg-light
                         peer-valid:pl-1 peer-valid:pr-1 peer-valid:pt-0 peer-valid:pb-0 
                         `}
-                    >{defaultValue}</span>
+                    >{label}</span>
                     <span className={`${errors[name] ? 'text-red-500' : 'text-light'} pointer-events-none w-max-content block`}>{errors[name] ? `${name} is required` : '.'}</span>
                     <button type='button'
                         className={`absolute right-2 top-7 text-xs bg-slate-200 px-1 rounded-full`}
@@ -80,8 +79,8 @@ const SignIn = ({actionOnSubmit}: FormProps) => {
         {!signUp && 
         <>
         <div className={`w-full ${flexCenter} flex-col gap-2`}>
-            <TextLineInput name='email' defaultValue='Email' isRequired={true}/>
-            <TextLineInput name='password' defaultValue='Password' type='password' isRequired={true}/>
+            <TextLineInput name='email' label='Email' isRequired={true}/>
+            <TextLineInput name='password' label='Password' type='password' isRequired={true}/>
         </div>
         <button type="button" className='underline text-blue-500 mt-2 mb-8'>I forgot my password</button>
         <div className={`${flexCenter} w-full gap-4 `}>
@@ -103,16 +102,16 @@ const SignIn = ({actionOnSubmit}: FormProps) => {
         {signUp &&
         <>
             <div className={`w-full ${flexCenter} flex-col gap-2 py-2`}>
-                <TextLineInput name='firstName' defaultValue='First Name' isRequired={true} />
-                <TextLineInput name='lastName' defaultValue='Last Name' isRequired={true} />
-                <TextLineInput name='email' defaultValue='Email' isRequired={true} />
-                <TextLineInput name='repeatEmail' defaultValue='Repeat Email' isRequired={true} autoComplete='current-password' />
+                <TextLineInput name='firstName' label='First Name' isRequired={true} />
+                <TextLineInput name='lastName' label='Last Name' isRequired={true} />
+                <TextLineInput name='email' label='Email' isRequired={true} />
+                <TextLineInput name='repeatEmail' label='Repeat Email' isRequired={true} autoComplete='current-password' />
                 <span className='px-0 py-2 lg:px-0'>Your password is personal and should not be shared</span>
-                <TextLineInput name='password' defaultValue='Password' type='password' isRequired={true} />
-                <TextLineInput name='repeatPassword' defaultValue='Repeat Password' type='password' isRequired={true} />
+                <TextLineInput name='password' label='Password' type='password' isRequired={true} />
+                <TextLineInput name='repeatPassword' label='Repeat Password' type='password' isRequired={true} />
                 <span className='px-8 lg:px-0'>In case of loosing your password</span>
-                <TextLineInput name='secondEmail' defaultValue='2nd Email' isRequired={false} />
-                <TextLineInput name='secondEmail' defaultValue='Repeat 2nd Email' isRequired={false} />
+                <TextLineInput name='secondEmail' label='2nd Email' isRequired={false} />
+                <TextLineInput name='secondEmail' label='Repeat 2nd Email' isRequired={false} />
             </div>
             <div className={`${flexCenter} w-full gap-4 mt-4`}>
                 <Button onClick={handleSubmit} type='submit' theme='full' className='' text='Create Account' />

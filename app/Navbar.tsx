@@ -17,7 +17,7 @@ const Navbar = () => {
     <header className={`flex justify-between relative px-16 items-center py-2 border-b border-solid border-grayBorder`}>
       <Link href={'/'} className={`${flexCenter} gap-1`}>
       <LogoSVG className={``} height='28'/>
-      <h1 className={`${flexCenter} font-medium`}>Hour Tracker</h1>
+      <h1 className={`${flexCenter} font-bold`}>Hour Tracker</h1>
       </Link>
       <nav className={`${flexCenter} gap-4`}>
         {user ? 

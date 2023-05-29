@@ -1,7 +1,7 @@
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { signOutUser } from '@/redux/userSlice';
 import Button from './Button';
-import { FormProps }  from '../dashboard/interface'
+import { FormProps }  from '../dashboard/WorkPlace'
 import { flexCenter } from '@/util/mixin';
 const SignOut = ({actionOnSubmit}: FormProps) => {
     const user = useAppSelector(state => state.userSlice.user)

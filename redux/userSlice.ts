@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { WorkPlace, Shift, PLACES_OF_WORK } from '@/app/dashboard/WorkPlace'
 
 interface User {
     userId: string
@@ -13,7 +14,13 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    user: null
+    user: {
+        userId: '123456',
+        email: 'dummyuser@gmail.com',
+        firstName: 'Dummy',
+        lastName: 'User',
+        lastLogin: 'time string',
+    }
 }
 const userSlice = createSlice({
     name: 'user',
@@ -29,9 +36,12 @@ const userSlice = createSlice({
         },
         signOutUser(state) {
             state.user = null
-        }
+        },
     }
 })
 
-export const { signInUser, signOutUser } = userSlice.actions
+export const { 
+    signInUser,
+    signOutUser,
+    } = userSlice.actions
 export default userSlice.reducer
