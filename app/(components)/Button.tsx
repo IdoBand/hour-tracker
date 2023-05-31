@@ -1,5 +1,3 @@
-import { type } from "os"
-
 interface ButtonProps{
     onClick?: any
     theme: 'full' | 'blank'

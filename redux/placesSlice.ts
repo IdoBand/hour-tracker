@@ -1,6 +1,6 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
-import { WorkPlace, PLACES_OF_WORK } from '@/app/dashboard/WorkPlace'
-import { Shift } from '@/app/dashboard/workPlaceStats/Shift'
+import { WorkPlace } from '@/app/dashboard/WorkPlace'
+import { PLACES_OF_WORK } from './dummyUser'
 interface PlacesState {
     places: any[],
     currentWorkPlace: null | WorkPlace
@@ -72,8 +72,6 @@ const placesSlice = createSlice({
             },
         setCurrentWorkPlace: {
             reducer: (state, action: PayloadAction<string>) => {
-                console.log(action.payload);
-                
                 for (const place of state.places) {
                     if (action.payload === place.placeId) {
                         state.currentWorkPlace = place

@@ -20,7 +20,7 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
     const user = useAppSelector(state => state.userSlice.user)
     const dispatch = useAppDispatch()
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
-    const { visualCalendar, selectedDay } = useCalendar(false)
+    const { visualCalendar, selectedDay } = useCalendar(false, [])
     interface TextLineInputProps {
         name: string
         label: string
@@ -47,7 +47,7 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
     }
     const NumberLineInput = ({name, label, type='text', isRequired, autoComplete}: TextLineInputProps) => {
         return (
-            <div className={`flex flex-col  mb-6`}>
+            <div className={`flex flex-col mb-6`}>
                 <div className={`flex justify-between w-full md:flex-col`}>
                     <label>{label}</label>
                     <input
@@ -60,6 +60,14 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
                 <span className={`${errors[name] ? 'text-red-500' : 'text-light'} pointer-events-none w-max-content block md:text-xs`}>{errors[name] && `${label} is required`}</span>
             </div>
             )
+    }
+    const CheckBoxInput = (name: string, label: string) => {
+        return (
+            <>
+                <label>{label}</label>
+                <input type='checkbox' defaultChecked {...register(name, {required: false})}/>
+            </>
+        )
     }
     function extractData(data: any) {
         data.selectedDay = format(selectedDay, 'yyyy-MM-dd')
@@ -75,14 +83,10 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
             hoursPastMonth: 0,
             totalHours: 0,
             wagePerHour: data.wagePerHour,
+            isBreakPaid: data.isCurrent,
             link: '',
             checked: false,
             shifts: [],
-            
-            
-            
-            
-            
         }
             
         
@@ -99,7 +103,7 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
         lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
         >
         <h1  className={`w-full ${dashBoardWorkPlaceHeader}`}>Add a New Work Place</h1>
-        <div className={`w-full ${flexCenter} md:flex-col`}>
+        <div className={`w-full flex justify-center items-start mt-4 md:flex-col`}>
             <div className={`w-1/2 flex flex-col md:w-full`}>
                 <TextLineInput label='Work Place Name' name='workPlaceName' type='text' isRequired={true} />
                 <NumberLineInput label='Wage Per Hour' name='wagePerHour' type='number' isRequired={true} />
@@ -107,19 +111,23 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
                     <label>Starting Date</label>
                     <label className='w-2/5 md:w-full rounded-md bg-white'>{format(selectedDay, 'dd-MM-yyyy')}</label>
                 </div>
+                <div className={`w-full text-center mb-6 `}>
+                    Check V if the answer is yes
+                </div>
                 <div className={`${addNewWorkPlaceFormSection}`}>
-                    <label>Currently Employed There?</label>
-                    <input type='checkbox' defaultChecked {...register('isCurrent', {required: false})}/>
+                    {CheckBoxInput('isCurrent', 'Currently Employed There?')}
+                </div>
+                <div className={`${addNewWorkPlaceFormSection}`}>
+                    {CheckBoxInput('isBreakPaid', 'Are you payed on break time?')}
                 </div>
                 <div className={`${addNewWorkPlaceFormSection}`}>
                     <label>Notes</label>
                     <textarea
                         {...register('notes', {required: false})}
                         className='w-2/5 md:w-full' />
-                    
                 </div>
             </div>
-            <div className={`w-1/2 ${flexCenter} flex-col md:w-full`}>
+            <div className={`w-1/2 flex justify-center items-start flex-col md:w-full`}>
                 {visualCalendar}
             </div>
         </div>

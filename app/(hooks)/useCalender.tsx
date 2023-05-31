@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState, useRef } from 'react'
 import {
   add,
   eachDayOfInterval,
@@ -15,8 +15,10 @@ import {
   parseISO,
   startOfToday,
 } from 'date-fns'
+import Button from '../(components)/Button'
+import { flexCenter } from '@/util/mixin'
 
-const colStartClasses = [
+const COL_START_CLASSES = [
   '',
   'col-start-2',
   'col-start-3',
@@ -25,72 +27,63 @@ const colStartClasses = [
   'col-start-6',
   'col-start-7',
 ]
-
-interface Meeting {
-    id: number
-    name: string
-    imageUrl: string
-    startDatetime: string
-    endDatetime: string
-
-}
-const meetings: Meeting[] = [
-  {
-    id: 1,
-    name: 'Leslie Alexander',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-05-11T13:00',
-    endDatetime: '2023-05-11T14:30',
-  },
-  {
-    id: 2,
-    name: 'Michael Foster',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-05-20T09:00',
-    endDatetime: '2023-05-20T11:30',
-  },
-  {
-    id: 3,
-    name: 'Dries Vincent',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-05-20T17:00',
-    endDatetime: '2023-05-20T18:30',
-  },
-  {
-    id: 4,
-    name: 'Leslie Alexander',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-06-09T13:00',
-    endDatetime: '2023-06-09T14:30',
-  },
-  {
-    id: 5,
-    name: 'Michael Foster',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-05-13T11:30:30',
-    endDatetime: '2023-05-13T11:50:30',
-  },
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
 ]
-
-
+const yearsAndMonthsMenuContainer = 'flex flex-col rounded-md overflow-auto scrollbar-thin scrollbar-thumb-gray-200'
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
-
-export function useCalendar(isSideBar: boolean) {
+const chosenYearDateValue = 'rounded-md border border-solid border-black text-sky-500'
+export function useCalendar(isSideBar: boolean, events?: any) {
     const today = startOfToday()
     const [selectedDay, setSelectedDay] = useState<Date>(today)
-    const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMM-yyyy'))
-    const firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
+    // ***current*** Month / Year is what displayed in calender itself after approving.
+    // ***chosen*** Month / Year is what displayed when you pick a year/month from the menu before approving.
+    const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMMM'))
+    const [currentYear, setCurrentYear] = useState<string>(format(today, 'yyyy'))
+    const firstDayCurrentMonth = parse(`${currentMonth}-${currentYear}`, 'MMMM-yyyy', new Date())
 
+    
+    const days = eachDayOfInterval({
+      start: firstDayCurrentMonth,
+      end: endOfMonth(firstDayCurrentMonth),
+  })
+
+  function previousMonth() {
+      const firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
+      setSelectedDay(firstDayNextMonth)
+      setCurrentYear(format(firstDayNextMonth, 'yyyy'))
+      setCurrentMonth(format(firstDayNextMonth, 'MMMM'))
+  }
+  
+  function nextMonth() {
+      const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
+      setSelectedDay(firstDayNextMonth)
+      setCurrentYear(format(firstDayNextMonth, 'yyyy'))
+      setCurrentMonth(format(firstDayNextMonth, 'MMMM'))
+  }
+
+  const selectedDayEvents = events.filter((event: any) =>
+      isSameDay(parseISO(event.shiftStart), selectedDay)
+  )
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     const [sideBar, setSideBar] = useState<boolean>(isSideBar)
-    const [yearsAndMonthsOptions, setYearsAndMonthsOptions] = useState<boolean>(false)
+    const yearsAndMonthsOptionsRef = useRef<boolean>(false)
+    const [yearsAndMonthsOptions, setYearsAndMonthsOptions] = useState<boolean>(yearsAndMonthsOptionsRef.current)
+    
     const years = useMemo(() => {
         const currentYear = format(today, 'yyyy')
         const result = []
@@ -100,79 +93,89 @@ export function useCalendar(isSideBar: boolean) {
         return result
     }, [])
 
-    const months = useMemo(() => {
-
-    }, [])
-
     const [chosenYear, setChosenYear] = useState<string>(format(today, 'yyyy'))
-    const [chosenMonth, setChosenMonth] =  useState<string>(format(today, 'MMM'))
+    const [chosenMonth, setChosenMonth] =  useState<string>(format(today, 'MMMM'))
 
     function handleMonthClick(month: string) {
-
+      setChosenMonth(month)
     }
     function handleYearClick(year: string) {
-
+      setChosenYear(year)
     }
-                        {/* {yearsAndMonthsOptions &&
-                        <div >
-                            <div className='flex flex-col absolute top-7 left-9 max-h-32 rounded-md overflow-auto bg-sky-100'>
-                            {years.map((year, idx) => {
-                                return <div 
-                                            key={year} 
-                                            className='px-1'
-                                            onClick={() => handleYearClick(year.toString())}
-                                            >{year}</div>
-                            })}
-                            </div>
-                            <div>
+    function handleOkClick() {
+      setSelectedDay(parse(`${chosenMonth}-${chosenYear}`, 'MMMM-yyyy', new Date()))
+      setCurrentMonth(chosenMonth)
+      setCurrentYear(chosenYear)
+      setYearsAndMonthsOptions(false)
+    }
 
-                            </div>
-                        </div>
-                    } */}
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const days = eachDayOfInterval({
-        start: firstDayCurrentMonth,
-        end: endOfMonth(firstDayCurrentMonth),
-    })
 
 
-    function previousMonth() {
-        const firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
-        setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+
+const selectMonthAndYearMenu = () => {
+  return (
+          <div className='flex flex-col absolute top-3 rounded-lg p-4 bg-light shadow-2xl'>
+            <div className='flex  w-full px-6'>
+                <h2 className='text-left w-1/2 text-lg font-semibold'>Year</h2>
+                <h2 className='text-center w-1/2 text-lg font-semibold'>Month</h2>
+              </div>
+            <div className=' top-10 left-0 h-52 flex gap-4'>
+              <div className={`${yearsAndMonthsMenuContainer}`}>
+                {years.map((year, idx) => {
+                    return <div 
+                                key={year} 
+                                className={`mx-2 px-3 cursor-pointer ${+chosenYear === year && chosenYearDateValue}`}
+                                onClick={() => {handleYearClick(year.toString())}}
+                                >{year}</div>
+                })}
+              </div>
+              <div className={`${yearsAndMonthsMenuContainer}`}>
+                {MONTHS.map((month, idx) => {
+                    return <div 
+                                key={month} 
+                                className={`mx-2 px-3 cursor-pointer ${chosenMonth === month && chosenYearDateValue}`}
+                                onClick={() => handleMonthClick(month.toString())}
+                                >{month}</div>
+                })}
+              </div>
+            </div>
+            <div className={`w-full ${flexCenter} bg-inherit mt-4 rounded-b-lg gap-4`}>
+              <Button theme='blank' text='Cancel' onClick={() => setYearsAndMonthsOptions(false)} className='text-sm' type='button'/>
+              <Button theme='full' text='OK' onClick={handleOkClick} className='bottom-[-20]  text-sm' type='button'/>
+            </div>
+          </div>
+)
     }
-
-    function nextMonth() {
-        const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
-        setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
-    }
-
-    const selectedDayMeetings = meetings.filter((meeting) =>
-        isSameDay(parseISO(meeting.startDatetime), selectedDay)
-    )
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     const visualCalendar = 
-    <div className="w-100">
-      <div className="max-w-100 px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
+    <div className="w-full">
+      <div className={`max-w-full flex justify-center items-start px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6`}>
         <div className="flex gap-4 md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
           <div className="md:pr-14">
-            <div className="flex items-center">
-              <h2 className="flex-auto font-semibold text-gray-900">
-                <button 
-                    type='button'
-                    onClick={() => setYearsAndMonthsOptions(prev => !prev)}
-                    className={`relative`}
+            <div className="flex items-center justify-between relative">
+              <h2 className=" font-semibold text-gray-900">
+                <div
+                    onClick={() => {setYearsAndMonthsOptions(true); yearsAndMonthsOptionsRef.current = true}}
+                    className={`cursor-pointer`}
                     >
                     {format(firstDayCurrentMonth, 'MMMM yyyy')}
-                </button>
+                </div>
               </h2>
-              <button
-                type="button"
-                onClick={previousMonth}
-                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-              >
-                <span className="sr-only">Previous month</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                </svg>
+              {yearsAndMonthsOptions &&
+                        selectMonthAndYearMenu()
+                    }
+              <div className='flex gap-2'>
+                <button
+                  type="button"
+                  onClick={previousMonth}
+                  className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                >
+                  <span className="sr-only">Previous month</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                  </svg>
 
               </button>
               <button
@@ -186,6 +189,8 @@ export function useCalendar(isSideBar: boolean) {
                 </svg>
 
               </button>
+              </div>
+              
             </div>
             <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
               <div>S</div>
@@ -201,7 +206,7 @@ export function useCalendar(isSideBar: boolean) {
                 <div
                   key={day.toString()}
                   className={classNames(
-                    dayIdx === 0 && colStartClasses[getDay(day)],
+                    dayIdx === 0 && COL_START_CLASSES[getDay(day)],
                     'py-1.5'
                   )}
                 >
@@ -221,7 +226,7 @@ export function useCalendar(isSideBar: boolean) {
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-400',
-                      isEqual(day, selectedDay) && isToday(day) && 'bg-red-500',
+                      isEqual(day, selectedDay) && isToday(day) && 'bg-sky-500',
                       isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         'bg-gray-900',
@@ -237,8 +242,8 @@ export function useCalendar(isSideBar: boolean) {
                   </button>
 
                   <div className="w-1 h-1 mx-auto mt-1">
-                    {meetings.some((meeting) =>
-                      isSameDay(parseISO(meeting.startDatetime), day)
+                    {events.some((event: any) =>
+                      isSameDay(parseISO(event.shiftStart), day)
                     ) && (
                       <div className="w-1 h-1 rounded-full bg-sky-500"></div>
                     )}
@@ -256,9 +261,9 @@ export function useCalendar(isSideBar: boolean) {
                 </time>
               </h2>
                 <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
-                {selectedDayMeetings.length > 0 ? (
-                  selectedDayMeetings.map((meeting) => (
-                    <MeetingTag meeting={meeting} key={meeting.id} />
+                {selectedDayEvents.length > 0 ? (
+                  selectedDayEvents.map((event: any) => (
+                    <EventTag event={event} key={event.id} />
                   ))
                 ) : (
                   <p className='mx-auto'>No details for today.</p>
@@ -275,26 +280,26 @@ export function useCalendar(isSideBar: boolean) {
 
 }
 
-function MeetingTag(meeting: any) {
+function EventTag(event: any) {
 
-  const startDateTime = parseISO(meeting.meeting.startDatetime)
-  const endDateTime = parseISO(meeting.meeting.endDatetime)
+  const startDateTime = parseISO(event.event.shiftStart)
+  const endDateTime = parseISO(event.event.shiftEnd)
 
   return (
-    <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
-      <img
-        src={meeting.meeting.imageUrl}
+    <li className="flex items-start px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
+      {/* <img
+        src={event.event.imageUrl}
         alt=""
         className="flex-none w-10 h-10 rounded-full"
-      />
+      /> */}
       <div className="flex-auto">
-        <p className="text-gray-900">{meeting.meeting.name}</p>
+        <p className="text-gray-900">{event.event.name}</p>
         <p className="mt-0.5">
-          <time dateTime={meeting.meeting.startDatetime}>
+          <time dateTime={event.event.shiftStart}>
             {format(startDateTime, 'h:mm a')}
           </time>{' '}
           -{' '}
-          <time dateTime={meeting.meeting.endDatetime}>
+          <time dateTime={event.event.shiftEnd}>
             {format(endDateTime, 'h:mm a')}
           </time>
         </p>
@@ -352,5 +357,9 @@ function MeetingTag(meeting: any) {
       </Menu>
     </li>
   )
+}
+
+const MonthsAndYearsMenu = () => {
+
 }
 

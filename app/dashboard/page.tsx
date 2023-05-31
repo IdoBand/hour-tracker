@@ -5,7 +5,6 @@ import { workPlace } from './WorkPlace';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import AddNewWorkPlaceForm from './AddNewWorkPlaceForm';
 import { checkboxAll, removeWorkPlaces, setWorkPlaceCheckbox, setCurrentWorkPlace } from '@/redux/placesSlice';
-
 const articlesContainer = {
     initial: {
         opacity: 0,
@@ -49,7 +48,7 @@ const Dashboard = () => {
 
     return (
         <main className={`w-full flex justify-center items-center relative`}>
-            <div className={`w-10/12 flex justify-center items-center flex-col py-2 gap-4`}>
+            <div className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}>
                 <h1 className={`text-2xl`}>Dashboard</h1>
                 <div className={`flex w-full`}>
                     <h1 className={`text-xl w-full`}>Hello, {user ? user.firstName+' '+ user.lastName : 'John Doe'}</h1>
