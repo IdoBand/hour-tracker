@@ -5,6 +5,9 @@ import { workPlace } from './WorkPlace';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import AddNewWorkPlaceForm from './AddNewWorkPlaceForm';
 import { checkboxAll, removeWorkPlaces, setWorkPlaceCheckbox, setCurrentWorkPlace } from '@/redux/placesSlice';
+import AddRemoveEditButtons from '../(components)/AddRemoveEditButtons';
+import FramerSpringRotate from '../(components)/FramerSpringRotate';
+
 const articlesContainer = {
     initial: {
         opacity: 0,
@@ -19,7 +22,7 @@ const articlesContainer = {
 }
 
 const Dashboard = () => {
-
+    
     const user = useAppSelector(state => state.userSlice.user)
     const workPlaces = useAppSelector(state => state.placesSlice.places)
     const dispatch = useAppDispatch()
@@ -27,11 +30,6 @@ const Dashboard = () => {
     const [addNewWorkingPlace, setAddNewWorkingPlace] = useState<boolean>(false)
     const firstSelectAllClick = useRef<boolean>(false)
     
-    
-
-    function handleRemoveButtons() {
-        setRemoveButtons(prev => !prev)
-    }
     function handleCheckBoxClick(placeId: string) {
         firstSelectAllClick.current = false
         dispatch(setWorkPlaceCheckbox(placeId))
@@ -52,30 +50,18 @@ const Dashboard = () => {
                 <h1 className={`text-2xl`}>Dashboard</h1>
                 <div className={`flex w-full`}>
                     <h1 className={`text-xl w-full`}>Hello, {user ? user.firstName+' '+ user.lastName : 'John Doe'}</h1>
-                    <nav className={`flex border-b border-solid border-l-grayBorder`}>
-                        <button className={`relative mx-3`}onClick={() => setAddNewWorkingPlace(true)}>+ Add</button>
-                        <button className={`relative ml-3`} onClick={handleRemoveButtons}>- Remove</button>
-                        {removeButtons &&
-                        <>
-                        <button className={`relative ml-3 text-danger`} onClick={selectAll}>Select All</button>
-                        <button className={`relative ml-3 text-danger`} onClick={() => dispatch(removeWorkPlaces())}>Remove Permanently</button>
-                        </>
-                        }
-                    </nav>
+                    <AddRemoveEditButtons 
+                        handleAddClick={() => setAddNewWorkingPlace(true)} 
+                        handleRemoveClick={() => setRemoveButtons(prev => !prev)} 
+                        handleSelectAll={selectAll} 
+                        handleRemovePermanentlyClick={() => dispatch(removeWorkPlaces())}
+                        />
                 </div>
                 {addNewWorkingPlace && 
-                    <motion.div
-                    className='w-full'
-                        initial={{ scale: 0}}
-                        animate={{rotate: 360, scale: 1 }}
-                        transition={{
-                            type: "spring",
-                            stiffness: 260,
-                            damping: 20,
-                        }}
+                    <FramerSpringRotate
                     >
                         <AddNewWorkPlaceForm onClose={() => setAddNewWorkingPlace(false)} />
-                    </motion.div>
+                    </FramerSpringRotate>
                 }
                 {user && workPlaces &&
                     <motion.div 

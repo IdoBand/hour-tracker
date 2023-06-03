@@ -28,7 +28,6 @@ class TimeHelperClass {
         const endDate = new Date(end)
         const totalHours = differenceInMinutes(endDate, startDate) / 60
         return totalHours
-        
     }
     calculateTimeTwoDatesString(start: string, end: string) {
         /**
@@ -40,7 +39,7 @@ class TimeHelperClass {
         const minutesDifference = differenceInMinutes(endDate, startDate)
         return this.generateTimeDescriptionString(minutesDifference)
     }
-    calculateTimeMultipleDate(events: any[]) {
+    calculateTimeMultipleDates(events: any[]) {
         /**
          * This function receives an array of objects which contain 2 properties start and end ISO 8601 strings,
          *  calculate the time for each, and returns the sum of all.
@@ -70,7 +69,12 @@ class TimeHelperClass {
             return `${Math.floor(minutes / 60)} Hr ${minutes % 60} mins`
         }
     }
-    calculateYearlyDuration(start: string, end: string) {
+    calculateYearlyDuration(start: string, end?: string) {
+        /**
+         * This function receives 2 ISO 8601 string and calculates the time difference between them in days,
+         * and returns a string description in years / days.
+         * @returns {string} - time unit in years / days.
+         */
         if (!end) {
             end = formatISO(new Date())
         } 
@@ -88,7 +92,60 @@ class TimeHelperClass {
             return `${yearsDifference} Year${yearsDifference > 1 ? 's' : ''}`
         }
     }
-    
+    validateShiftTimes(shiftStartDate: string, shiftEndDate: string, breakStartDate: string, breakEndDate: string) {
+        /**
+         * This function receives 4 date strings and compares them.
+         * constrains:
+         * 1. Shift duration cannot be <= 0.
+         * 2. Shift start date cannot occur after shift end.
+         * 3. Break start date cannot occur before shift start or after.
+         * 4. Break end date cannot occur after shift end.
+         * 5. Break start date cannot occur after break end.
+         *  
+         * If all dates follow these constraints the function returns true
+         * @returns {isDataValid: boolean, issues: string[]}.
+         */
+        interface validationResultObjectProps{
+            isDataValid: boolean
+            issues: string[]
+        }
+        let validationResultObject: validationResultObjectProps = {
+            isDataValid: true,
+            issues: []
+        }
+
+        const shiftDuration = this.calculateHoursTwoDates(shiftStartDate, shiftEndDate)
+        if (!shiftDuration) {
+            validationResultObject.isDataValid = false
+            validationResultObject.issues.push('Shift duration cannot be 0.')
+        }
+        if (shiftDuration < 0) {
+          validationResultObject.isDataValid = false
+          validationResultObject.issues.push('Shift starting hour must be before ending hour.')
+        }
+
+        const breakDuration = this.calculateHoursTwoDates(breakStartDate, breakEndDate)
+        if (breakDuration) {
+            
+            const shiftBreakStartHoursDifference = this.calculateHoursTwoDates(shiftStartDate, breakStartDate)
+            const shiftBreakEndHoursDifference = this.calculateHoursTwoDates( breakEndDate, shiftEndDate)
+
+            if (breakDuration < 0) {
+                validationResultObject.isDataValid = false
+                validationResultObject.issues.push('Break starting hour cannot occur after Break ending hour.')
+            }
+            if (shiftBreakStartHoursDifference < 0) {
+                validationResultObject.isDataValid = false
+                validationResultObject.issues.push('Break starting hour cannot occur before shift starting hour.')
+                
+            }
+            if (shiftBreakEndHoursDifference < 0) {
+                validationResultObject.isDataValid = false
+                validationResultObject.issues.push('Break ending hour cannot occur after shift ending hour.')
+            }
+        }
+        return validationResultObject
+    }
 }
 
 export const TimeHelper = new TimeHelperClass()

@@ -3,16 +3,15 @@ import { motion } from 'framer-motion'
 import { checkBoxStyle, dashBoardWorkPlaceHeader } from '@/util/mixin';
 import { VercelSVG } from '@/util/icons'
 import Link from 'next/link';
+import { TimeHelper } from '../(hooks)/TimeHelper';
+import { ShiftsManipulator } from '../(hooks)/ShiftsManipulator';
 
 export interface WorkPlace {
     placeId: string
     name: string
     employmentStartDate: string
     employmentEndDate: string
-    employmentDuration: string
     isCurrent: boolean
-    hoursPastWeek: number
-    hoursPastMonth: number
     totalHours: number
     wagePerHour: number
     isBreakPaid: boolean
@@ -34,8 +33,18 @@ const singleArticle = {
         },
     }
 }
+
+export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
+
+    if (shifts.length) {
+      const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
+      return TimeHelper.calculateTimeMultipleDates(dates)
+    }
+    return '0'
+}
+
 export const workPlace = (key: number ,removeButtons: boolean, handleCheckBoxClick: (placeId: string) => void, handleWorkPlaceClick: (placeId: string) => void,
-                {placeId, name, employmentStartDate, employmentEndDate, employmentDuration, isCurrent, hoursPastWeek, hoursPastMonth, totalHours, link, checked}: WorkPlace): React.ReactNode => {
+            {placeId, name, employmentStartDate, employmentEndDate, isCurrent, totalHours, link, checked, shifts}: WorkPlace): React.ReactNode => {
         return (
             <motion.article 
                 key={key}
@@ -63,10 +72,23 @@ export const workPlace = (key: number ,removeButtons: boolean, handleCheckBoxCli
                 '>
                     <div className={`${isCurrent ? 'text-secondary' : 'DARK'} ${dashBoardWorkPlaceHeader}`}>{name}</div>
                         <div className={`flex flex-col`}>
-                        <span className=''>Total Hours: {totalHours}</span>
-                        <span className=''>Hours Past Week: {hoursPastWeek}</span>
-                        <span className=''>Hours Past Month: {hoursPastMonth}</span>
-                        <span className=''>Employment Duration: {employmentDuration}</span>
+                            <div>
+                                <span className='font-semibold'>Total Hours: </span>
+                                <span className=''>{prepareShiftsForTotalTimeCalculation(shifts)}</span>
+                            </div>
+                            <div>
+                                <span className='font-semibold'>Hours Past Week: </span>
+                                <span className=''>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastWeekShifts(shifts))}</span>
+                            </div>
+                            <div>
+                                <span className='font-semibold'>Hours Past Month: </span>
+                                <span className=''>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastMonthShifts(shifts))}</span>
+                            </div>
+                            <div>
+                                <span className='font-semibold'>Employment Duration: </span>
+                                <span className=''>{TimeHelper.calculateYearlyDuration(employmentStartDate, employmentEndDate)}</span>
+                            </div>
+
                         </div>
                     
                 </div>

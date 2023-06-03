@@ -1,22 +1,21 @@
 "use client";
 import { useForm } from 'react-hook-form'
-import { dashBoardWorkPlaceHeader, flexCenter } from '@/util/mixin';
+import { formHeader } from '@/util/mixin';
 import Button from '../(components)/Button';
 import { useCalendar } from '../(hooks)/useCalender';
 import { format } from 'date-fns'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { WorkPlace } from './WorkPlace';
 import { addWorkPlace } from '@/redux/placesSlice';
-import { motion } from 'framer-motion'
 
-interface AddNewWorkPlaceComponentProps {
+export interface FormProps {
     onClose: () => void
 }
 const addNewWorkPlaceFormSection = 'flex justify-between w-full mb-6 md:flex-col'
 
 
 
-const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
+const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
     const user = useAppSelector(state => state.userSlice.user)
     const dispatch = useAppDispatch()
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
@@ -31,7 +30,7 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
     }
     const TextLineInput = ({name, label, type='text', isRequired, autoComplete, value}: TextLineInputProps) => {
         return (
-        <div className={`flex flex-col  mb-6`}>
+        <div className={`flex flex-col mb-6`}>
             <div className={`flex justify-between w-full md:flex-col`}>
                 <label>{label}</label>
                 <input
@@ -102,7 +101,7 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
         bg-light shadow-2xl
         lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
         >
-        <h1  className={`w-full ${dashBoardWorkPlaceHeader}`}>Add a New Work Place</h1>
+        <h1  className={`${formHeader}`}>Add a New Work Place</h1>
         <div className={`w-full flex justify-center items-start mt-4 md:flex-col`}>
             <div className={`w-1/2 flex flex-col md:w-full`}>
                 <TextLineInput label='Work Place Name' name='workPlaceName' type='text' isRequired={true} />
@@ -112,7 +111,7 @@ const AddNewWorkPlaceForm = ({onClose,}: AddNewWorkPlaceComponentProps) => {
                     <label className='w-2/5 md:w-full rounded-md bg-white'>{format(selectedDay, 'dd-MM-yyyy')}</label>
                 </div>
                 <div className={`w-full text-center mb-6 `}>
-                    Check V if the answer is yes
+                    Check V if the answer is yes for the following questions
                 </div>
                 <div className={`${addNewWorkPlaceFormSection}`}>
                     {CheckBoxInput('isCurrent', 'Currently Employed There?')}

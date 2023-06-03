@@ -18,6 +18,9 @@ import {
 import Button from '../(components)/Button'
 import { flexCenter } from '@/util/mixin'
 
+const chosenYearDateValue = 'rounded-md border border-solid border-black text-sky-500'
+const yearsAndMonthsMenuContainer = 'flex flex-col rounded-md overflow-auto scrollbar-thin scrollbar-thumb-gray-200'
+
 const COL_START_CLASSES = [
   '',
   'col-start-2',
@@ -41,21 +44,26 @@ const MONTHS = [
   'November',
   'December'
 ]
-const yearsAndMonthsMenuContainer = 'flex flex-col rounded-md overflow-auto scrollbar-thin scrollbar-thumb-gray-200'
+
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
-const chosenYearDateValue = 'rounded-md border border-solid border-black text-sky-500'
-export function useCalendar(isSideBar: boolean, events?: any) {
+
+export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?: () => void) {
     const today = startOfToday()
     const [selectedDay, setSelectedDay] = useState<Date>(today)
-    // ***current*** Month / Year is what displayed in calender itself after approving.
+    // ***current*** Month / Year is what displayed in calender itself after approving default value is today for first render,
+    // and the 1st of the month at each time the year/month is changed.
     // ***chosen*** Month / Year is what displayed when you pick a year/month from the menu before approving.
     const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMMM'))
     const [currentYear, setCurrentYear] = useState<string>(format(today, 'yyyy'))
+    const [chosenYear, setChosenYear] = useState<string>(format(today, 'yyyy'))
+    const [chosenMonth, setChosenMonth] =  useState<string>(format(today, 'MMMM'))
     const firstDayCurrentMonth = parse(`${currentMonth}-${currentYear}`, 'MMMM-yyyy', new Date())
+    const [sideBar, setSideBar] = useState<boolean>(isSideBar)
+    const yearsAndMonthsOptionsRef = useRef<boolean>(false)
+    const [yearsAndMonthsOptions, setYearsAndMonthsOptions] = useState<boolean>(yearsAndMonthsOptionsRef.current)
 
-    
     const days = eachDayOfInterval({
       start: firstDayCurrentMonth,
       end: endOfMonth(firstDayCurrentMonth),
@@ -78,11 +86,6 @@ export function useCalendar(isSideBar: boolean, events?: any) {
   const selectedDayEvents = events.filter((event: any) =>
       isSameDay(parseISO(event.shiftStart), selectedDay)
   )
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    const [sideBar, setSideBar] = useState<boolean>(isSideBar)
-    const yearsAndMonthsOptionsRef = useRef<boolean>(false)
-    const [yearsAndMonthsOptions, setYearsAndMonthsOptions] = useState<boolean>(yearsAndMonthsOptionsRef.current)
     
     const years = useMemo(() => {
         const currentYear = format(today, 'yyyy')
@@ -93,8 +96,7 @@ export function useCalendar(isSideBar: boolean, events?: any) {
         return result
     }, [])
 
-    const [chosenYear, setChosenYear] = useState<string>(format(today, 'yyyy'))
-    const [chosenMonth, setChosenMonth] =  useState<string>(format(today, 'MMMM'))
+    
 
     function handleMonthClick(month: string) {
       setChosenMonth(month)
@@ -109,44 +111,41 @@ export function useCalendar(isSideBar: boolean, events?: any) {
       setYearsAndMonthsOptions(false)
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-const selectMonthAndYearMenu = () => {
-  return (
-          <div className='flex flex-col absolute top-3 rounded-lg p-4 bg-light shadow-2xl'>
-            <div className='flex  w-full px-6'>
-                <h2 className='text-left w-1/2 text-lg font-semibold'>Year</h2>
-                <h2 className='text-center w-1/2 text-lg font-semibold'>Month</h2>
+  const selectMonthAndYearMenu = () => {
+    return (
+            <div className='flex flex-col absolute top-3 rounded-lg p-4 bg-light shadow-2xl'>
+              <div className='flex  w-full px-6'>
+                  <h2 className='text-left w-1/2 text-lg font-semibold'>Year</h2>
+                  <h2 className='text-center w-1/2 text-lg font-semibold'>Month</h2>
+                </div>
+              <div className=' top-10 left-0 h-52 flex gap-4'>
+                <div className={`${yearsAndMonthsMenuContainer}`}>
+                  {years.map((year, idx) => {
+                      return <div 
+                                  key={year} 
+                                  className={`mx-2 px-3 cursor-pointer ${+chosenYear === year && chosenYearDateValue}`}
+                                  onClick={() => {handleYearClick(year.toString())}}
+                                  >{year}</div>
+                  })}
+                </div>
+                <div className={`${yearsAndMonthsMenuContainer}`}>
+                  {MONTHS.map((month, idx) => {
+                      return <div 
+                                  key={month} 
+                                  className={`mx-2 px-3 cursor-pointer ${chosenMonth === month && chosenYearDateValue}`}
+                                  onClick={() => handleMonthClick(month.toString())}
+                                  >{month}</div>
+                  })}
+                </div>
               </div>
-            <div className=' top-10 left-0 h-52 flex gap-4'>
-              <div className={`${yearsAndMonthsMenuContainer}`}>
-                {years.map((year, idx) => {
-                    return <div 
-                                key={year} 
-                                className={`mx-2 px-3 cursor-pointer ${+chosenYear === year && chosenYearDateValue}`}
-                                onClick={() => {handleYearClick(year.toString())}}
-                                >{year}</div>
-                })}
-              </div>
-              <div className={`${yearsAndMonthsMenuContainer}`}>
-                {MONTHS.map((month, idx) => {
-                    return <div 
-                                key={month} 
-                                className={`mx-2 px-3 cursor-pointer ${chosenMonth === month && chosenYearDateValue}`}
-                                onClick={() => handleMonthClick(month.toString())}
-                                >{month}</div>
-                })}
+              <div className={`w-full ${flexCenter} bg-inherit mt-4 rounded-b-lg gap-4`}>
+                <Button theme='blank' text='Cancel' onClick={() => setYearsAndMonthsOptions(false)} className='text-sm' type='button'/>
+                <Button theme='full' text='OK' onClick={handleOkClick} className='bottom-[-20]  text-sm' type='button'/>
               </div>
             </div>
-            <div className={`w-full ${flexCenter} bg-inherit mt-4 rounded-b-lg gap-4`}>
-              <Button theme='blank' text='Cancel' onClick={() => setYearsAndMonthsOptions(false)} className='text-sm' type='button'/>
-              <Button theme='full' text='OK' onClick={handleOkClick} className='bottom-[-20]  text-sm' type='button'/>
-            </div>
-          </div>
-)
-    }
+            )
+      }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     const visualCalendar = 
@@ -262,8 +261,8 @@ const selectMonthAndYearMenu = () => {
               </h2>
                 <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
                 {selectedDayEvents.length > 0 ? (
-                  selectedDayEvents.map((event: any) => (
-                    <EventTag event={event} key={event.id} />
+                  selectedDayEvents.map((event: any, idx: number) => (
+                    <EventTag event={event} key={idx} />
                   ))
                 ) : (
                   <p className='mx-auto'>No details for today.</p>
@@ -280,13 +279,13 @@ const selectMonthAndYearMenu = () => {
 
 }
 
-function EventTag(event: any) {
+function EventTag(event: any, key: number) {
 
   const startDateTime = parseISO(event.event.shiftStart)
   const endDateTime = parseISO(event.event.shiftEnd)
 
   return (
-    <li className="flex items-start px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
+    <li key={key} className="flex items-start px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
       {/* <img
         src={event.event.imageUrl}
         alt=""
@@ -358,8 +357,3 @@ function EventTag(event: any) {
     </li>
   )
 }
-
-const MonthsAndYearsMenu = () => {
-
-}
-

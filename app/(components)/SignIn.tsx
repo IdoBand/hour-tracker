@@ -88,9 +88,9 @@ const SignIn = (actionOnSubmit: any) => {
             <Button onClick={reset} type='button' theme='blank' className='' text='Clear' />
         </div>
         <div className={`flex flex-col my-4 relative gap-6`}>
-        <div className={`w-full ${flexCenter}  text-center text-gray-500
-            before:absolute before:left-0 before:w-2/12 before:bg-grayBorder after:h-0.5 before:rounded-lg
-            after:absolute after:flex after:right-0 after:w-2/12 after:bg-grayBorder before:h-0.5 after:rounded-lg
+        <div className={`w-full ${flexCenter} gap-4 text-center text-gray-500
+                before:absolute-content before:grow before:bg-grayBorder before:h-[1px] before:rounded-lg
+                after:absolute-content after:grow after:bg-grayBorder after:h-[1px] after:rounded-lg
             `}
             >Or Continue With</div>
             <div className={`${flexCenter}`}>
