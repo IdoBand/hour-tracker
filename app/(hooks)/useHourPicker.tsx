@@ -5,8 +5,9 @@ import { ArrowDownCircleIcon } from '@heroicons/react/24/solid';
 const selectClassName = `px-2 ${scrollBar} outline-none rounded-lg appearance-none`;
 const optionClassName = ` hover:bg-sky-200 rounded-lg`;
 
-export function useHourPicker() {
-  const [selectedHour, setSelectedHour] = useState<string>('00:00');
+export function useHourPicker( hour?: string) {
+
+  const [selectedHour, setSelectedHour] = useState<string>(hour ? hour : '00:00');
   const [focusedSelect, setFocusedSelect] = useState<string>('');
   const hours = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}` : `${i}`));
   const minutes = Array.from({ length: 60 }, (_, i) => (i < 10 ? `0${i}` : `${i}`));

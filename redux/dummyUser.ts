@@ -19,8 +19,8 @@ export const SHIFTS: Shift[] = [
       placeId: '3',
       shiftStart: `${currentYear}-${currentMonth}-20T13:00`,
       shiftEnd: `${currentYear}-${currentMonth}-20T19:00`,
-      breakStart: `${currentYear}-${currentMonth}-20T19:00`,
-      breakEnd: `${currentYear}-${currentMonth}-20T19:40`,
+      breakStart: `${currentYear}-${currentMonth}-20T18:00`,
+      breakEnd: `${currentYear}-${currentMonth}-20T18:40`,
       iWorkedOn: `Lorem ipsum dolor sit amet. Est omnis quisquam eos obcaecati provident sed architecto recusandae ut illo voluptate qui rerum porro. Qui quod maiores et asperiores dolor et sunt maiores vel consequatur enim ad quos nulla et placeat amet. Eum debitis veniam et repudiandae minima 33 expedita dolorum eos dolor nostrum.`,
       notes: 'dont forget to complete the boss`s task next week',
       checked: false
@@ -30,8 +30,8 @@ export const SHIFTS: Shift[] = [
       placeId: '3',
       shiftStart: `${currentYear}-${currentMonth}-21T12:30`,
       shiftEnd: `${currentYear}-${currentMonth}-21T20:00`,
-      breakStart: `${currentYear}-${currentMonth}-21T20:00`,
-      breakEnd: `${currentYear}-${currentMonth}-21T20:30`,
+      breakStart: `${currentYear}-${currentMonth}-21T16:20`,
+      breakEnd: `${currentYear}-${currentMonth}-21T16:50`,
       iWorkedOn: `Lorem ipsum dolor sit amet. Est omnis quisquam eos obcaecati provident sed architecto recusandae ut illo voluptate qui rerum porro. Qui quod maiores et asperiores dolor et sunt maiores vel consequatur enim ad quos nulla et placeat amet. Eum debitis veniam et repudiandae minima 33 expedita dolorum eos dolor nostrum.`,
       notes: '',
       checked: false
@@ -63,8 +63,8 @@ export const SHIFTS: Shift[] = [
       placeId: '3',
       shiftStart: `${currentYear}-${lastMonth}-05T12:45`,
       shiftEnd: `${currentYear}-${lastMonth}-05T20:00`,
-      breakStart: `${currentYear}-${lastMonth}-05T20:10`,
-      breakEnd: `${currentYear}-${lastMonth}-05T20:30`,
+      breakStart: `${currentYear}-${lastMonth}-05T15:15`,
+      breakEnd: `${currentYear}-${lastMonth}-05T15:30`,
       iWorkedOn: `Lorem ipsum dolor sit amet. Est omnis quisquam eos obcaecati provident sed architecto recusandae ut illo voluptate qui rerum porro. Qui quod maiores et asperiores dolor et sunt maiores vel consequatur enim ad quos nulla et placeat amet. Eum debitis veniam et repudiandae minima 33 expedita dolorum eos dolor nostrum.`,
       notes: '',
       checked: false

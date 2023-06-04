@@ -2,30 +2,42 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCalendar } from '../../(hooks)/useCalender';
 import Button from '@/app/(components)/Button';
-import { FormProps } from '../AddNewWorkPlaceForm';
 import { useHourPicker }from '@/app/(hooks)/useHourPicker';
 import { format } from 'date-fns'
 import { Shift } from './Shift';
 import { ArrowDownCircleIcon } from '@heroicons/react/24/solid'
 import { TimeHelper } from '@/app/(hooks)/TimeHelper';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addShiftToCurrentWorkPlace } from '@/redux/placesSlice';
-const AddShift = ({ onClose }: FormProps) => {
+import { addShiftToCurrentWorkPlace, editShift } from '@/redux/placesSlice';
+
+interface AddEditShiftProps {
+  addOrEdit: 'add' | 'edit'
+  startDate?: string
+  endDate?: string
+  breakStart?: string,
+  breakEnd?: string
+  iWorkedOn?: string
+  notes?: string
+  onClose: () => void
+  shiftId?: string
+}
+
+const AddShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, shiftId }: AddEditShiftProps) => {
 
   const [formIssues, setFormIssues] = useState<string[]>([])
   const currentWorkPlaceId = useAppSelector(state => state.placesSlice.currentWorkPlace?.placeId)
   const dispatch = useAppDispatch()
-
+  
   const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
-  const { visualCalendar: shiftStartCalender, selectedDay: shiftStartDay } = useCalendar(false, []);
-  const { visualCalendar: shiftEndCalender, selectedDay: shiftEndDay } = useCalendar(false, []);
-  const { visualCalendar: breakStartCalender, selectedDay: breakStartDay } = useCalendar(false, []);
-  const { visualCalendar: breakEndCalender, selectedDay: breakEndDay } = useCalendar(false, []);
+  const { visualCalendar: shiftStartCalender, selectedDay: shiftStartDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(startDate as string));
+  const { visualCalendar: shiftEndCalender, selectedDay: shiftEndDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(endDate as string));
+  const { visualCalendar: breakStartCalender, selectedDay: breakStartDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(breakStart as string));
+  const { visualCalendar: breakEndCalender, selectedDay: breakEndDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(breakEnd as string));
 
-  const { visualHourPicker: shiftStartHourPicker, selectedHour: shiftStartHour } = useHourPicker();
-  const { visualHourPicker: shiftEndHourPicker, selectedHour: shiftEndHour } = useHourPicker();
-  const { visualHourPicker: breakStartHourPicker, selectedHour: breakStartHour } = useHourPicker();
-  const { visualHourPicker: breakEndHourPicker, selectedHour: breakEndHour } = useHourPicker();
+  const { visualHourPicker: shiftStartHourPicker, selectedHour: shiftStartHour } = useHourPicker(startDate ? startDate!.slice(11,16) : '');
+  const { visualHourPicker: shiftEndHourPicker, selectedHour: shiftEndHour } = useHourPicker(endDate ? endDate!.slice(11,16) : '');
+  const { visualHourPicker: breakStartHourPicker, selectedHour: breakStartHour } = useHourPicker(breakStart ? breakStart!.slice(11,16) : '');
+  const { visualHourPicker: breakEndHourPicker, selectedHour: breakEndHour } = useHourPicker(breakEnd ? breakEnd!.slice(11,16) : '');
 
   interface HourInputProps {
 
@@ -75,14 +87,10 @@ const AddShift = ({ onClose }: FormProps) => {
     const breakStartDate = format(breakStartDay, 'yyyy-MM-dd')+'T'+breakStartHour
     const breakEndDate = format(breakEndDay, 'yyyy-MM-dd')+'T'+breakEndHour
     const validation = TimeHelper.validateShiftTimes(shiftStartDate, shiftEndDate, breakStartDate, breakEndDate)
-    
-    
-    console.log(validation.isDataValid );
-    
-    
+
     if (validation.isDataValid) {
       const newShift: Shift = {
-        shiftId: Date.now().toString(),
+        shiftId: addOrEdit === 'add' ? Date.now().toString() : shiftId as string,
         placeId: currentWorkPlaceId as string,
         shiftStart: shiftStartDate,
         shiftEnd: shiftEndDate,
@@ -92,15 +100,20 @@ const AddShift = ({ onClose }: FormProps) => {
         notes: data.notes,
         checked: false
       }
-      dispatch(addShiftToCurrentWorkPlace(newShift))
+      if (addOrEdit === 'add') {
+        dispatch(addShiftToCurrentWorkPlace(newShift))
+      } else if (addOrEdit == 'edit') {
+        console.log('should edit');
+        
+        dispatch(editShift(newShift))
+      }
       setFormIssues([])
       onClose()
     } else {
       setFormIssues(validation.issues)
     }
-
   }
-  
+
   return (
     <form onSubmit={handleSubmit(data => {
       extractData(data);
@@ -120,12 +133,12 @@ const AddShift = ({ onClose }: FormProps) => {
         </div>
         <div className='w-1/2 flex justify-start items-center flex-col pt-4'>
           <label className='w-11/12 mb-1'>I Worked On:</label>
-          <textarea 
+          <textarea defaultValue={iWorkedOn}
             className={`w-11/12 outline-none p-1 mb-10`}
             {...register('iWorkedOn', {required: false})}
           />
           <label className='w-11/12 mb-1'>Notes:</label>
-          <textarea 
+          <textarea defaultValue={notes}
             className={`w-11/12 outline-none p-1 mb-10`}
             {...register('notes', {required: false})}
           />
@@ -144,7 +157,7 @@ const AddShift = ({ onClose }: FormProps) => {
       </div>}
       <div className={`w-full flex justify-end gap-4`}>
         <Button type='button' theme='blank' text='Discard' onClick={onClose} className='' />
-        <Button type='submit' theme='full' text='Add' className='' />
+        <Button type='submit' theme='full' text={addOrEdit === 'add' ? 'Add' : 'Save Changes'} className='' />
       </div>
     </form>
   )

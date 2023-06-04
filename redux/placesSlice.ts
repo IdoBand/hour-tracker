@@ -94,6 +94,27 @@ const placesSlice = createSlice({
                 return { payload: placeId }
             }
         },
+        removeShifts: {
+            reducer: (state, action: PayloadAction<Array<string>>) => {
+                const shiftIdsSet = new Set(action.payload)
+                state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.filter((shift: Shift) => {
+                    return !shiftIdsSet.has(shift.shiftId) && shift
+                })
+            },
+            prepare: (shiftIdMap: Array<string>) => {
+                return { payload: shiftIdMap }
+            }
+        },
+        editShift: {
+            reducer: (state, action: PayloadAction<Shift>) => {
+                state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.map((shift: Shift) => {
+                    return shift.shiftId === action.payload.shiftId ? action.payload : shift
+                })
+            },
+            prepare: (shift: Shift) => {
+                return { payload: shift }
+            }
+        },
     }
 })
 
@@ -105,6 +126,7 @@ export const {
     removeWorkPlaces,
     setCurrentWorkPlace,
     addShiftToCurrentWorkPlace,
-
+    removeShifts,
+    editShift,
     } = placesSlice.actions
 export default placesSlice.reducer

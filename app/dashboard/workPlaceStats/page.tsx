@@ -9,7 +9,7 @@ import { isSameMonth, parseISO } from 'date-fns'
 import AddRemoveEditButtons from '@/app/(components)/AddRemoveEditButtons';
 import { useState } from 'react';
 import FramerSpringRotate from '@/app/(components)/FramerSpringRotate';
-import AddShift from './AddShift';
+import AddShift from './AddShiftForm';
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
 
 
@@ -77,7 +77,7 @@ const WorkPlaceStats = () => {
         </div>
         {addShiftForm &&
           <FramerSpringRotate>
-            <AddShift onClose={() => setAddShiftForm(false)}/>
+            <AddShift addOrEdit='add' onClose={() => setAddShiftForm(false)} />
           </FramerSpringRotate>
         }
         <div className='w-full gap-2'>

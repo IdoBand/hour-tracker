@@ -49,7 +49,8 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?: () => void) {
+export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?: () => void, preChosenDay?: Date | undefined) {
+
     const today = startOfToday()
     const [selectedDay, setSelectedDay] = useState<Date>(today)
     // ***current*** Month / Year is what displayed in calender itself after approving default value is today for first render,
@@ -71,14 +72,12 @@ export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?:
 
   function previousMonth() {
       const firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
-      setSelectedDay(firstDayNextMonth)
       setCurrentYear(format(firstDayNextMonth, 'yyyy'))
       setCurrentMonth(format(firstDayNextMonth, 'MMMM'))
   }
   
   function nextMonth() {
       const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
-      setSelectedDay(firstDayNextMonth)
       setCurrentYear(format(firstDayNextMonth, 'yyyy'))
       setCurrentMonth(format(firstDayNextMonth, 'MMMM'))
   }
@@ -213,24 +212,24 @@ export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?:
                     type="button"
                     onClick={() => setSelectedDay(day)}
                     className={classNames(
-                      isEqual(day, selectedDay) && 'text-white',
-                      !isEqual(day, selectedDay) &&
+                      isSameDay(day, selectedDay) && 'text-white',
+                      !isSameDay(day, selectedDay) &&
                         isToday(day) &&
                         'text-blue-500',
-                      !isEqual(day, selectedDay) &&
+                      !isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-900',
-                      !isEqual(day, selectedDay) &&
+                      !isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-400',
-                      isEqual(day, selectedDay) && isToday(day) && 'bg-sky-500',
-                      isEqual(day, selectedDay) &&
+                      isSameDay(day, selectedDay) && isToday(day) && 'bg-sky-500',
+                      isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         'bg-gray-900',
-                      !isEqual(day, selectedDay) && 'hover:bg-gray-200',
-                      (isEqual(day, selectedDay) || isToday(day)) &&
+                      !isSameDay(day, selectedDay) && 'hover:bg-gray-200',
+                      (isSameDay(day, selectedDay) || isToday(day)) &&
                         'font-semibold',
                       'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
                     )}

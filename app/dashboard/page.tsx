@@ -3,7 +3,7 @@ import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { workPlace } from './WorkPlace';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
-import AddNewWorkPlaceForm from './AddNewWorkPlaceForm';
+import AddNewWorkPlaceForm from './AddWorkPlaceForm';
 import { checkboxAll, removeWorkPlaces, setWorkPlaceCheckbox, setCurrentWorkPlace } from '@/redux/placesSlice';
 import AddRemoveEditButtons from '../(components)/AddRemoveEditButtons';
 import FramerSpringRotate from '../(components)/FramerSpringRotate';
