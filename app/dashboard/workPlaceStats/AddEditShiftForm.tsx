@@ -9,6 +9,7 @@ import { ArrowDownCircleIcon } from '@heroicons/react/24/solid'
 import { TimeHelper } from '@/app/(hooks)/TimeHelper';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addShiftToCurrentWorkPlace, editShift } from '@/redux/placesSlice';
+import { dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin';
 
 interface AddEditShiftProps {
   addOrEdit: 'add' | 'edit'
@@ -22,7 +23,7 @@ interface AddEditShiftProps {
   shiftId?: string
 }
 
-const AddShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, shiftId }: AddEditShiftProps) => {
+const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, shiftId }: AddEditShiftProps) => {
 
   const [formIssues, setFormIssues] = useState<string[]>([])
   const currentWorkPlaceId = useAppSelector(state => state.placesSlice.currentWorkPlace?.placeId)
@@ -67,7 +68,7 @@ const AddShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedO
                   className='absolute top-6 z-20 shadow-lg bg-light w-max py-2 rounded-xl'
                   >
                   {calender}
-                  <div className='w-10/12 flex justify-end'>
+                  <div className='w-11/12 flex justify-end'>
                     <Button type='submit' theme='full' text='OK' className='text-xs' onClick={() => setIsCalender(false)}/>
                   </div>
                   
@@ -120,10 +121,10 @@ const AddShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedO
     })}
       className={`w-full flex flex-col rounded-br-2xl rounded-3xl p-8
       border border-solid border-dark dark:border-light
-      bg-light shadow-2xl
+      bg-light
       lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
     >
-      <h1 className={`w-full`}>Add a Shift</h1>
+      <h1 className={`w-full ${dashBoardWorkPlaceHeader}`}>Add a Shift to {useAppSelector(state => state.placesSlice.currentWorkPlace?.name)}</h1>
       <div className={`flex w-full`}>
         <div className='w-1/2 pb-16 pt-8'>
           <HourInput label='Shift Start' children={shiftStartHourPicker} calender={shiftStartCalender} selectedDay={shiftStartDay}/>
@@ -163,4 +164,4 @@ const AddShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedO
   )
 }
 
-export default AddShift;
+export default AddEditShift;

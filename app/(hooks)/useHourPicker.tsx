@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { flexCenter, scrollBar } from '@/util/mixin';
+import { flexCenter, scrollBar } from '@/app/(hooks)/mixin';
 import { ArrowDownCircleIcon } from '@heroicons/react/24/solid';
 
 const selectClassName = `px-2 ${scrollBar} outline-none rounded-lg appearance-none`;

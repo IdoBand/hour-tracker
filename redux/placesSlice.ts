@@ -1,10 +1,10 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { WorkPlace } from '@/app/dashboard/WorkPlace'
 import { PLACES_OF_WORK } from './dummyUser'
 import { Shift } from '@/app/dashboard/workPlaceStats/Shift'
 import { parseISO, compareAsc } from 'date-fns'
 interface PlacesState {
-    places: any[],
+    places: WorkPlace[],
     currentWorkPlace: null | WorkPlace
 }
 
@@ -88,21 +88,31 @@ const placesSlice = createSlice({
             reducer: (state, action: PayloadAction<Shift>) => {
                 state.currentWorkPlace?.shifts.push(action.payload)
                 state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.sort((a, b) => compareAsc(parseISO(a.shiftStart), parseISO(b.shiftStart)));
-                
+                let idx: number = -1
+                for (let i = 0 ; i < state.places.length ; i ++) {
+                    if (state.places[i].placeId === action.payload.placeId) {
+                        idx = i
+                        console.log(idx);
+                        
+                        break
+                    }
+                }
+                state.places[idx!] = state.currentWorkPlace as WorkPlace
+
             },
-            prepare: (placeId: Shift) => {
-                return { payload: placeId }
+            prepare: (shift: Shift) => {
+                return { payload: shift }
             }
         },
         removeShifts: {
             reducer: (state, action: PayloadAction<Array<string>>) => {
                 const shiftIdsSet = new Set(action.payload)
                 state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.filter((shift: Shift) => {
-                    return !shiftIdsSet.has(shift.shiftId) && shift
+                    if (!shiftIdsSet.has(shift.shiftId)) {return shift}
                 })
             },
-            prepare: (shiftIdMap: Array<string>) => {
-                return { payload: shiftIdMap }
+            prepare: (shiftIdsArray: Array<string>) => {
+                return { payload: shiftIdsArray }
             }
         },
         editShift: {
@@ -115,6 +125,38 @@ const placesSlice = createSlice({
                 return { payload: shift }
             }
         },
+        setShiftCheckBox: {
+            reducer: (state, action: PayloadAction<string>) => {
+                state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.map((shift: Shift) => {
+                    if (shift.shiftId === action.payload) {
+                        shift.checked = !shift.checked
+                    }
+                    return shift
+                })
+            },
+            prepare: (placeId: string) => {
+                return { payload: placeId }
+            }
+        },
+        checkBoxAllShifts: {
+            reducer: (state, action: PayloadAction<boolean>) => {
+                if (action.payload) {
+                    state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.map((shift: Shift) => {
+                        shift.checked = !shift.checked
+                        return shift
+                    })
+                } else {
+                    state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.map((shift: Shift) => {
+                        shift.checked = true
+                        return shift
+                    })
+                }
+            },
+            prepare: (isFirstSelectAllClick: boolean) => {
+                return { payload: isFirstSelectAllClick }
+            }
+        },
+        
     }
 })
 
@@ -128,5 +170,8 @@ export const {
     addShiftToCurrentWorkPlace,
     removeShifts,
     editShift,
+    setShiftCheckBox,
+    checkBoxAllShifts,
+
     } = placesSlice.actions
 export default placesSlice.reducer

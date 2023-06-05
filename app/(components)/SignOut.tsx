@@ -1,13 +1,13 @@
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { signOutUser } from '@/redux/userSlice';
 import Button from './Button';
-import { flexCenter } from '@/util/mixin';
+import { flexCenter } from '@/app/(hooks)/mixin';
 
 const SignOut = (actionOnSubmit: any) => {
     const user = useAppSelector(state => state.userSlice.user)
     const dispatch = useAppDispatch()
   return (
-    <main className={`w-full ${flexCenter} flex-col gap-8`}>
+    <main className={`w-full ${flexCenter} flex-col gap-8 p-4`}>
         <h1 className={`text-2xl px-10`}>
             You are signed in as {user?.firstName} {user?.lastName}
         </h1>

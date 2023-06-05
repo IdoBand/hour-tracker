@@ -16,7 +16,7 @@ import {
   startOfToday,
 } from 'date-fns'
 import Button from '../(components)/Button'
-import { flexCenter } from '@/util/mixin'
+import { flexCenter } from '@/app/(hooks)/mixin'
 
 const chosenYearDateValue = 'rounded-md border border-solid border-black text-sky-500'
 const yearsAndMonthsMenuContainer = 'flex flex-col rounded-md overflow-auto scrollbar-thin scrollbar-thumb-gray-200'
@@ -52,7 +52,7 @@ function classNames(...classes: any) {
 export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?: () => void, preChosenDay?: Date | undefined) {
 
     const today = startOfToday()
-    const [selectedDay, setSelectedDay] = useState<Date>(today)
+    const [selectedDay, setSelectedDay] = useState<Date>(preChosenDay? preChosenDay : today)
     // ***current*** Month / Year is what displayed in calender itself after approving default value is today for first render,
     // and the 1st of the month at each time the year/month is changed.
     // ***chosen*** Month / Year is what displayed when you pick a year/month from the menu before approving.

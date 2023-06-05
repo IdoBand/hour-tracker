@@ -7,7 +7,8 @@ import AddNewWorkPlaceForm from './AddWorkPlaceForm';
 import { checkboxAll, removeWorkPlaces, setWorkPlaceCheckbox, setCurrentWorkPlace } from '@/redux/placesSlice';
 import AddRemoveEditButtons from '../(components)/AddRemoveEditButtons';
 import FramerSpringRotate from '../(components)/FramerSpringRotate';
-
+import AddEditShift from './workPlaceStats/AddEditShiftForm';
+import Modal from '../(components)/Modal';
 const articlesContainer = {
     initial: {
         opacity: 0,
@@ -27,9 +28,10 @@ const Dashboard = () => {
     const workPlaces = useAppSelector(state => state.placesSlice.places)
     const dispatch = useAppDispatch()
     const [removeButtons, setRemoveButtons] = useState<boolean>(false)
-    const [addNewWorkingPlace, setAddNewWorkingPlace] = useState<boolean>(false)
+    const [addWorkPlaceForm, setAddWorkPlaceForm] = useState<boolean>(false)
     const firstSelectAllClick = useRef<boolean>(false)
-    
+    const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
+
     function handleCheckBoxClick(placeId: string) {
         firstSelectAllClick.current = false
         dispatch(setWorkPlaceCheckbox(placeId))
@@ -43,6 +45,9 @@ const Dashboard = () => {
     function handleWorkPlaceClick(placeId: string) {
         dispatch(setCurrentWorkPlace(placeId))
     }
+    function addShiftClick(){
+
+    }
 
     return (
         <main className={`w-full flex justify-center items-center relative`}>
@@ -51,31 +56,35 @@ const Dashboard = () => {
                 <div className={`flex w-full`}>
                     <h1 className={`text-xl w-full`}>Hello, {user ? user.firstName+' '+ user.lastName : 'John Doe'}</h1>
                     <AddRemoveEditButtons 
-                        handleAddClick={() => setAddNewWorkingPlace(true)} 
-                        handleRemoveClick={() => setRemoveButtons(prev => !prev)} 
+                        handleAddClick={() => setAddWorkPlaceForm(true)} 
+                        handleRemoveClick={() => setRemoveButtons((prev) => !prev)} 
                         handleSelectAll={selectAll} 
                         handleRemovePermanentlyClick={() => dispatch(removeWorkPlaces())}
                         />
                 </div>
-                {addNewWorkingPlace && 
-                    <FramerSpringRotate
-                    >
-                        <AddNewWorkPlaceForm onClose={() => setAddNewWorkingPlace(false)} />
+                {addWorkPlaceForm && 
+                    <FramerSpringRotate>
+                        <AddNewWorkPlaceForm onClose={() => setAddWorkPlaceForm(false)} />
                     </FramerSpringRotate>
                 }
                 {user && workPlaces &&
                     <motion.div 
-                        className='flex flex-col-reverse w-full'
+                        className='w-full grid grid-cols-4 gap-10'
                         variants={articlesContainer}
                         initial="initial"
                         animate="animate"
                         >
                     {workPlaces.map((place, idx) => {
-                        return workPlace(idx, removeButtons, handleCheckBoxClick, handleWorkPlaceClick, place) 
+                        return workPlace(idx, removeButtons, handleCheckBoxClick, handleWorkPlaceClick, setAddEditShiftForm, place) 
                     })}
                     </motion.div>
                 }
             </div>
+            {addShiftForm && 
+                <Modal onClose={() => setAddEditShiftForm(false)} className=''>
+                    <AddEditShift addOrEdit='add' onClose={() => setAddEditShiftForm(false)}/>
+                </Modal>
+            }
         </main>
   )
 }

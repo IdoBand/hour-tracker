@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import Button from './Button';
-import { flexCenter } from '@/util/mixin';
+import { flexCenter } from '@/app/(hooks)/mixin';
 import { NextSVG } from '@/util/icons'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { signInUser } from '@/redux/userSlice';
@@ -69,7 +69,7 @@ const SignIn = (actionOnSubmit: any) => {
     }
 
   return (
-    <>
+    <main className='p-8'>
     <div className={`w-full ${flexCenter} gap-6 mb-10`}>
         <button className={`${signUp ? 'underline' : ''}`} onClick={() => setSignUp(prev => !prev)}>Register</button>
         <button className={`${signUp ? '' : 'underline'}`} onClick={() => setSignUp(prev => !prev)}>Sign In</button>
@@ -120,7 +120,7 @@ const SignIn = (actionOnSubmit: any) => {
         </>
         }
     </form>
-    </>
+    </main>
   )
 }
 

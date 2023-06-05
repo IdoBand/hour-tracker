@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react'
 import Link from 'next/link'
-import { flexCenter } from '@/util/mixin';
+import { flexCenter } from '@/app/(hooks)/mixin';
 import Modal from './(components)/Modal';
 import SignIn from './(components)/SignIn';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';

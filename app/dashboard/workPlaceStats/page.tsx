@@ -2,16 +2,16 @@
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
 import { useCalendar } from '../../(hooks)/useCalender';
 import { Shift } from './Shift';
-import { dashBoardWorkPlaceHeader } from '@/util/mixin';
-import  ShiftComponent  from './Shift'
+import { dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin';
+import ShiftComponent from './Shift'
 import { TimeHelper } from '@/app/(hooks)/TimeHelper';
 import { isSameMonth, parseISO } from 'date-fns'
 import AddRemoveEditButtons from '@/app/(components)/AddRemoveEditButtons';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import FramerSpringRotate from '@/app/(components)/FramerSpringRotate';
-import AddShift from './AddShiftForm';
+import AddEditShift from './AddEditShiftForm';
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
-
+import { removeShifts, setShiftCheckBox, checkBoxAllShifts } from '@/redux/placesSlice';
 
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
@@ -29,15 +29,38 @@ function totalBreakTime(shifts: Shift[]) {
 }
 
 const WorkPlaceStats = () => {
-  const [addShiftForm, setAddShiftForm] = useState<boolean>(false)
-  const user = useAppSelector(state => state.userSlice.user)
   const currentWorkPlace = useAppSelector(state => state.placesSlice.currentWorkPlace)
+  
   const { visualCalendar, selectedDay } = useCalendar(true, currentWorkPlace!.shifts)
+  const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
+  const [removeButtons, setRemoveButtons] = useState<boolean>(false)
+  const firstSelectAllClick = useRef<boolean>(false)
+  const user = useAppSelector(state => state.userSlice.user)
+  const dispatch = useAppDispatch()
   const shifts: Shift[] = currentWorkPlace!.shifts.filter(shift => {
     if (isSameMonth(selectedDay, parseISO(shift.shiftStart))) {
       return shift
     }
   })
+  
+
+  function handleCheckBoxClick(shiftId: string) {
+    firstSelectAllClick.current = false
+    dispatch(setShiftCheckBox(shiftId))
+  }
+  function selectAll() {
+    dispatch(checkBoxAllShifts(firstSelectAllClick.current))
+    if (!firstSelectAllClick.current) {
+        firstSelectAllClick.current = true
+    }
+  }
+  function handleRemovePermanentlyClick() {
+    const shiftsIdsArray: string[] = []
+    for (const shift of shifts) {
+      shift.checked && shiftsIdsArray.push(shift.shiftId)
+    }
+    dispatch(removeShifts(shiftsIdsArray))
+  }
 
   return (
     <main className={`w-full flex justify-center items-center flex-col`}>
@@ -69,15 +92,15 @@ const WorkPlaceStats = () => {
         <div className={`flex justify-between w-full`}>
           <h1 className={`${dashBoardWorkPlaceHeader}`}>Shifts</h1>
           <AddRemoveEditButtons 
-              handleAddClick={() => setAddShiftForm(true)} 
-              handleSelectAll={true} 
-              handleRemoveClick={true} 
-              handleRemovePermanentlyClick={true}
+              handleAddClick={() => setAddEditShiftForm(true)} 
+              handleRemoveClick={() => setRemoveButtons((prev) => !prev)} 
+              handleSelectAll={selectAll} 
+              handleRemovePermanentlyClick={handleRemovePermanentlyClick}
               />
         </div>
         {addShiftForm &&
-          <FramerSpringRotate>
-            <AddShift addOrEdit='add' onClose={() => setAddShiftForm(false)} />
+          <FramerSpringRotate className='shadow-2xl rounded-2xl'>
+            <AddEditShift addOrEdit='add' onClose={() => setAddEditShiftForm(false)} />
           </FramerSpringRotate>
         }
         <div className='w-full gap-2'>
@@ -95,16 +118,9 @@ const WorkPlaceStats = () => {
             shifts.map((shift, idx) => {
               return <div key={idx} className='w-full'>
                 <ShiftComponent 
-                shiftId={shift.shiftId}
-                placeId={shift.placeId}
-                shiftStart={shift.shiftStart}
-                shiftEnd={shift.shiftEnd}
-                breakStart={shift.breakStart}
-                breakEnd={shift.breakEnd}
-                iWorkedOn={shift.iWorkedOn}
-                notes={shift.notes}
-                checked={shift.checked} 
-              />
+                  shift={shift} 
+                  removeButtons={removeButtons} 
+                  handleCheckBoxClick={handleCheckBoxClick} />
               </div>
             })
             :
