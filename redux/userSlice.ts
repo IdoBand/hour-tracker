@@ -1,26 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { WorkPlace, Shift, PLACES_OF_WORK } from '@/app/dashboard/WorkPlace'
+import { dummyUser, User } from './dummyUser'
 
-interface User {
-    userId: string
-    email: string
-    firstName: string
-    lastName: string
-    lastLogin?: string
-}
     
 interface UserState {
     user: User | null
 }
 
 const initialState: UserState = {
-    user: {
-        userId: '123456',
-        email: 'dummyuser@gmail.com',
-        firstName: 'Dummy',
-        lastName: 'User',
-        lastLogin: 'time string',
-    }
+    user: dummyUser
 }
 const userSlice = createSlice({
     name: 'user',
@@ -30,7 +17,7 @@ const userSlice = createSlice({
             reducer: (state, action: PayloadAction<User>) => {
                 state.user = action.payload
             },
-            prepare: (newUser) => {
+            prepare: (newUser: User) => {
                 return { payload: newUser }
             }
         },

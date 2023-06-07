@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpCircleIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import { ArrowUpCircleIcon, CheckCircleIcon, XCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
 import { checkBoxStyle, dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin';
 import { TimeHelper } from '@/app/(hooks)/TimeHelper'
 import { format, parseISO } from 'date-fns'
@@ -26,7 +26,7 @@ function parseISOString(string: string): string {
     const ISODate = parseISO(string)
     return format(ISODate, 'dd-MM-yyyy')
 }
-
+const shiftPropertyContainer = 'w-full'
 const slideDownDiv = {
     // when using this -> add to motion.div className 'overflow-hidden'
     initial: {
@@ -53,6 +53,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
     const dispatch = useAppDispatch()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [removalModal, setRemovalModal] = useState<boolean>(false)
+    const [shiftOptionsMenu, setShiftOptionsMenu] = useState<boolean>(false)
     const [editMode, setEditMode] = useState<boolean>(false)
     const shiftData = {
         shiftDate: parseISOString(shift.shiftStart),
@@ -75,37 +76,41 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
             <ArrowUpCircleIcon className='w-5' />
           </motion.div>
         );
-      };
+    };
 
   return (
-    <div className={`w-full flex justify-between flex-col rounded-lg py-1 cursor-pointer`}>
-            <div className={`w-full grid grid-cols-7 grid-flow-col rounded-lg px-2 py-1
+    <div className={`w-full flex justify-between flex-col rounded-lg py-1 cursor-pointer  relative`}>
+        {removeButtons && <input 
+                data-key={shift.shiftId}
+                type='checkbox' 
+                checked={shift.checked} 
+                onClick={(e) => e.stopPropagation()} 
+                onChange={(e) => {handleCheckBoxClick(e.target.dataset.key as string)}}
+                className={`appearance-none rounded-full w-5 h-5 border-2 border-black outline-none cursor-pointer transition-colors duration-200 ease-in-out absolute top-2.5 right-9 z-10
+                checked:bg-red-500 checked:before:absolute checked:before:content-['X'] checked:before:text-light checked:before:left-1/2 checked:before:top-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2`} />}
+            <div className={`w-full grid grid-cols-7 grid-flow-col rounded-lg px-2 py-1 
                 ${isOpen && 'bg-gray-200'}
                 border border-black hover:bg-sky-100
+                lg:grid-cols-3 lg:text-sm
                 `}
                 onClick={() => setIsOpen(prev => !prev)}
             >
+                <span className={`w-full order-8`}>{MotionArrow()}</span>
                 <span className={`col-start-1 col-end-2 w-full`}>{shiftData.shiftDate}</span>
-                <span className={`col-start-2 col-end-3 w-full`}>{shiftData.shiftStart}</span>
-                <span className={`col-start-3 col-end-4 w-full`}>{shiftData.shiftEnd}</span>
-                <span className={`col-start-4 col-end-5 w-full`}>{shiftData.shiftDuration}</span>
-                <span className={`col-start-5 col-end-6 w-full`}>{shiftData.breakDuration}</span>
-                <span className={`col-start-6 col-end-7 w-full`}>{checkOrX(shift.iWorkedOn)}</span>
-                <span className={`col-start-7 col-end-8 w-full flex justify-between relative`}>{checkOrX(shift.notes)}{removeButtons && <input 
-                                    data-key={shift.shiftId}
-                                    type='checkbox' 
-                                    checked={shift.checked} 
-                                    onClick={(e) => e.stopPropagation()} 
-                                    onChange={(e) => {handleCheckBoxClick(e.target.dataset.key as string)}}
-                                    className={`appearance-none rounded-full w-5 h-5 border-2 border-black outline-none cursor-pointer transition-colors duration-200 ease-in-out absolute top-0.5 right-6
-                                    checked:bg-red-500 checked:before:absolute checked:before:content-['X'] checked:before:text-light checked:before:left-1/2 checked:before:top-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2`} />}{MotionArrow()}</span>
+                <span className={`col-start-2 col-end-3 w-full lg:flex lg:justify-center`}>{shiftData.shiftStart}</span>
+                <span className={`col-start-3 col-end-4 w-full lg:flex lg:justify-center`}>{shiftData.shiftEnd}</span>
+                <span className={`col-start-4 col-end-5 w-full lg:hidden`}>{shiftData.shiftDuration}</span>
+                <span className={`col-start-5 col-end-6 w-full lg:hidden`}>{shiftData.breakDuration}</span>
+                <span className={`col-start-6 col-end-7 w-full lg:hidden`}>{checkOrX(shift.iWorkedOn)}</span>
+                <span className={`col-start-7 col-end-8 w-full lg:hidden`}>{checkOrX(shift.notes)}</span>
+                
             </div>
         {isOpen && 
             <motion.article 
                 variants={slideDownDiv}
                 initial="initial"
                 animate="animate"
-            className={`w-full min-h-max shadow-md rounded-lg px-2 py-1 overflow-hidden`}>
+            className={`w-full min-h-max shadow-md rounded-lg px-2 py-1 overflow-hidden cursor-default`}>
                 {editMode ?
                     <AddEditShift 
                         addOrEdit='edit'
@@ -119,38 +124,38 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                         shiftId={shift.shiftId}
                     />
                 :
-                    <div className='p-8 flex gap-4'>
-                        <div className='w-[20%] flex flex-col gap-2'>
-                            <div >
+                    <div className='p-8 flex gap-4 relative md:flex-col md:p-2'>
+                        <div className='w-2/6 flex flex-col gap-2 lg:w-full'>
+                            <div className={`${shiftPropertyContainer}`}>
                                 <span className='font-semibold'>Shift Start: </span> 
                                 <span>{shiftData.shiftStart}</span>
                             </div>
-                            <div >
+                            <div className={`${shiftPropertyContainer}`}>
                                 <span className='font-semibold'>Shift End: </span> 
                                 <span>{shiftData.shiftEnd}</span>
                             </div>
-                            <div >
+                            <div className={`${shiftPropertyContainer}`}>
                                 <span className='font-semibold'>Shift Duration: </span> 
                                 <span>{shiftData.shiftDuration}</span>
                             </div>
-                            <div >
+                            <div className={`${shiftPropertyContainer}`}>
                                 <span className='font-semibold'>Break Duration: </span> 
                                 <span>{shiftData.breakDuration}</span>
                             </div>
                             {shiftData.breakDuration !== '0' && 
                                 <>
-                                    <div >
+                                    <div className={`${shiftPropertyContainer}`}>
                                         <span className='font-semibold'>Break Start: </span> 
-                                        <span>{shift.breakStart}</span>
+                                        <span>{shiftData.breakStart}</span>
                                     </div>
-                                    <div >
+                                    <div className={`${shiftPropertyContainer}`}>
                                         <span className='font-semibold'>Break End: </span> 
-                                        <span>{shift.breakEnd}</span>
+                                        <span>{shiftData.breakEnd}</span>
                                     </div>
                                 </>
                             }
                         </div>
-                        <div className={'w-4/6 flex flex-col gap-2'}>
+                        <div className={'w-4/6 flex flex-col gap-2 lg:w-full'}>
                             <div className='flex flex-col'>
                                 <div className='font-semibold'>
                                 I Worked On: 
@@ -164,10 +169,17 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                                 {shift.notes}
                             </div>
                         </div>
-                        <div className='w-[10%] flex items-end flex-col gap-2'>
-                            <Button theme='full' onClick={() => setEditMode(true)} className='text-xs px-7' text='Edit' type='button'/>
-                            <Button theme='full' onClick={() => setRemovalModal(true)} className='text-xs' text='Remove' type='button'/>
+                        <div className='absolute right-4 top-4 cursor-pointer'>
+                            <EllipsisHorizontalCircleIcon onClick={() => setShiftOptionsMenu((prev) => !prev)} className='w-5 relative'/>
+                            {shiftOptionsMenu &&
+                                <div className='flex items-end flex-col gap-2 bg-light shadow-xl p-4 rounded-lg absolute right-0 top-10'>
+                                    <Button theme='full' onClick={() => {setEditMode(true); setShiftOptionsMenu(false)}} className='text-xs px-7' text='Edit' type='button'/>
+                                    <Button theme='full' onClick={() => {setRemovalModal(true); setShiftOptionsMenu(false)}} className='text-xs' text='Remove' type='button'/>
+                                </div>
+                            }
                         </div>
+                        
+                        
                     </div>
                 }
             </motion.article>

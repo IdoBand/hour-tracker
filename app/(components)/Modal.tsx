@@ -2,6 +2,7 @@
 import ReactDom from 'react-dom'
 import { flexCenter } from '@/app/(hooks)/mixin'
 import { motion } from 'framer-motion'
+import { scrollBar } from '@/app/(hooks)/mixin'
 interface ModalProps {
     children?: React.ReactNode
     onClose: () => void
@@ -19,12 +20,12 @@ export default function Modal({onClose, children, className}: ModalProps) {
                         variants={modalMotion}
                         initial="initial"
                         animate="animate"
-                        className={`w-max-content bg-light text-dark relative rounded-lg 
+                        className={` bg-light text-dark relative rounded-lg max-h-[90%] overflow-auto ${scrollBar}
                         lg:w-10/12 pt-8
                         ${className}`}
                         onClick={(e) => e.stopPropagation()}
                         >
-                            <button className={`absolute top-2 left-2 text-dark hover:cursor-pointer hover:text-red-700`} 
+                            <button className={`absolute top-2 right-2 text-dark hover:cursor-pointer hover:text-red-700`} 
                             onClick={onClose}>X</button>
                             {children}
                         </motion.div>

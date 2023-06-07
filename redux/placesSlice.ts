@@ -10,7 +10,7 @@ interface PlacesState {
 
 const initialState: PlacesState = {
     places: PLACES_OF_WORK,
-    currentWorkPlace: PLACES_OF_WORK[0]
+    currentWorkPlace: null
 }
 
 const placesSlice = createSlice({

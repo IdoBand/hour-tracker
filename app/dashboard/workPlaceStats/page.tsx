@@ -12,6 +12,7 @@ import FramerSpringRotate from '@/app/(components)/FramerSpringRotate';
 import AddEditShift from './AddEditShiftForm';
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
 import { removeShifts, setShiftCheckBox, checkBoxAllShifts } from '@/redux/placesSlice';
+import { ArrowUpCircleIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
@@ -68,21 +69,21 @@ const WorkPlaceStats = () => {
         <div className={`${dashBoardWorkPlaceHeader} my-3`}>
           Overview
         </div>
-        <div className='flex w-full'>
-          <div className='block w-2/3 shadow-lg rounded-lg'>
+        <div className='flex w-full md:flex-col'>
+          <div className='w-1/2 p-3 shadow-lg rounded-lg md:w-full'>
             {visualCalendar}
           </div>
-          <div className={`flex w-1/3 flex-col shadow-lg rounded-lg p-4 gap-4`}>
+          <div className={`flex w-1/2 flex-col shadow-lg rounded-lg p-4 gap-4 md:w-full md:text-sm`}>
             
             <div className={`p-1 flex w-full flex-col rounded-lg gap-1`}>
-              <span className='w-full font-semibold text-lg underline'>Monthly Overview</span>
+              <span className='w-full font-semibold text-lg underline md: text-center'>Monthly Overview</span>
               <span>{`Expected Salary: `} <span className='font-semibold'>{`${ShiftsManipulator.calculateSalary(shifts, 44)} ₪`}</span></span>
               <span>{`Total Time: `}<span className='font-semibold'>{`${totalHoursForPeriod(shifts)}`}</span></span>
               <span>{`Total Break Time: `}<span className='font-semibold'>{`${totalBreakTime(shifts)}`}</span></span>
             </div>
             
             <div className={`p-1 flex w-full flex-col rounded-lg gap-1`}>
-              <span className='w-full font-semibold text-lg underline'>Work Place Overview</span>
+              <span className='w-full font-semibold text-lg underline md: text-center'>Work Place Overview</span>
               <span>{`Wage Per Hour: `} <span className='font-semibold'>{`${currentWorkPlace?.wagePerHour} ₪`}</span></span>
               <span>{`Total Employment Duration: `}<span className='font-semibold'>{`${totalHoursForPeriod(currentWorkPlace!.shifts)}`}</span></span>
               <span>{`Total Break Duration: `}<span className='font-semibold'>{`${totalBreakTime(currentWorkPlace!.shifts)}`}</span></span>
@@ -104,14 +105,18 @@ const WorkPlaceStats = () => {
           </FramerSpringRotate>
         }
         <div className='w-full gap-2'>
-          <div className={`w-full bg-sky-200 rounded-lg grid grid-cols-7 grid-flow-col px-2 py-1`}>
-            <span className={`col-start-1 col-end-2 w-full`}>Date</span>
-            <span className={`col-start-2 col-end-3 w-full`}>Start</span>
-            <span className={`col-start-3 col-end-4 w-full`}>End</span>
-            <span className={`col-start-4 col-end-5 w-full`}>Duration</span>
-            <span className={`col-start-5 col-end-6 w-full`}>Break</span>
-            <span className={`col-start-6 col-end-7 w-full`}>I Worked On</span>
-            <span className={`col-start-7 col-end-8 w-full`}>Notes</span>
+          <div className={`w-full bg-sky-200 rounded-lg grid grid-cols-7 grid-flow-col px-2 py-1
+            lg:grid-cols-3
+          `}
+          >
+            <span className={`w-full flex order-8 opacity-0`}><ArrowUpCircleIcon className='w-5'/></span>
+            <span className={`col-start-1 col-end-2 w-full lg:flex lg:justify-center`}>Date</span>
+            <span className={`col-start-2 col-end-3 w-full lg:flex lg:justify-center`}>Start</span>
+            <span className={`col-start-3 col-end-4 w-full lg:flex lg:justify-center`}>End</span>
+            <span className={`col-start-4 col-end-5 w-full lg:hidden`}>Duration</span>
+            <span className={`col-start-5 col-end-6 w-full lg:hidden`}>Break</span>
+            <span className={`col-start-6 col-end-7 w-full lg:hidden`}>I Worked On</span>
+            <span className={`col-start-7 col-end-8 w-full lg:hidden`}>Notes</span>
           </div>
           <div className='w-full gap-2 flex-col-reverse'>
             {shifts.length ? 

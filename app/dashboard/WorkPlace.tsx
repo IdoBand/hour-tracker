@@ -13,7 +13,6 @@ export interface WorkPlace {
     employmentStartDate: string
     employmentEndDate: string
     isCurrent: boolean
-    totalHours: number
     wagePerHour: number
     isBreakPaid: boolean
     link: string
@@ -46,7 +45,7 @@ export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
 
 export const workPlace = (key: number ,removeButtons: boolean, handleCheckBoxClick: (placeId: string) => void, handleWorkPlaceClick: (placeId: string) => void,
     setAddEditShiftForm: any,            
-{placeId, name, employmentStartDate, employmentEndDate, isCurrent, totalHours, link, checked, shifts}: WorkPlace): React.ReactNode => {
+{placeId, name, employmentStartDate, employmentEndDate, isCurrent, link, checked, shifts}: WorkPlace): React.ReactNode => {
         return (
             <motion.article 
                 key={key}

@@ -45,16 +45,18 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
     label: string
     calender: any
     selectedDay: any
-    children: any
+    hourPicker: any
   }
   const HourInput = useCallback(
-      ({ label, calender , children , selectedDay}: HourInputProps) => {
+      ({ label, calender , hourPicker , selectedDay}: HourInputProps) => {
         const [isCalender, setIsCalender] = useState<boolean>(false)
     
         return (
-          <div className={`mb-9 w-full flex justify-between items-center z-50`}>
+          <div className={`mb-9 w-full flex justify-between items-center z-50
+              lg:flex-col
+          `}>
             <label>{label}</label>
-            <div className='relative flex items-center'>
+            <div className='relative flex items-center gap-2'>
               <label 
                 className='w-max px-2 flex gap-1 py-1 cursor-pointer md:w-full rounded-md bg-white'
                 onClick={() => setIsCalender(prev => !prev)}
@@ -74,8 +76,9 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
                   
                 </div>
               }
+              {hourPicker}
             </div>
-            {children}
+            
           </div>
         )
       }
@@ -122,17 +125,21 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
       className={`w-full flex flex-col rounded-br-2xl rounded-3xl p-8
       border border-solid border-dark dark:border-light
       bg-light
-      lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
+      lg:p-2`}
     >
       <h1 className={`w-full ${dashBoardWorkPlaceHeader}`}>Add a Shift to {useAppSelector(state => state.placesSlice.currentWorkPlace?.name)}</h1>
-      <div className={`flex w-full`}>
-        <div className='w-1/2 pb-16 pt-8'>
-          <HourInput label='Shift Start' children={shiftStartHourPicker} calender={shiftStartCalender} selectedDay={shiftStartDay}/>
-          <HourInput label='Shift End' children={shiftEndHourPicker} calender={shiftEndCalender} selectedDay={shiftEndDay}/>
-          <HourInput label='Break Start' children={breakStartHourPicker} calender={breakStartCalender} selectedDay={breakStartDay}/>
-          <HourInput label='Break End' children={breakEndHourPicker} calender={breakEndCalender} selectedDay={breakEndDay}/>
+      <div className={`flex w-full lg:flex-col lg:justify-center lg:items-center`}>
+        <div className={`w-96 pb-16 pt-8
+          lg:w-full
+        `}>
+          <HourInput label='Shift Start' hourPicker={shiftStartHourPicker} calender={shiftStartCalender} selectedDay={shiftStartDay}/>
+          <HourInput label='Shift End' hourPicker={shiftEndHourPicker} calender={shiftEndCalender} selectedDay={shiftEndDay}/>
+          <HourInput label='Break Start' hourPicker={breakStartHourPicker} calender={breakStartCalender} selectedDay={breakStartDay}/>
+          <HourInput label='Break End' hourPicker={breakEndHourPicker} calender={breakEndCalender} selectedDay={breakEndDay}/>
         </div>
-        <div className='w-1/2 flex justify-start items-center flex-col pt-4'>
+        <div className={`flex grow justify-start items-end flex-col pt-8
+            lg:w-full lg:pt-0
+        `}>
           <label className='w-11/12 mb-1'>I Worked On:</label>
           <textarea defaultValue={iWorkedOn}
             className={`w-11/12 outline-none p-1 mb-10`}

@@ -148,11 +148,11 @@ export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?:
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     const visualCalendar = 
-    <div className="w-full">
-      <div className={`max-w-full flex justify-center items-start px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6`}>
-        <div className="flex gap-4 md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
-          <div className="md:pr-14">
-            <div className="flex items-center justify-between relative">
+    <div className="w-full pt-4">
+      <div className={`max-w-full flex justify-start items-start px-4 sm:px-7 md:max-w-4xl md:px-6 lg:justify-center`}>
+        <div className="flex md:flex-col gap-4 lg:justify-center md:divide-y divide-gray-200">
+          <div className="w-max flex flex-col items-center justify-between">
+            <div className="w-full flex items-center justify-between relative">
               <h2 className=" font-semibold text-gray-900">
                 <div
                     onClick={() => {setYearsAndMonthsOptions(true); yearsAndMonthsOptionsRef.current = true}}
@@ -162,9 +162,9 @@ export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?:
                 </div>
               </h2>
               {yearsAndMonthsOptions &&
-                        selectMonthAndYearMenu()
+                      selectMonthAndYearMenu()
                     }
-              <div className='flex gap-2'>
+              <div className='flex gap-2 justify-between'>
                 <button
                   type="button"
                   onClick={previousMonth}
@@ -190,7 +190,7 @@ export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?:
               </div>
               
             </div>
-            <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
+            <div className="w-full grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
               <div>S</div>
               <div>M</div>
               <div>T</div>
@@ -251,8 +251,8 @@ export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?:
             </div>
           </div>
           {sideBar &&
-            <section className="mt-12 md:mt-0 md:pl-14">
-              <h2 className="font-semibold text-gray-900">
+            <section className="mt-16 mb-0 md:mb-6 md:mt-0 text-center">
+              <h2 className="font-semibold text-gray-900 w-full pt-2">
                 Details for{' '}
                 <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
                   {format(selectedDay, 'MMM dd, yyy')}
