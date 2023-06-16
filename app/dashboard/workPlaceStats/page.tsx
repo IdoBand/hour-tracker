@@ -12,7 +12,7 @@ import FramerSpringRotate from '@/app/(components)/FramerSpringRotate';
 import AddEditShift from './AddEditShiftForm';
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
 import { removeShifts, setShiftCheckBox, checkBoxAllShifts } from '@/redux/placesSlice';
-import { ArrowUpCircleIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid'
 
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
@@ -77,7 +77,7 @@ const WorkPlaceStats = () => {
             
             <div className={`p-1 flex w-full flex-col rounded-lg gap-1`}>
               <span className='w-full font-semibold text-lg underline md: text-center'>Monthly Overview</span>
-              <span>{`Expected Salary: `} <span className='font-semibold'>{`${ShiftsManipulator.calculateSalary(shifts, 44)} ₪`}</span></span>
+              <span>{`Expected Salary: `} <span className='font-semibold'>{`${ShiftsManipulator.calculateSalary(shifts)} ₪`}</span></span>
               <span>{`Total Time: `}<span className='font-semibold'>{`${totalHoursForPeriod(shifts)}`}</span></span>
               <span>{`Total Break Time: `}<span className='font-semibold'>{`${totalBreakTime(shifts)}`}</span></span>
             </div>

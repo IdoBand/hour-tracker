@@ -10,8 +10,8 @@ const AddRemoveEditButtons = ({handleAddClick, handleSelectAll, handleRemoveClic
 
   return (
     <nav className={`flex border-b border-solid border-l-grayBorder`}>
-        <button className={`relative mx-3`}onClick={handleAddClick}>+ Add</button>
-        <button className={`relative ml-3`} onClick={() => {handleRemoveClick() ; setRemoveButtons(prev => !prev)}}>- Remove</button>
+        <button className={`relative mx-3 hover:text-secondary`}onClick={handleAddClick}>+ Add</button>
+        <button className={`relative ml-3 hover:text-secondary`} onClick={() => {handleRemoveClick() ; setRemoveButtons(prev => !prev)}}>- Remove</button>
         {removeButtons &&
         <>
         <button className={`relative ml-3 text-danger`} onClick={handleSelectAll}>Select All</button>

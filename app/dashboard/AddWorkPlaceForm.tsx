@@ -13,21 +13,21 @@ export interface FormProps {
 }
 const addNewWorkPlaceFormSection = 'flex justify-between w-full mb-6 md:flex-col'
 
-
+export interface TextLineInputProps {
+    name: string
+    label: string
+    type?: 'text' | 'number'
+    isRequired: boolean
+    autoComplete?: string
+    value?: string | number
+}
 
 const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
     const user = useAppSelector(state => state.userSlice.user)
     const dispatch = useAppDispatch()
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
     const { visualCalendar, selectedDay } = useCalendar(false, [])
-    interface TextLineInputProps {
-        name: string
-        label: string
-        type?: 'text' | 'number'
-        isRequired: boolean
-        autoComplete?: string
-        value?: string | number
-    }
+  
     const TextLineInput = ({name, label, type='text', isRequired, autoComplete, value}: TextLineInputProps) => {
         return (
         <div className={`flex flex-col mb-6`}>
@@ -70,22 +70,19 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
     }
     function extractData(data: any) {
         data.selectedDay = format(selectedDay, 'yyyy-MM-dd')
-        console.log(data)
+
         const newWorkPlace: WorkPlace = {
             placeId: Date.now().toString(),
             name: data.workPlaceName,
             employmentStartDate: data.selectedDay,
             employmentEndDate: '',
             isCurrent: data.isCurrent,
-            totalHours: 0,
             wagePerHour: data.wagePerHour,
             isBreakPaid: data.isCurrent,
             link: '',
             checked: false,
             shifts: [],
         }
-            
-        
         dispatch(addWorkPlace(newWorkPlace))
         onClose()
     }

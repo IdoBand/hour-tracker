@@ -20,6 +20,8 @@ export interface Shift {
     iWorkedOn: string
     notes: string
     checked: boolean
+    wagePerHour: number,
+    tipBonus: number
 }
 
 function parseISOString(string: string): string {
@@ -122,6 +124,8 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                         breakStart={shift.breakStart}
                         breakEnd={shift.breakEnd}
                         shiftId={shift.shiftId}
+                        wagePerHour={shift.wagePerHour}
+                        tipBonus={shift.tipBonus}
                     />
                 :
                     <div className='p-8 flex gap-4 relative md:flex-col md:p-2'>
@@ -137,6 +141,14 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                             <div className={`${shiftPropertyContainer}`}>
                                 <span className='font-semibold'>Shift Duration: </span> 
                                 <span>{shiftData.shiftDuration}</span>
+                            </div>
+                            <div className={`${shiftPropertyContainer}`}>
+                                <span className='font-semibold'>Wage Per Hour: </span> 
+                                <span>{`${shift.wagePerHour} ₪`}</span>
+                            </div>
+                            <div className={`${shiftPropertyContainer}`}>
+                                <span className='font-semibold'>Tip / Bonus: </span> 
+                                <span>{`${shift.tipBonus} ₪`}</span>
                             </div>
                             <div className={`${shiftPropertyContainer}`}>
                                 <span className='font-semibold'>Break Duration: </span> 

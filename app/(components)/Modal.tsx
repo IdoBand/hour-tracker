@@ -15,13 +15,13 @@ const modalMotion = {
 export default function Modal({onClose, children, className}: ModalProps) {
     return ReactDom.createPortal(
         <>
-                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} overflow-auto`} onClick={onClose}>
+                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} overflow-auto z-10`} onClick={onClose}>
                         <motion.div 
                         variants={modalMotion}
                         initial="initial"
                         animate="animate"
-                        className={` bg-light text-dark relative rounded-lg max-h-[90%] overflow-auto ${scrollBar}
-                        lg:w-10/12 pt-8
+                        className={`w-max bg-light text-dark relative rounded-lg max-h-[90%] overflow-auto ${scrollBar}
+                        lg:w-11/12 pt-8
                         ${className}`}
                         onClick={(e) => e.stopPropagation()}
                         >

@@ -13,7 +13,7 @@ const Button = ({onClick, theme, text, className, type}: ButtonProps) => {
   return (
     <button 
         onClick={onClick}
-        className={`${buttonThemes[theme]} py-2 px-4 ${className}`}
+        className={`${buttonThemes[theme]} py-2 px-4 ${className} h-max`}
         type={type}
         >
         {text}

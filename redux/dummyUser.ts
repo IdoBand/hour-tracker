@@ -39,7 +39,9 @@ export const SHIFTS3: Shift[] = [
       breakStart: `${currentYear}-${currentMonth}-20T18:00`,
       breakEnd: `${currentYear}-${currentMonth}-20T18:40`,
       iWorkedOn: loremIpsumParagraph,
-      notes: 'dont forget to complete the boss`s task next week',
+      notes: 'don`t forget to complete the boss`s task next week',
+      wagePerHour: 56,
+      tipBonus: 0,
       checked: false
     },
     {
@@ -51,6 +53,8 @@ export const SHIFTS3: Shift[] = [
       breakEnd: `${currentYear}-${currentMonth}-21T16:50`,
       iWorkedOn: loremIpsumParagraph,
       notes: '',
+      wagePerHour: 56,
+      tipBonus: 0,
       checked: false
     },
     {
@@ -62,6 +66,8 @@ export const SHIFTS3: Shift[] = [
       breakEnd: `${currentYear}-${currentMonth}-22T16:00`,
       iWorkedOn: '',
       notes: 'added a new project feature',
+      wagePerHour: 56,
+      tipBonus: 0,
       checked: false
     },
     {
@@ -73,6 +79,8 @@ export const SHIFTS3: Shift[] = [
       breakEnd: `${currentYear}-${lastMonth}-03T19:00`,
       iWorkedOn: `this is a random string`,
       notes: 'dont forget to complete the boss`s task next week',
+      wagePerHour: 56,
+      tipBonus: 0,
       checked: false
     },
     {
@@ -84,6 +92,8 @@ export const SHIFTS3: Shift[] = [
       breakEnd: `${currentYear}-${lastMonth}-05T15:30`,
       iWorkedOn: loremIpsumParagraph,
       notes: '',
+      wagePerHour: 56,
+      tipBonus: 0,
       checked: false
     },
     {
@@ -95,6 +105,8 @@ export const SHIFTS3: Shift[] = [
       breakEnd: `${currentYear}-${lastMonth}-19T10:25`,
       iWorkedOn: '',
       notes: 'added a new project feature',
+      wagePerHour: 56,
+      tipBonus: 0,
       checked: false
     },
     {
@@ -106,6 +118,8 @@ export const SHIFTS3: Shift[] = [
       breakEnd: `${currentYear}-${lastMonth}-19T16:00`,
       iWorkedOn: '',
       notes: 'added a new project feature',
+      wagePerHour: 56,
+      tipBonus: 0,
       checked: false
     },
   ]
@@ -119,6 +133,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-20T13:20`,
     iWorkedOn: loremIpsumParagraph,
     notes: loremIpsumParagraph,
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -130,6 +146,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-21T14:50`,
     iWorkedOn: '',
     notes: loremIpsumParagraph,
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -141,6 +159,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-22T13:35`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -152,6 +172,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-03T13:50`,
     iWorkedOn: '',
     notes: loremIpsumParagraph,
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -163,6 +185,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-05T13:40`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -174,6 +198,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-17T13:25`,
     iWorkedOn: '',
     notes: loremIpsumParagraph,
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -185,6 +211,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-19T14:05`,
     iWorkedOn: '',
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   // Additional shifts with placeId '3'
@@ -197,6 +225,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-10T13:50`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -208,6 +238,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-12T14:05`,
     iWorkedOn: '',
     notes: loremIpsumParagraph,
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -219,6 +251,8 @@ export const SHIFTS1: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-15T14:35`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   }
 ];
@@ -233,6 +267,8 @@ export const SHIFTS2: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-20T13:20`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -244,6 +280,8 @@ export const SHIFTS2: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-21T14:50`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -255,6 +293,8 @@ export const SHIFTS2: Shift[] = [
     breakEnd: `${currentYear}-${currentMonth}-22T13:35`,
     iWorkedOn: '',
     notes: loremIpsumParagraph,
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -266,6 +306,8 @@ export const SHIFTS2: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-03T13:50`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -277,6 +319,8 @@ export const SHIFTS2: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-05T13:40`,
     iWorkedOn: '',
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -288,6 +332,8 @@ export const SHIFTS2: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-17T13:25`,
     iWorkedOn: '',
     notes: loremIpsumParagraph,
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
   {
@@ -299,47 +345,49 @@ export const SHIFTS2: Shift[] = [
     breakEnd: `${currentYear}-${lastMonth}-19T14:05`,
     iWorkedOn: loremIpsumParagraph,
     notes: '',
+    wagePerHour: 44,
+    tipBonus: 0,
     checked: false
   },
 ];
 
 const place1: WorkPlace = {
-    placeId: '1',
-    name: 'WORK PLACE NAME 1',
-    employmentStartDate: '2022-05-11T13:00',
-    employmentEndDate: '2023-05-11T13:00',
-    isCurrent: false,
-    wagePerHour: 44,
-    isBreakPaid: true,
-    link: '',
-    checked: false,
-    shifts: SHIFTS1
+  placeId: '1',
+  name: 'WORK PLACE NAME 1',
+  employmentStartDate: '2022-05-11T13:00',
+  employmentEndDate: '2023-05-11T13:00',
+  isCurrent: false,
+  wagePerHour: 44,
+  isBreakPaid: true,
+  link: '',
+  checked: false,
+  shifts: SHIFTS1
 }
 const place2: WorkPlace = {
-    placeId: '2',
-    name: 'WORK PLACE NAME 2',
-    employmentStartDate: '2019-05-11T13:00',
-    employmentEndDate: '2021-10-11T13:00',
-    isCurrent: false,
-    wagePerHour: 44,
-    isBreakPaid: false,
-    link: '',
-    checked: false,
-    shifts: SHIFTS2
-    
+  placeId: '2',
+  name: 'WORK PLACE NAME 2',
+  employmentStartDate: '2019-05-11T13:00',
+  employmentEndDate: '2021-10-11T13:00',
+  isCurrent: false,
+  wagePerHour: 44,
+  isBreakPaid: false,
+  link: '',
+  checked: false,
+  shifts: SHIFTS2
+  
 }
 const place3: WorkPlace = {
-    placeId: '3',
-    name: 'WORK PLACE NAME 3',
-    employmentStartDate: '2012-12-11T13:00',
-    employmentEndDate: '2019-05-11T13:00',
-    isCurrent: true,
-    wagePerHour: 44,
-    isBreakPaid: true,
-    link: '',
-    checked: false,
-    shifts: SHIFTS3
-    
+  placeId: '3',
+  name: 'WORK PLACE NAME 3',
+  employmentStartDate: '2012-12-11T13:00',
+  employmentEndDate: '2019-05-11T13:00',
+  isCurrent: true,
+  wagePerHour: 56,
+  isBreakPaid: true,
+  link: '',
+  checked: false,
+  shifts: SHIFTS3
+  
 }
 
 

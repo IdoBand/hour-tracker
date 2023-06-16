@@ -19,7 +19,7 @@ const SignOut = ({ onClose }: SignOutProps) => {
   }
   return (
     <main className={`w-full ${flexCenter} flex-col gap-8 p-4`}>
-        <h1 className={`text-2xl px-10`}>
+        <h1 className={`text-2xl px-10 lg:text-lg md:text-sm md:px-0`}>
             You are signed in as {user?.firstName} {user?.lastName}
         </h1>
         <div className={`${flexCenter} gap-4`}>

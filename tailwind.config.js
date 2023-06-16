@@ -12,7 +12,7 @@ module.exports = {
         light: '#f5f5f5',
         grayBorder: '#D3D3D3',
         primary: '#B63E96',
-        secondary: '#58E6D9',
+        secondary: 'rgb(56 189 248)',
         danger: 'rgb(190, 60, 60)',
       },
       backgroundImage: {
