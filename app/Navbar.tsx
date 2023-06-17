@@ -21,16 +21,16 @@ const Navbar = () => {
   const navbarLinks = (className: string) => {
     return (
       <nav className={`${flexCenter} ${className}`}>
-            {user ? 
-            <>
-              <Link href={'/dashboard'} className={`${navbarLinkClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >Dashboard</Link>
-              <Link href={'/'} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); setSignOut(true); mobileMenu && setMobileMenu(false)}}>Sign Out</Link>
-            </>
-            :
-              <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); setSignIn(true); mobileMenu && setMobileMenu(false)}}>Sign In</Link>
-            }
-            <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); mobileMenu && setMobileMenu(false)}}>About</Link>
-            
+        <Link href={'/'} className={`${navbarLinkClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >Home</Link>
+        {user ? 
+        <>
+          <Link href={'/dashboard'} className={`${navbarLinkClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >Dashboard</Link>
+          <Link href={'/'} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); setSignOut(true); mobileMenu && setMobileMenu(false)}}>Sign Out</Link>
+        </>
+        :
+          <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); setSignIn(true); mobileMenu && setMobileMenu(false)}}>Sign In</Link>
+        }
+        <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); mobileMenu && setMobileMenu(false)}}>About</Link>
       </nav>
     )
   }
@@ -38,7 +38,7 @@ const Navbar = () => {
   return (
     <>
     <header className={`w-full ${flexCenter}  border-b border-solid border-grayBorder z-20 bg-light`}>
-      <main className={`flex justify-between relative w-10/12 items-center py-2`}>
+      <main className={`flex justify-between relative w-10/12 items-center py-2 md:w-11/12`}>
         <Link href={'/'} className={`${flexCenter} gap-1`}>
         <LogoSVG className={``} height='28'/>
         <h1 className={`${flexCenter} font-bold`}>Hour Tracker</h1>
@@ -64,10 +64,9 @@ const Navbar = () => {
     }
     {mobileMenu && <Modal onClose={() => setMobileMenu(false)}>
                 <div className='relative overflow-hidden'>
-                  <LogoSVG className='absolute opacity-40 sm:opacity-10' width='200' height='200' />
-                  {navbarLinks('flex-col gap-6 pb-8')}
+                  <LogoSVG className='absolute -bottom-8 -left-5 opacity-40 sm:opacity-10' width='200' height='200' />
+                  {navbarLinks('flex-col gap-6 py-8')}
                 </div>
-                
                 </Modal>
     }
     </>

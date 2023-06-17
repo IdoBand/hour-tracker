@@ -2,7 +2,7 @@
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
 import { useCalendar } from '../../(hooks)/useCalender';
 import { Shift } from './Shift';
-import { dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin';
+import { dashBoardWorkPlaceHeader, pageHeader } from '@/app/(hooks)/mixin';
 import ShiftComponent from './Shift'
 import { TimeHelper } from '@/app/(hooks)/TimeHelper';
 import { isSameMonth, parseISO } from 'date-fns'
@@ -13,7 +13,7 @@ import AddEditShift from './AddEditShiftForm';
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
 import { removeShifts, setShiftCheckBox, checkBoxAllShifts } from '@/redux/placesSlice';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid'
-
+import Redirect from '@/app/(components)/Redirect';
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
     const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
@@ -31,7 +31,9 @@ function totalBreakTime(shifts: Shift[]) {
 
 const WorkPlaceStats = () => {
   const currentWorkPlace = useAppSelector(state => state.placesSlice.currentWorkPlace)
-  
+  if (!currentWorkPlace) {
+    return <Redirect to='/dashboard' />
+  }
   const { visualCalendar, selectedDay } = useCalendar(true, currentWorkPlace!.shifts)
   const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
   const [removeButtons, setRemoveButtons] = useState<boolean>(false)
@@ -66,7 +68,7 @@ const WorkPlaceStats = () => {
   return (
     <main className={`w-full flex justify-center items-center flex-col`}>
       <div className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}>
-        <div className={`${dashBoardWorkPlaceHeader} my-3`}>
+        <div className={`${pageHeader} my-3`}>
           Overview
         </div>
         <div className='flex w-full md:flex-col'>
@@ -120,8 +122,8 @@ const WorkPlaceStats = () => {
           </div>
           <div className='w-full gap-2 flex-col-reverse'>
             {shifts.length ? 
-            shifts.map((shift, idx) => {
-              return <div key={idx} className='w-full'>
+            shifts.map((shift) => {
+              return <div key={shift.shiftId} className='w-full'>
                 <ShiftComponent 
                   shift={shift} 
                   removeButtons={removeButtons} 

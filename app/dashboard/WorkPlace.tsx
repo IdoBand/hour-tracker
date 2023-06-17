@@ -1,11 +1,9 @@
 import { Shift } from './workPlaceStats/Shift'
-import { motion } from 'framer-motion'
-import { checkBoxStyle, dashBoardWorkPlaceHeader, flexCenter } from '@/app/(hooks)/mixin';
-import { VercelSVG } from '@/util/icons'
+import { dashBoardWorkPlaceHeader, checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import Link from 'next/link';
 import { TimeHelper } from '../(hooks)/TimeHelper';
 import { ShiftsManipulator } from '../(hooks)/ShiftsManipulator';
-import { SquaresPlusIcon, MagnifyingGlassIcon, ChartBarIcon } from '@heroicons/react/24/solid';
+import { SquaresPlusIcon, ChartBarIcon } from '@heroicons/react/24/solid';
 
 export interface WorkPlace {
     placeId: string
@@ -20,83 +18,72 @@ export interface WorkPlace {
     shifts: Shift[]
 }
 
-const singleArticle = {
-    initial: {
-        opacity: 0,
-        y: 50,
-    },
-    animate: {
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 1
-        },
-    }
-}
 
 export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
-
     if (shifts.length) {
-      const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
-      return TimeHelper.calculateTimeMultipleDates(dates)
+        const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
+        return TimeHelper.calculateTimeMultipleDates(dates)
     }
     return '0'
 }
 
-export const workPlace = (key: number ,removeButtons: boolean, handleCheckBoxClick: (placeId: string) => void, handleWorkPlaceClick: (placeId: string) => void,
-    setAddEditShiftForm: any,            
-{placeId, name, employmentStartDate, employmentEndDate, isCurrent, link, checked, shifts}: WorkPlace): React.ReactNode => {
+interface WorkPlaceComponentProps {
+    workPlace: WorkPlace
+    removeButtons: boolean
+    handleCheckBoxClick: (placeId: string) => void
+    handleWorkPlaceClick: (placeId: string) => void
+    setAddEditShiftForm: any
+}
+export default function WorkPlaceComponent ({workPlace, removeButtons, handleCheckBoxClick, handleWorkPlaceClick, setAddEditShiftForm}: WorkPlaceComponentProps) {
         return (
-            <motion.article 
-                key={key}
-                className={`col-span-2 w-full relative rounded-br-2xl rounded-3xl p-6
-                    border border-solid dark:border-light
-                    bg-light shadow-2xl 
-                    lg:col-span-4
-                `}
-                variants={singleArticle}
-                >
+            <div>
                 {removeButtons && <input 
-                                    data-key={placeId}
+                                    data-key={workPlace.placeId}
                                     type='checkbox' 
-                                    checked={checked} 
+                                    checked={workPlace.checked} 
                                     onClick={(e) => e.stopPropagation()} 
                                     onChange={(e) => {handleCheckBoxClick(e.target.dataset.key as string)}}
-                                    className={`${checkBoxStyle}`}/>}
+                                    className={checkboxRemoveStyle}/>}
                 <div className='flex justify-between'>
-                    
                     <div className={`flex flex-col`}>
-                        <div className={`${isCurrent ? 'text-secondary' : 'DARK'} ${dashBoardWorkPlaceHeader} w-full mb-4`}>{name}</div>
-                        <div>
-                            <span className='font-semibold'>Total Hours: </span>
-                            <span className=''>{prepareShiftsForTotalTimeCalculation(shifts)}</span>
+                        <div className={`${workPlace.isCurrent ? 'text-secondary' : 'DARK'} ${dashBoardWorkPlaceHeader} w-full mb-4`}>{workPlace.name}</div>
+                        <div className='sm:flex xs:flex-col'>
+                            <span className='font-semibold md:text-sm sm:text:xs'>Total Hours: </span>
+                            <span className='md:text-sm sm:text-xs'>{prepareShiftsForTotalTimeCalculation(workPlace.shifts)}</span>
                         </div>
-                        <div>
-                            <span className='font-semibold'>Hours Past Week: </span>
-                            <span className=''>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastWeekShifts(shifts))}</span>
+                        <div className='sm:flex xs:flex-col'>
+                            <span className='font-semibold md:text-sm sm:text:xs'>Hours Past Week: </span>
+                            <span className='md:text-sm sm:text-xs'>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastWeekShifts(workPlace.shifts))}</span>
                         </div>
-                        <div>
-                            <span className='font-semibold'>Hours Past Month: </span>
-                            <span className=''>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastMonthShifts(shifts))}</span>
+                        <div className='sm:flex xs:flex-col'>
+                            <span className='font-semibold md:text-sm sm:text:xs'>Hours Past Month: </span>
+                            <span className='md:text-sm sm:text-xs'>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastMonthShifts(workPlace.shifts))}</span>
                         </div>
-                        <div>
-                            <span className='font-semibold'>Employment Duration: </span>
-                            <span className=''>{TimeHelper.calculateYearlyDuration(employmentStartDate, employmentEndDate)}</span>
+                        <div className='sm:flex xs:flex-col'>
+                            <span className='font-semibold md:text-sm sm:text:xs'>Employment Duration: </span>
+                            <span className='md:text-sm sm:text-xs'>{TimeHelper.calculateYearlyDuration(workPlace.employmentStartDate, workPlace.employmentEndDate)}</span>
                         </div>
                     </div>
                     <div className={`flex justify-center items-end flex-col gap-4 w-max`}>
                         <Link 
                             href={'/dashboard/workPlaceStats'} 
-                            className='cursor-pointer shadow-xl rounded-full p-2 ml-4 mt-3 w-max group hover:scale-125'>
-                            <div onClick={() => handleWorkPlaceClick(placeId)}>
+                            className={`cursor-pointer shadow-xl rounded-full p-2 ml-4 mt-3 w-max group relative 
+                                before:opacity-0 hover:before:opacity-100 before:bg-sky-400 before:text-light before:absolute before:content-['Stats']
+                                before:-bottom-7 before:-left-0 before:text-xs before:p-1 before:rounded-lg before:transition-opacity before:duration-400
+                            `}>
+                            <div onClick={() => handleWorkPlaceClick(workPlace.placeId)}>
                                 <ChartBarIcon className='w-6 group-hover:fill-secondary'/>
                             </div>
                         </Link>
-                        <div className='cursor-pointer shadow-xl rounded-full p-2 ml-4 mt-3 w-max group hover:scale-125' onClick={() => {handleWorkPlaceClick(placeId);setAddEditShiftForm(true)}}>
+                        <div className={`cursor-pointer shadow-xl rounded-full p-2 ml-4 mt-3 w-max group relative
+                                before:opacity-0 hover:before:opacity-100 before:bg-sky-400 before:text-light before:absolute before:content-['QuickAdd']
+                                before:-bottom-7 before:-left-0 before:text-xs before:p-1 before:rounded-lg before:transition-opacity before:duration-400
+                        `} 
+                                onClick={() => {handleWorkPlaceClick(workPlace.placeId);setAddEditShiftForm(true)}}>
                             <SquaresPlusIcon className='w-6 group-hover:fill-secondary'/>
                         </div>
                     </div>
                 </div>
-            </motion.article>
+            </div>
         )
     }

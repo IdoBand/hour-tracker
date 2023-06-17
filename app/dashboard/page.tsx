@@ -1,7 +1,7 @@
 'use client';
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { workPlace } from './WorkPlace';
+import WorkPlaceComponent from './WorkPlace';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import AddNewWorkPlaceForm from './AddWorkPlaceForm';
 import { checkboxAll, removeWorkPlaces, setWorkPlaceCheckbox, setCurrentWorkPlace } from '@/redux/placesSlice';
@@ -9,6 +9,8 @@ import AddRemoveEditButtons from '../(components)/AddRemoveEditButtons';
 import FramerSpringRotate from '../(components)/FramerSpringRotate';
 import AddEditShift from './workPlaceStats/AddEditShiftForm';
 import Modal from '../(components)/Modal';
+import { pageHeader } from '../(hooks)/mixin';
+import Redirect from '../(components)/Redirect';
 const articlesContainer = {
     initial: {
         opacity: 0,
@@ -21,10 +23,25 @@ const articlesContainer = {
         },
     }
 }
-
+const singleArticle = {
+    initial: {
+        opacity: 0,
+        y: 50,
+    },
+    animate: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 1
+        },
+    }
+}
 const Dashboard = () => {
     
     const user = useAppSelector(state => state.userSlice.user)
+    if (!user) {
+        <Redirect to='/' />
+    }
     const workPlaces = useAppSelector(state => state.placesSlice.places)
     const dispatch = useAppDispatch()
     const [removeButtons, setRemoveButtons] = useState<boolean>(false)
@@ -45,16 +62,13 @@ const Dashboard = () => {
     function handleWorkPlaceClick(placeId: string) {
         dispatch(setCurrentWorkPlace(placeId))
     }
-    function addShiftClick(){
-
-    }
 
     return (
         <main className={`w-full flex justify-center items-center relative`}>
             <div className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}>
-                <h1 className={`text-2xl`}>Dashboard</h1>
+                <h1 className={`${pageHeader}`}>Dashboard</h1>
                 <div className={`flex w-full`}>
-                    <h1 className={`text-xl w-full`}>Hello, {user ? user.firstName+' '+ user.lastName : 'John Doe'}</h1>
+                    <h1 className={`text-xl w-full md:text-base`}>Hello, {user ? user.firstName+' '+ user.lastName : ''}</h1>
                     <AddRemoveEditButtons 
                         handleAddClick={() => setAddWorkPlaceForm(true)} 
                         handleRemoveClick={() => setRemoveButtons((prev) => !prev)} 
@@ -74,8 +88,24 @@ const Dashboard = () => {
                         initial="initial"
                         animate="animate"
                         >
-                    {workPlaces.map((place, idx) => {
-                        return workPlace(idx, removeButtons, handleCheckBoxClick, handleWorkPlaceClick, setAddEditShiftForm, place) 
+                    {workPlaces.map((place) => {
+                        return <motion.article 
+                            key={place.placeId}
+                            className={`col-span-2 w-full relative rounded-br-2xl rounded-3xl p-6
+                                border border-solid dark:border-light
+                                bg-light shadow-2xl 
+                                lg:col-span-4
+                            `}
+                            variants={singleArticle}
+                        >
+                            <WorkPlaceComponent
+                                workPlace={place}
+                                removeButtons={removeButtons}
+                                handleCheckBoxClick={handleCheckBoxClick}
+                                handleWorkPlaceClick={handleWorkPlaceClick}
+                                setAddEditShiftForm={setAddEditShiftForm}
+                                />
+                        </motion.article>
                     })}
                     </motion.div>
                 }

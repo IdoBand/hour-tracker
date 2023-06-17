@@ -9,7 +9,7 @@ import { ArrowDownCircleIcon } from '@heroicons/react/24/solid'
 import { TimeHelper } from '@/app/(hooks)/TimeHelper';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addShiftToCurrentWorkPlace, editShift } from '@/redux/placesSlice';
-import { dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin';
+import { formHeader } from '@/app/(hooks)/mixin';
 import { WorkPlace } from '../WorkPlace';
 import { TextLineInputProps } from '../AddWorkPlaceForm';
 interface AddEditShiftProps {
@@ -61,7 +61,7 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
       const [isCalender, setIsCalender] = useState<boolean>(false)
   
       return (
-        <div className={`mb-9 w-full flex justify-between items-center z-50
+        <div className={`mb-9 w-full flex justify-between items-center z-50 flex-wrap
             lg:flex-col
         `}>
           <label>{label}</label>
@@ -76,7 +76,7 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
             
             {isCalender && 
               <div 
-                className='absolute top-6 z-20 shadow-lg bg-light w-max py-2 rounded-xl'
+                className='absolute bottom-0 z-20 shadow-lg bg-light w-max py-2 rounded-xl'
                 >
                 {calender}
                 <div className='w-11/12 flex justify-end'>
@@ -146,12 +146,11 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
     <form onSubmit={handleSubmit(data => {
       extractData(data);
     })}
-      className={`w-full flex flex-col rounded-br-2xl rounded-3xl p-8
-      border border-solid border-dark dark:border-light
+      className={`min-w-[45rem] max-w-full flex flex-col rounded-br-2xl rounded-3xl p-8
       bg-light
-      lg:p-2`}
+      lg:p-2 md:min-w-[5rem]`}
     >
-      <h1 className={`w-full ${dashBoardWorkPlaceHeader}`}>Add a Shift to {useAppSelector(state => state.placesSlice.currentWorkPlace?.name)}</h1>
+      <h1 className={formHeader}>Add a Shift to {useAppSelector(state => state.placesSlice.currentWorkPlace?.name)}</h1>
       <div className={`flex w-full lg:flex-col lg:justify-center lg:items-center`}>
         <div className={`w-1/3 pb-16 pt-8
           lg:w-full lg:pb-0
@@ -161,7 +160,7 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
           <HourInput label='Break Start' hourPicker={breakStartHourPicker} calender={breakStartCalender} selectedDay={breakStartDay}/>
           <HourInput label='Break End' hourPicker={breakEndHourPicker} calender={breakEndCalender} selectedDay={breakEndDay}/>
         </div>
-        <div className={`w-2/3 flex grow justify-start items-center flex-col pt-8
+        <div className={`w-2/3 flex justify-start items-center flex-col pt-8
             lg:w-full lg:pt-0 lg:items-center
         `}>
           <div className={`w-full flex flex-col justify-center items-center`}>

@@ -23,11 +23,10 @@ const SignOut = ({ onClose }: SignOutProps) => {
             You are signed in as {user?.firstName} {user?.lastName}
         </h1>
         <div className={`${flexCenter} gap-4`}>
-          <Button type='button' text='Ok' onClick={() => onClose()} theme='blank' className='px-8' />
+          <Button type='button' text='Ok' onClick={onClose} theme='blank' className='px-8' />
           <Link href='/'>
             <Button type='button' text='Sign Out' onClick={handleSignOut} theme='full' className='' />
           </Link>
-          
         </div>
     </main>
   )

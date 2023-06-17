@@ -84,7 +84,7 @@ const SignIn = ({onClose}: SignInProps) => {
     }
 
   return (
-    <main className='px-8 pb-8 pt-2'>
+    <main className='px-8 pb-8 pt-2 md:px-2'>
     <div className={`w-full ${flexCenter} gap-6 mb-10`}>
         <button className={`${signUp ? 'underline' : ''}`} onClick={() => setSignUp(prev => !prev)}>Register</button>
         <button className={`${signUp ? '' : 'underline'}`} onClick={() => setSignUp(prev => !prev)}>Sign In</button>
@@ -100,7 +100,7 @@ const SignIn = ({onClose}: SignInProps) => {
         <button type="button" className='underline text-blue-500 mt-2 mb-8'>I forgot my password</button>
         <div className={`${flexCenter} flex-col w-full gap-3 `}>
                 <Button onClick={(e: React.MouseEvent) => {e.preventDefault() ;signInDummy(dummyUser, PLACES_OF_WORK)}} type='button' theme='full' className='' text='Sign In as Dummy User' />
-            <div className={`${flexCenter} w-full gap-4`}>
+            <div className={`${flexCenter} w-full gap-4 md:gap-2`}>
                 <Button onClick={reset} type='button' theme='blank' className='px-6' text='Clear' />
                 <Button onClick={handleSubmit} type='submit' theme='full' className='px-6' text='Sign In' />
             </div>

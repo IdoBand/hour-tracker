@@ -148,8 +148,8 @@ export function useCalendar(isSideBar: boolean, events: any[], dateButtonClick?:
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     const visualCalendar = 
-    <div className="w-full pt-4">
-      <div className={`max-w-full flex justify-start items-start px-4 sm:px-7 md:max-w-4xl md:px-6 lg:justify-center`}>
+    <div className="w-full">
+      <div className={`max-w-full flex justify-center items-start px-4 sm:px-7 md:max-w-4xl md:px-6 lg:justify-center`}>
         <div className="flex md:flex-col gap-4 lg:justify-center md:divide-y divide-gray-200">
           <div className="w-max flex flex-col items-center justify-between">
             <div className="w-full flex items-center justify-between relative">

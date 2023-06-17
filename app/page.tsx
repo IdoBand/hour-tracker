@@ -5,7 +5,10 @@ import Button from "./(components)/Button";
 import { StarIcon, CubeIcon } from '@heroicons/react/24/solid'
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-
+import { useAppSelector } from "@/redux/hooks";
+import Redirect from "./(components)/Redirect";
+import Modal from "./(components)/Modal";
+import SignIn from "./SignIn";
 ////////////////////////////////////////////////////////////////////////////////////////
 interface BulletProps {
   header: string
@@ -63,9 +66,14 @@ const motionChild = {
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
+
+
 export default function Home() {
   const mediaQuery = window.matchMedia('(max-width: 800px)')
   const [isMobile, setIsMobile] = useState<boolean>(mediaQuery.matches)
+  const [signIn, setSignIn] = useState<boolean>(false)
+  const [shouldRedirect, setShouldRedirect] = useState<boolean>(false)
+  const user = useAppSelector(state => state.userSlice.user)
   useEffect(() => {
     const handleScreenChange = (event: MediaQueryListEvent) => {
         setIsMobile(event.matches);
@@ -74,7 +82,18 @@ export default function Home() {
       return () => {
         mediaQuery.removeEventListener('change',handleScreenChange);
       };
-}, [])
+  }, [])
+  if (shouldRedirect) {
+    return <Redirect to='dashboard' />
+  }
+
+  function handleStartTracking() {
+    if (user) {
+      setShouldRedirect(true)
+    } else {
+      setSignIn(true)
+    }
+  }
   return (
     <main className={`flex justify-center items-start w-full min-h-screen relative overflow-x-hidden
     before:absolute before:left-10 before:top-3 before:w-96 before:h-96 before:rounded-full before:bg-sky-200
@@ -105,7 +124,7 @@ export default function Home() {
             </motion.div>
 
             <div className={`${flexCenter} gap-4 md:flex-col`}>
-              <Button text="Start Tracking" theme="full" type="button" className="" />
+              <Button text="Start Tracking" theme="full" type="button" className="" onClick={handleStartTracking} />
                 <div className={`${flexCenter} flex-col`}>
                   <h3 className="text-gray-400">+41.5K Users</h3>
                   <div className="flex">
@@ -134,7 +153,10 @@ export default function Home() {
         </div>
         
       </div>
-      
+      {signIn && <Modal onClose={() => setSignIn(false)}>
+                  <SignIn onClose={() => (setSignIn(false))}/>
+              </Modal>
+    }
     </main>
   );
 }

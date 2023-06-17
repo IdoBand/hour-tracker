@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpCircleIcon, CheckCircleIcon, XCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
-import { checkBoxStyle, dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin';
+import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import { TimeHelper } from '@/app/(hooks)/TimeHelper'
 import { format, parseISO } from 'date-fns'
 import { flexCenter } from '@/app/(hooks)/mixin'
@@ -81,15 +81,14 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
     };
 
   return (
-    <div className={`w-full flex justify-between flex-col rounded-lg py-1 cursor-pointer  relative`}>
+    <div className={`w-full flex justify-between flex-col rounded-lg py-1 cursor-pointer relative`}>
         {removeButtons && <input 
                 data-key={shift.shiftId}
                 type='checkbox' 
                 checked={shift.checked} 
                 onClick={(e) => e.stopPropagation()} 
                 onChange={(e) => {handleCheckBoxClick(e.target.dataset.key as string)}}
-                className={`appearance-none rounded-full w-5 h-5 border-2 border-black outline-none cursor-pointer transition-colors duration-200 ease-in-out absolute top-2.5 right-9 z-10
-                checked:bg-red-500 checked:before:absolute checked:before:content-['X'] checked:before:text-light checked:before:left-1/2 checked:before:top-1/2 checked:before:-translate-x-1/2 checked:before:-translate-y-1/2`} />}
+                className={checkboxRemoveStyle} />}
             <div className={`w-full grid grid-cols-7 grid-flow-col rounded-lg px-2 py-1 
                 ${isOpen && 'bg-gray-200'}
                 border border-black hover:bg-sky-100

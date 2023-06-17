@@ -15,17 +15,17 @@ const modalMotion = {
 export default function Modal({onClose, children, className}: ModalProps) {
     return ReactDom.createPortal(
         <>
-                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} overflow-auto z-10`} onClick={onClose}>
+                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} z-10`} onClick={onClose}>
                         <motion.div 
                         variants={modalMotion}
                         initial="initial"
                         animate="animate"
                         className={`w-max bg-light text-dark relative rounded-lg max-h-[90%] overflow-auto ${scrollBar}
-                        lg:w-11/12 pt-8
+                        lg:w-11/12 pt-1
                         ${className}`}
                         onClick={(e) => e.stopPropagation()}
                         >
-                            <button className={`absolute top-2 right-2 text-dark hover:cursor-pointer hover:text-red-700`} 
+                            <button className={`absolute top-2 right-2 text-dark hover:cursor-pointer hover:text-red-700 z-10`} 
                             onClick={onClose}>X</button>
                             {children}
                         </motion.div>
