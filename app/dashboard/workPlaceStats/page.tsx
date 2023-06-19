@@ -14,6 +14,10 @@ import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
 import { removeShifts, setShiftCheckBox, checkBoxAllShifts } from '@/redux/placesSlice';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid'
 import Redirect from '@/app/(components)/Redirect';
+const emptyWorkPlace = {
+  wagePerHour: 0,
+  shifts: []
+}
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
     const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
@@ -30,10 +34,10 @@ function totalBreakTime(shifts: Shift[]) {
 }
 
 const WorkPlaceStats = () => {
-  const currentWorkPlace = useAppSelector(state => state.placesSlice.currentWorkPlace)
-  if (!currentWorkPlace) {
-    return <Redirect to='/dashboard' />
-  }
+  
+  const reduxCurrentWorkPlace = useAppSelector(state => state.placesSlice.currentWorkPlace)
+  const currentWorkPlace = reduxCurrentWorkPlace ? reduxCurrentWorkPlace : emptyWorkPlace
+  
   const { visualCalendar, selectedDay } = useCalendar(true, currentWorkPlace!.shifts)
   const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
   const [removeButtons, setRemoveButtons] = useState<boolean>(false)
@@ -45,6 +49,9 @@ const WorkPlaceStats = () => {
       return shift
     }
   })
+  if (!reduxCurrentWorkPlace) {
+    return <Redirect to='/dashboard' />
+  }
   
 
   function handleCheckBoxClick(shiftId: string) {
@@ -102,7 +109,7 @@ const WorkPlaceStats = () => {
               />
         </div>
         {addShiftForm &&
-          <FramerSpringRotate className='shadow-2xl rounded-2xl'>
+          <FramerSpringRotate className='shadow-2xl rounded-2xl relative z-20'>
             <AddEditShift addOrEdit='add' onClose={() => setAddEditShiftForm(false)} />
           </FramerSpringRotate>
         }
@@ -120,7 +127,7 @@ const WorkPlaceStats = () => {
             <span className={`col-start-6 col-end-7 w-full lg:hidden`}>I Worked On</span>
             <span className={`col-start-7 col-end-8 w-full lg:hidden`}>Notes</span>
           </div>
-          <div className='w-full gap-2 flex-col-reverse'>
+          <div className='w-full gap-2 flex-col'>
             {shifts.length ? 
             shifts.map((shift) => {
               return <div key={shift.shiftId} className='w-full'>

@@ -8,13 +8,14 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { LogoSVG } from '@/util/icons';
 import SignOut from './SignOut';
 import { Bars3Icon } from '@heroicons/react/24/solid'
-
+import About from './About';
 const navbarLinkClassName = 'hover:text-sky-400 hover:scale-110 z-10'
 
 const Navbar = () => {
   const [signIn, setSignIn] = useState<boolean>(false)
   const [signOut, setSignOut] = useState<boolean>(false)
   const [mobileMenu, setMobileMenu] = useState<boolean>(false)
+  const [about, setAbout] = useState<boolean>(false)
   const user = useAppSelector(state => state.userSlice.user)
   const dispatch = useAppDispatch()
 
@@ -30,7 +31,7 @@ const Navbar = () => {
         :
           <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); setSignIn(true); mobileMenu && setMobileMenu(false)}}>Sign In</Link>
         }
-        <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); mobileMenu && setMobileMenu(false)}}>About</Link>
+        <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); mobileMenu && setMobileMenu(false) ; setAbout(true)}}>About</Link>
       </nav>
     )
   }
@@ -67,6 +68,10 @@ const Navbar = () => {
                   <LogoSVG className='absolute -bottom-8 -left-5 opacity-40 sm:opacity-10' width='200' height='200' />
                   {navbarLinks('flex-col gap-6 py-8')}
                 </div>
+                </Modal>
+    }
+    {about && <Modal onClose={() => setAbout(false)}>
+                <About />
                 </Modal>
     }
     </>

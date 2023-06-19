@@ -1,17 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useCalendar } from '../../(hooks)/useCalender';
 import Button from '@/app/(components)/Button';
-import { useHourPicker }from '@/app/(hooks)/useHourPicker';
-import { format } from 'date-fns'
 import { Shift } from './Shift';
-import { ArrowDownCircleIcon } from '@heroicons/react/24/solid'
 import { TimeHelper } from '@/app/(hooks)/TimeHelper';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addShiftToCurrentWorkPlace, editShift } from '@/redux/placesSlice';
 import { formHeader } from '@/app/(hooks)/mixin';
 import { WorkPlace } from '../WorkPlace';
 import { TextLineInputProps } from '../AddWorkPlaceForm';
+import { useFullDate } from '@/app/(hooks)/useFullDate';
 interface AddEditShiftProps {
   addOrEdit: 'add' | 'edit'
   startDate?: string
@@ -24,6 +21,18 @@ interface AddEditShiftProps {
   shiftId?: string
   wagePerHour?: number
   tipBonus?: number
+}
+interface FullDateInputProps {
+  label: string
+  fullDatePicker: ReactNode
+}
+const FullDateInput = ({label, fullDatePicker}: FullDateInputProps) => {
+  return (
+    <div className={`mb-9 w-full flex justify-between items-center flex-wrap lg:flex-col relative`}>
+            <label>{label}</label>
+            {fullDatePicker}
+    </div>
+  )
 }
 
 const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, shiftId, wagePerHour, tipBonus }: AddEditShiftProps) => {
@@ -49,69 +58,20 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
         </div>
         )
   }
-////////////////////////////////////////////////////////////////////////////////////////
-  interface HourInputProps {
-    label: string
-    calender: any
-    selectedDay: any
-    hourPicker: any
-  }
-  const HourInput = useCallback(
-    ({ label, calender , hourPicker , selectedDay}: HourInputProps) => {
-      const [isCalender, setIsCalender] = useState<boolean>(false)
-  
-      return (
-        <div className={`mb-9 w-full flex justify-between items-center z-50 flex-wrap
-            lg:flex-col
-        `}>
-          <label>{label}</label>
-          <div className='relative flex items-center gap-2 xs:flex-col'>
-            <label 
-              className='w-max px-2 flex gap-1 py-1 cursor-pointer md:w-full rounded-md bg-white'
-              onClick={() => setIsCalender(prev => !prev)}
-            >
-              {format(selectedDay, 'dd-MM-yyyy')}
-              <ArrowDownCircleIcon className='w-5' />
-            </label>
-            
-            {isCalender && 
-              <div 
-                className='absolute bottom-0 z-20 shadow-lg bg-light w-max py-2 rounded-xl'
-                >
-                {calender}
-                <div className='w-11/12 flex justify-end'>
-                  <Button type='submit' theme='full' text='OK' className='text-xs' onClick={() => setIsCalender(false)}/>
-                </div>
-              </div>
-            }
-            {hourPicker}
-          </div>
-          
-        </div>
-      )
-    }
-  , [])
-////////////////////////////////////////////////////////////////////////////////////////
 
   const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
-  const { visualCalendar: shiftStartCalender, selectedDay: shiftStartDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(startDate as string));
-  const { visualCalendar: shiftEndCalender, selectedDay: shiftEndDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(endDate as string));
-  const { visualCalendar: breakStartCalender, selectedDay: breakStartDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(breakStart as string));
-  const { visualCalendar: breakEndCalender, selectedDay: breakEndDay } = useCalendar(false, [], undefined, addOrEdit === 'add' ? undefined : new Date(breakEnd as string));
 
-  const { visualHourPicker: shiftStartHourPicker, selectedHour: shiftStartHour } = useHourPicker(startDate ? startDate!.slice(11,16) : '');
-  const { visualHourPicker: shiftEndHourPicker, selectedHour: shiftEndHour } = useHourPicker(endDate ? endDate!.slice(11,16) : '');
-  const { visualHourPicker: breakStartHourPicker, selectedHour: breakStartHour } = useHourPicker(breakStart ? breakStart!.slice(11,16) : '');
-  const { visualHourPicker: breakEndHourPicker, selectedHour: breakEndHour } = useHourPicker(breakEnd ? breakEnd!.slice(11,16) : '');
-
-
+  const { setIsCalender: a, visualFullDate: shiftStartVD, selectedFullDate: shiftStartFD } = useFullDate('add' ? undefined : new Date(startDate as string), startDate ? startDate!.slice(11,16) : '')
+  const { setIsCalender: b, visualFullDate: shiftEndVD, selectedFullDate: shiftEndFD } = useFullDate(addOrEdit === 'add' ? undefined : new Date(endDate as string), endDate ? endDate!.slice(11,16) : '')
+  const { setIsCalender: c, visualFullDate: breakStartVD, selectedFullDate: breakStartFD } = useFullDate(addOrEdit === 'add' ? undefined : new Date(breakStart as string), breakStart ? breakStart!.slice(11,16) : '')
+  const { setIsCalender: d, visualFullDate: breakEndVD, selectedFullDate: breakEndFD } = useFullDate(addOrEdit === 'add' ? undefined : new Date(breakEnd as string), breakEnd ? breakEnd!.slice(11,16) : '')
 
   function extractData(data: any) {
 
-    const shiftStartDate = format(shiftStartDay, 'yyyy-MM-dd')+'T'+shiftStartHour
-    const shiftEndDate = format(shiftEndDay, 'yyyy-MM-dd')+'T'+shiftEndHour
-    const breakStartDate = format(breakStartDay, 'yyyy-MM-dd')+'T'+breakStartHour
-    const breakEndDate = format(breakEndDay, 'yyyy-MM-dd')+'T'+breakEndHour
+    const shiftStartDate = shiftStartFD
+    const shiftEndDate = shiftEndFD
+    const breakStartDate = breakStartFD
+    const breakEndDate = breakEndFD
     const validation = TimeHelper.validateShiftTimes(shiftStartDate, shiftEndDate, breakStartDate, breakEndDate)
 
     if (validation.isDataValid) {
@@ -131,8 +91,6 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
       if (addOrEdit === 'add') {
         dispatch(addShiftToCurrentWorkPlace(newShift))
       } else if (addOrEdit == 'edit') {
-        console.log('should edit');
-        
         dispatch(editShift(newShift))
       }
       setFormIssues([])
@@ -146,19 +104,15 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
     <form onSubmit={handleSubmit(data => {
       extractData(data);
     })}
-      className={`min-w-[45rem] max-w-full flex flex-col rounded-br-2xl rounded-3xl p-8
-      bg-light
-      lg:p-2 md:min-w-[5rem]`}
+      className={`min-w-[45rem] max-w-full flex flex-col rounded-br-2xl rounded-3xl p-8 bg-light lg:p-2 md:min-w-[5rem]`}
     >
       <h1 className={formHeader}>Add a Shift to {useAppSelector(state => state.placesSlice.currentWorkPlace?.name)}</h1>
       <div className={`flex w-full lg:flex-col lg:justify-center lg:items-center`}>
-        <div className={`w-1/3 pb-16 pt-8
-          lg:w-full lg:pb-0
-        `}>
-          <HourInput label='Shift Start' hourPicker={shiftStartHourPicker} calender={shiftStartCalender} selectedDay={shiftStartDay}/>
-          <HourInput label='Shift End' hourPicker={shiftEndHourPicker} calender={shiftEndCalender} selectedDay={shiftEndDay}/>
-          <HourInput label='Break Start' hourPicker={breakStartHourPicker} calender={breakStartCalender} selectedDay={breakStartDay}/>
-          <HourInput label='Break End' hourPicker={breakEndHourPicker} calender={breakEndCalender} selectedDay={breakEndDay}/>
+        <div className={`w-1/3 pb-16 pt-8 lg:w-full lg:pb-0`}>
+          <FullDateInput label="Shift Start" fullDatePicker={shiftStartVD} />
+          <FullDateInput label="Shift End" fullDatePicker={shiftEndVD} />
+          <FullDateInput label="Break Start" fullDatePicker={breakStartVD} />
+          <FullDateInput label="Break End" fullDatePicker={breakEndVD} />
         </div>
         <div className={`w-2/3 flex justify-start items-center flex-col pt-8
             lg:w-full lg:pt-0 lg:items-center

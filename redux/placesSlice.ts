@@ -92,8 +92,6 @@ const placesSlice = createSlice({
                 for (let i = 0 ; i < state.places.length ; i ++) {
                     if (state.places[i].placeId === action.payload.placeId) {
                         idx = i
-                        console.log(idx);
-                        
                         break
                     }
                 }

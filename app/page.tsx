@@ -39,9 +39,9 @@ const Sentence = ({text}: SentenceProps) => {
   </div>)
 }
 const sentences = [
-  <Sentence text="Tired of endless Excel sheets?" />,
-  <Sentence text="Don't trust your boss with keeping track of your work hours?" />,
-  <Sentence text="Trying to remember what you worked on last week?" />
+  <Sentence key={0} text="Tired of endless Excel sheets?" />,
+  <Sentence key={1} text="Don't trust your boss with keeping track of your work hours?" />,
+  <Sentence key={2} text="Trying to remember what you worked on last week?" />
 ]
 const motionContainer = {
   initial: {},
@@ -69,12 +69,13 @@ const motionChild = {
 
 
 export default function Home() {
-  const mediaQuery = window.matchMedia('(max-width: 800px)')
-  const [isMobile, setIsMobile] = useState<boolean>(mediaQuery.matches)
+  
+  const [isMobile, setIsMobile] = useState<boolean>(false)
   const [signIn, setSignIn] = useState<boolean>(false)
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false)
   const user = useAppSelector(state => state.userSlice.user)
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 800px)')
     const handleScreenChange = (event: MediaQueryListEvent) => {
         setIsMobile(event.matches);
       }
