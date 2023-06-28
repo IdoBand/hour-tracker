@@ -114,18 +114,15 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
                 <span>{`Started Working at: `}<span className='font-semibold'>{format(parseISO(currentWorkPlace.employmentStartDate), 'dd/MM/yyyy')}</span></span>
                 <span>{`Total Employment Duration: `}<span className='font-semibold'>{`${totalHoursForPeriod(currentWorkPlace!.shifts)}`}</span></span>
                 <span>{`Total Break Duration: `}<span className='font-semibold'>{`${totalBreakTime(currentWorkPlace!.shifts)}`}</span></span>
-                {/* <button className='absolute top-10 right-1 w-5' onClick={() => setIsEditingWorkPlace(prev => !prev)}>
-                  <EllipsisHorizontalCircleIcon />
-                </button> */}
                 <CustomButton 
                   className='absolute top-10 right-1 w-5' 
                   onClick={() => setIsEditingWorkPlace(prev => !prev)}
-                  children={isEditingWorkPlace ? <XCircleIcon className='w-4' /> : <EllipsisHorizontalCircleIcon className='w-4' />}
                   hoverText={isEditingWorkPlace ? 'Discard' : 'Edit'}
                   where={'down'}
-                  />
-               
-                  
+                >
+                    {isEditingWorkPlace ? <XCircleIcon className='w-4' /> : <EllipsisHorizontalCircleIcon className='w-4' />}
+                </CustomButton>
+
             </div>
           </div>
         </div>

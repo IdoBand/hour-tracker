@@ -67,22 +67,22 @@ export default function WorkPlaceComponent ({workPlace, removeButtons, handleChe
                     <div className={`flex justify-center items-end flex-col gap-4 w-max`}>
                         <CustomButton 
                             className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
-                            children={
-                                    <Link href={`/dashboard/${workPlace.placeId}`}>
-                                        <ChartBarIcon className='w-6 h-6 group-hover:fill-secondary'/>
-                                    </Link>     
-                                }
                             hoverText='Statistics'
                             where='down'
-                            onClick={() => {handleWorkPlaceClick(workPlace.placeId)}} 
-                        />
-                        <CustomButton 
+                            onClick={() => {handleWorkPlaceClick(workPlace.placeId)}}
+                            >
+                            <Link href={`/dashboard/${workPlace.placeId}`}>
+                                    <ChartBarIcon className='w-6 h-6 group-hover:fill-secondary'/>
+                            </Link>
+                            </CustomButton>
+                        <CustomButton
                             className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
-                            children={<SquaresPlusIcon className='w-6 group-hover:fill-secondary'/>}
                             hoverText='Quick Add'
                             where='down'
-                            onClick={() => {handleWorkPlaceClick(workPlace.placeId); setAddEditShiftForm(true)}} 
-                        />
+                            onClick={() => {handleWorkPlaceClick(workPlace.placeId); setAddEditShiftForm(true)}}
+                            >
+                                <SquaresPlusIcon className='w-6 group-hover:fill-secondary'/>
+                        </CustomButton>
                     </div>
                 </div>
             </div>
