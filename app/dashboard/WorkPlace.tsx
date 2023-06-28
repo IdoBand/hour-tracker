@@ -1,4 +1,4 @@
-import { Shift } from './workPlaceStats/Shift'
+import { Shift } from './[workPlacecId]/Shift'
 import { dashBoardWorkPlaceHeader, checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import Link from 'next/link';
 import { TimeHelper } from '../(hooks)/TimeHelper';
@@ -66,7 +66,7 @@ export default function WorkPlaceComponent ({workPlace, removeButtons, handleChe
                     </div>
                     <div className={`flex justify-center items-end flex-col gap-4 w-max`}>
                         <Link 
-                            href={'/dashboard/workPlaceStats'} 
+                            href={`/dashboard/${workPlace.placeId}`} 
                             className={`cursor-pointer shadow-xl rounded-full p-2 ml-4 mt-3 w-max group relative 
                                 before:opacity-0 hover:before:opacity-100 before:bg-sky-400 before:text-light before:absolute before:content-['Stats']
                                 before:-bottom-7 before:-left-0 before:text-xs before:p-1 before:rounded-lg before:transition-opacity before:duration-400

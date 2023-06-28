@@ -7,7 +7,7 @@ import AddNewWorkPlaceForm from './AddWorkPlaceForm';
 import { checkboxAll, removeWorkPlaces, setWorkPlaceCheckbox, setCurrentWorkPlace } from '@/redux/placesSlice';
 import AddRemoveEditButtons from '../(components)/AddRemoveEditButtons';
 import FramerSpringRotate from '../(components)/FramerSpringRotate';
-import AddEditShift from './workPlaceStats/AddEditShiftForm';
+import AddEditShift from './[workPlacecId]/AddEditShiftForm';
 import Modal from '../(components)/Modal';
 import { pageHeader } from '../(hooks)/mixin';
 import Redirect from '../(components)/Redirect';

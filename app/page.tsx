@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import Redirect from "./(components)/Redirect";
 import Modal from "./(components)/Modal";
-import SignIn from "./SignIn";
+import SignIn from "./(modalComponents)/SignIn";
 ////////////////////////////////////////////////////////////////////////////////////////
 interface BulletProps {
   header: string

@@ -1,7 +1,7 @@
 'use client';
-import { useAppSelector, useAppDispatch } from '../redux/hooks';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { signOutUser } from '@/redux/userSlice';
-import Button from './(components)/Button';
+import Button from '../(components)/Button';
 import { flexCenter } from '@/app/(hooks)/mixin';
 import Link from 'next/link';
 import { setWorkPlaces } from '@/redux/placesSlice';

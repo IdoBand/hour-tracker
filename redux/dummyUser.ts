@@ -1,5 +1,5 @@
 import { WorkPlace } from "@/app/dashboard/WorkPlace"
-import { Shift } from "@/app/dashboard/workPlaceStats/Shift"
+import { Shift } from "@/app/dashboard/[workPlacecId]/Shift"
 
 import {
   format,

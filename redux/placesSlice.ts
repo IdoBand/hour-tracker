@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { WorkPlace } from '@/app/dashboard/WorkPlace'
 import { PLACES_OF_WORK } from './dummyUser'
-import { Shift } from '@/app/dashboard/workPlaceStats/Shift'
+import { Shift } from '@/app/dashboard/[workPlacecId]/Shift'
 import { parseISO, compareAsc } from 'date-fns'
 interface PlacesState {
     places: WorkPlace[],

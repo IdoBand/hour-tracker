@@ -2,13 +2,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { flexCenter } from '@/app/(hooks)/mixin';
-import Modal from './(components)/Modal';
-import SignIn from './SignIn';
+import Modal from './Modal';
+import SignIn from '../(modalComponents)/SignIn';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { LogoSVG } from '@/util/icons';
-import SignOut from './SignOut';
+import SignOut from '../(modalComponents)/SignOut';
 import { Bars3Icon } from '@heroicons/react/24/solid'
-import About from './About';
+import About from '../(modalComponents)/About';
 const navbarLinkClassName = 'hover:text-sky-400 hover:scale-110 z-10'
 
 const Navbar = () => {

@@ -32,9 +32,13 @@ function totalBreakTime(shifts: Shift[]) {
   }
   return '0'
 }
-
-const WorkPlaceStats = () => {
-  
+interface WorkPlaceStatsViewProps {
+  params: {
+      workPlaceId: string
+  }
+}
+const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
+  const work = props.params.workPlaceId
   const reduxCurrentWorkPlace = useAppSelector(state => state.placesSlice.currentWorkPlace)
   const currentWorkPlace = reduxCurrentWorkPlace ? reduxCurrentWorkPlace : emptyWorkPlace
   
@@ -76,7 +80,7 @@ const WorkPlaceStats = () => {
     <main className={`w-full flex justify-center items-center flex-col`}>
       <div className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}>
         <div className={`${pageHeader} my-3`}>
-          Overview
+          Overview {work}
         </div>
         <div className='flex w-full md:flex-col'>
           <div className='w-1/2 p-3 shadow-lg rounded-lg md:w-full'>

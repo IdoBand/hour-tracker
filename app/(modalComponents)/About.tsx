@@ -1,6 +1,6 @@
 import { NextSVG, TypeScriptIcon, ReactIcon, TailwindSVG, LinkedInIcon, GithubIcon, GmailIcon } from "@/util/icons"
 import Link from "next/link"
-import { flexCenter } from "./(hooks)/mixin"
+import { flexCenter } from "../(hooks)/mixin"
 const tools = [
     {
         name: '',
