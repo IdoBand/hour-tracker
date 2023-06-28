@@ -17,12 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body className={`min-h-screen relative ${inter.className} bg-light
-          text-dark
-        `}>
+        <body className={`${inter.className} bg-light text-dark`}>
           <Navbar />
-          {children}
-         
+          <div className='min-h-[90vh]'>
+            {children}
+          </div>
+          <Footer />
           <div id="portal" />
         </body>
       </Providers>

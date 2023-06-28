@@ -9,8 +9,9 @@ interface ModalProps {
     className?: string
 }
 const modalMotion = {
-    initial: {scale: 0, opacity: 1},
-    animate: {scale: 1, opacity: 1}
+    initial: {scale: 0, opacity: 0, x: -1000},
+    animate: {scale: 1, opacity: 1, x: 0, transition: {duration: 0.4}},
+    exit: {scale: 0, opacity: 0, x: 1000}
 }
 export default function Modal({onClose, children, className}: ModalProps) {
     return ReactDom.createPortal(
@@ -20,6 +21,7 @@ export default function Modal({onClose, children, className}: ModalProps) {
                         variants={modalMotion}
                         initial="initial"
                         animate="animate"
+                        exit="exit"
                         className={`w-max bg-light text-dark relative rounded-lg max-h-[90%] overflow-auto ${scrollBar}
                         lg:w-11/12 pt-1
                         ${className}`}

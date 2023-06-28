@@ -16,9 +16,9 @@ interface BulletProps {
 }
 const Bullet = ({header, text}: BulletProps) => {
   return (
-    <div className={`flex flex-col w-[25%] lg:w-11/12 lg:my-4 lg:text-sm`}>
+    <div className={`flex flex-col w-[25%] lg:w-11/12 lg:my-4 lg:text-sm group`}>
       <div className="flex gap-3 w-full">
-        <CubeIcon className="w-5"/>
+        <CubeIcon className="w-5 group-hover:rotate-180 group-hover:fill-sky-400 transition-all duration-300"/>
         <h2 className="text-lg font-medium">{header}</h2>
       </div>
         {text}
@@ -107,7 +107,10 @@ export default function Home() {
           <div className={`w-1/2 min-h-full flex justify-end items-center flex-col gap-8
             lg:w-full lg:items-center lg:mt-5
             `}>
-            <h1 className="text-4xl font-semibold lg:text-2xl md:text-lg">Track Your Work.</h1>
+            <motion.h1 
+              initial={{opacity: 0, scale:0}} 
+              animate={{opacity: 1, scale:1, transition: {duration: 1}}} 
+              className="text-4xl font-semibold lg:text-2xl md:text-lg">Track Your Work.</motion.h1>
             <motion.div 
               variants={motionContainer}
               initial="initial"
@@ -124,16 +127,16 @@ export default function Home() {
               <p className="mt-3 ml-5 font-medium">You are in the right place.</p>
             </motion.div>
 
-            <div className={`${flexCenter} gap-4 md:flex-col`}>
+            <div className={`${flexCenter} gap-4 md:flex-col group`}>
               <Button text="Start Tracking" theme="full" type="button" className="" onClick={handleStartTracking} />
                 <div className={`${flexCenter} flex-col`}>
                   <h3 className="text-gray-400">+41.5K Users</h3>
                   <div className="flex">
-                    <StarIcon className="w-5"/>
-                    <StarIcon className="w-5"/>
-                    <StarIcon className="w-5"/>
-                    <StarIcon className="w-5"/>
-                    <StarIcon className="w-5"/>
+                    <StarIcon className="w-5 group-hover:fill-sky-400 transition-all duration-300"/>
+                    <StarIcon className="w-5 group-hover:fill-sky-400 transition-all duration-300"/>
+                    <StarIcon className="w-5 group-hover:fill-sky-400 transition-all duration-300"/>
+                    <StarIcon className="w-5 group-hover:fill-sky-400 transition-all duration-300"/>
+                    <StarIcon className="w-5 group-hover:fill-sky-400 transition-all duration-300"/>
                   </div>
                 </div>
             </div> 

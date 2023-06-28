@@ -1,11 +1,13 @@
+'use client';
 import React from 'react'
+import Link from 'next/link'
 
 const Footer = () => {
   return (
-    <footer className={`sticky bottom-0 w-full h-12 flex justify-around items-center 
+    <footer className={`w-full h-12 flex justify-around items-center 
       border-t border-solid border-grayBorder`}>
       <div>
-        Footer
+        <Link href={'mailto:ido.bandd@gmail.com'}>Contact</Link>
       </div>
       <div>
         &copy; All Rights Reserved
