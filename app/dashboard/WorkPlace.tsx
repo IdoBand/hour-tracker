@@ -1,10 +1,10 @@
-import { Shift } from './[workPlacecId]/Shift'
+import { Shift } from './[workPlaceId]/Shift'
 import { dashBoardWorkPlaceHeader, checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import Link from 'next/link';
 import { TimeHelper } from '../(hooks)/TimeHelper';
 import { ShiftsManipulator } from '../(hooks)/ShiftsManipulator';
 import { SquaresPlusIcon, ChartBarIcon } from '@heroicons/react/24/solid';
-
+import CustomButton from '../(components)/CustomButton';
 export interface WorkPlace {
     placeId: string
     name: string
@@ -46,7 +46,7 @@ export default function WorkPlaceComponent ({workPlace, removeButtons, handleChe
                                     className={checkboxRemoveStyle}/>}
                 <div className='flex justify-between'>
                     <div className={`flex flex-col`}>
-                        <div className={`${workPlace.isCurrent ? 'text-secondary' : 'DARK'} ${dashBoardWorkPlaceHeader} w-full mb-4`}>{workPlace.name}</div>
+                        <div className={`${workPlace.isCurrent ? 'text-secondary' : 'DARK'} ${dashBoardWorkPlaceHeader} w-full mb-4`}>{workPlace.name}{workPlace.isCurrent &&<pre className='text-xs text-dark font-light h-full flex items-end'> Current</pre>}</div>
                         <div className='sm:flex xs:flex-col'>
                             <span className='font-semibold md:text-sm sm:text:xs'>Total Hours: </span>
                             <span className='md:text-sm sm:text-xs'>{prepareShiftsForTotalTimeCalculation(workPlace.shifts)}</span>
@@ -65,23 +65,24 @@ export default function WorkPlaceComponent ({workPlace, removeButtons, handleChe
                         </div>
                     </div>
                     <div className={`flex justify-center items-end flex-col gap-4 w-max`}>
-                        <Link 
-                            href={`/dashboard/${workPlace.placeId}`} 
-                            className={`cursor-pointer shadow-xl rounded-full p-2 ml-4 mt-3 w-max group relative 
-                                before:opacity-0 hover:before:opacity-100 before:bg-sky-400 before:text-light before:absolute before:content-['Stats']
-                                before:-bottom-7 before:-left-0 before:text-xs before:p-1 before:rounded-lg before:transition-opacity before:duration-400
-                            `}>
-                            <div onClick={() => handleWorkPlaceClick(workPlace.placeId)}>
-                                <ChartBarIcon className='w-6 group-hover:fill-secondary'/>
-                            </div>
-                        </Link>
-                        <div className={`cursor-pointer shadow-xl rounded-full p-2 ml-4 mt-3 w-max group relative
-                                before:opacity-0 hover:before:opacity-100 before:bg-sky-400 before:text-light before:absolute before:content-['QuickAdd']
-                                before:-bottom-7 before:-left-0 before:text-xs before:p-1 before:rounded-lg before:transition-opacity before:duration-400
-                        `} 
-                                onClick={() => {handleWorkPlaceClick(workPlace.placeId);setAddEditShiftForm(true)}}>
-                            <SquaresPlusIcon className='w-6 group-hover:fill-secondary'/>
-                        </div>
+                        <CustomButton 
+                            className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
+                            children={
+                                    <Link href={`/dashboard/${workPlace.placeId}`}>
+                                        <ChartBarIcon className='w-6 h-6 group-hover:fill-secondary'/>
+                                    </Link>     
+                                }
+                            hoverText='Statistics'
+                            where='down'
+                            onClick={() => {handleWorkPlaceClick(workPlace.placeId)}} 
+                        />
+                        <CustomButton 
+                            className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
+                            children={<SquaresPlusIcon className='w-6 group-hover:fill-secondary'/>}
+                            hoverText='Quick Add'
+                            where='down'
+                            onClick={() => {handleWorkPlaceClick(workPlace.placeId); setAddEditShiftForm(true)}} 
+                        />
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpCircleIcon, CheckCircleIcon, XCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
+import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
 import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import { TimeHelper } from '@/app/(hooks)/TimeHelper'
 import { format, parseISO } from 'date-fns'
@@ -10,6 +10,7 @@ import Modal from '@/app/(components)/Modal'
 import { useAppDispatch } from '@/redux/hooks'
 import { removeShifts } from '@/redux/placesSlice'
 import AddEditShift from './AddEditShiftForm'
+import CheckOrX from '@/app/(components)/CheckOrX';
 export interface Shift {
     shiftId: string
     placeId: string,
@@ -43,9 +44,7 @@ const slideDownDiv = {
         },
     }
 }
-const checkOrX = (str: string) => {
-    return str ?  <CheckCircleIcon className='w-5 fill-green-500' /> : <XCircleIcon className='w-5 fill-red-400'/>
-  }
+
 interface ShiftComponentProps {
     shift: Shift
     removeButtons: boolean
@@ -102,8 +101,8 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                 <span className={`col-start-3 col-end-4 w-full lg:flex lg:justify-center`}>{shiftData.shiftEnd}</span>
                 <span className={`col-start-4 col-end-5 w-full lg:hidden`}>{shiftData.shiftDuration}</span>
                 <span className={`col-start-5 col-end-6 w-full lg:hidden`}>{shiftData.breakDuration}</span>
-                <span className={`col-start-6 col-end-7 w-full lg:hidden`}>{checkOrX(shift.iWorkedOn)}</span>
-                <span className={`col-start-7 col-end-8 w-full lg:hidden`}>{checkOrX(shift.notes)}</span>
+                <span className={`col-start-6 col-end-7 w-full lg:hidden`}><CheckOrX itemToCheck={shift.iWorkedOn} /></span>
+                <span className={`col-start-7 col-end-8 w-full lg:hidden`}><CheckOrX itemToCheck={shift.notes} /></span>
                 
             </div>
         {isOpen && 

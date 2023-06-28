@@ -1,5 +1,5 @@
 import { startOfToday, isSameWeek, isSameMonth } from 'date-fns';
-import { Shift } from '../dashboard/[workPlacecId]/Shift';
+import { Shift } from '../dashboard/[workPlaceId]/Shift';
 import { TimeHelper } from './TimeHelper';
 class ShiftsManipulatorClass {
 

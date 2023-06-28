@@ -1,5 +1,5 @@
 import { WorkPlace } from "@/app/dashboard/WorkPlace"
-import { Shift } from "@/app/dashboard/[workPlacecId]/Shift"
+import { Shift } from "@/app/dashboard/[workPlaceId]/Shift"
 
 import {
   format,
@@ -353,7 +353,7 @@ export const SHIFTS2: Shift[] = [
 
 const place1: WorkPlace = {
   placeId: '1',
-  name: 'WORK PLACE NAME 1',
+  name: 'DreamScape Designs',
   employmentStartDate: '2022-05-11T13:00',
   employmentEndDate: '2023-05-11T13:00',
   isCurrent: false,
@@ -365,7 +365,7 @@ const place1: WorkPlace = {
 }
 const place2: WorkPlace = {
   placeId: '2',
-  name: 'WORK PLACE NAME 2',
+  name: 'Zenith Ventures',
   employmentStartDate: '2019-05-11T13:00',
   employmentEndDate: '2021-10-11T13:00',
   isCurrent: false,
@@ -378,7 +378,7 @@ const place2: WorkPlace = {
 }
 const place3: WorkPlace = {
   placeId: '3',
-  name: 'WORK PLACE NAME 3',
+  name: 'StellarSynergy Solutions',
   employmentStartDate: '2012-12-11T13:00',
   employmentEndDate: '2019-05-11T13:00',
   isCurrent: true,
@@ -392,3 +392,16 @@ const place3: WorkPlace = {
 
 
 export const PLACES_OF_WORK: WorkPlace[] = [place1, place2, place3]
+
+export const emptyWorkPlace = {
+  placeId: '',
+  name: '',
+  employmentStartDate: '',
+  employmentEndDate: '',
+  isCurrent: false,
+  wagePerHour: 56,
+  isBreakPaid: false,
+  link: '',
+  checked: false,
+  shifts: []
+}

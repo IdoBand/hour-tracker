@@ -9,7 +9,7 @@ import { LogoSVG } from '@/util/icons';
 import SignOut from '../(modalComponents)/SignOut';
 import { Bars3Icon } from '@heroicons/react/24/solid'
 import About from '../(modalComponents)/About';
-const navbarLinkClassName = 'hover:text-sky-400 hover:scale-110 z-10'
+const navbarLinkClassName = 'hover:text-sky-400 hover:scale-110 z-10 transition-all duration-300'
 
 const Navbar = () => {
   const [signIn, setSignIn] = useState<boolean>(false)

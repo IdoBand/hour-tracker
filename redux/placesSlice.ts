@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { WorkPlace } from '@/app/dashboard/WorkPlace'
 import { PLACES_OF_WORK } from './dummyUser'
-import { Shift } from '@/app/dashboard/[workPlacecId]/Shift'
+import { Shift } from '@/app/dashboard/[workPlaceId]/Shift'
 import { parseISO, compareAsc } from 'date-fns'
 interface PlacesState {
     places: WorkPlace[],
@@ -70,7 +70,7 @@ const placesSlice = createSlice({
                         return workPlace
                     }
                 })
-            },
+        },
         setCurrentWorkPlace: {
             reducer: (state, action: PayloadAction<string>) => {
                 for (const place of state.places) {
@@ -82,6 +82,20 @@ const placesSlice = createSlice({
             },
             prepare: (placeId: string) => {
                 return { payload: placeId }
+            }
+        },
+        editAWorkPlace: {
+            reducer: (state, action: PayloadAction<WorkPlace>) => {
+                for (let workPlace of state.places) {
+                    if (action.payload.placeId === workPlace.placeId) {
+                        workPlace = action.payload
+                        break
+                    }
+                    state.currentWorkPlace = action.payload
+                }
+            },
+            prepare: (newWorkPlaceData: WorkPlace) => {
+                return { payload: newWorkPlaceData }
             }
         },
         addShiftToCurrentWorkPlace: {
@@ -164,12 +178,12 @@ export const {
     setWorkPlaces, 
     addWorkPlace, 
     removeWorkPlaces,
+    editAWorkPlace,
     setCurrentWorkPlace,
     addShiftToCurrentWorkPlace,
     removeShifts,
     editShift,
     setShiftCheckBox,
     checkBoxAllShifts,
-
     } = placesSlice.actions
 export default placesSlice.reducer
