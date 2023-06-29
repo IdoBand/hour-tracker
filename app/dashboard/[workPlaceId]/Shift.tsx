@@ -195,7 +195,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
             </motion.article>
         }
         {removalModal && <Modal onClose={() => setRemovalModal(false)} className=''>
-            <div className='flex flex-col gap-8 px-6 pb-4'>
+            <div className='flex flex-col gap-8 px-8 py-4'>
                 Are you sure you want to remove this shift?
                 <div className={`${flexCenter} gap-4 `}>
                     <Button theme='blank' onClick={() => setRemovalModal(false)} className='' text='No' type='button'/>

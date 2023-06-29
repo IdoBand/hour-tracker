@@ -9,7 +9,14 @@ import { LogoSVG } from '@/util/icons';
 import SignOut from '../(modalComponents)/SignOut';
 import { Bars3Icon } from '@heroicons/react/24/solid'
 import About from '../(modalComponents)/About';
-const navbarLinkClassName = 'hover:text-sky-400 hover:scale-110 z-10 transition-all duration-300'
+import { usePathname } from 'next/navigation';
+
+
+
+const navbarLinkClassName = 'h-[45px] group relative flex items-center'
+const navbarLinkBeforeClassName = 'before:absolute before:w-full before:h-[2px] before:bg-sky-400 before:bottom-0 before:rounded-xl'
+const navbarLinkTextClassName = `group-hover:text-sky-400 group-hover:scale-110 z-10 transition-all duration-300`
+const navbarDivTextClassName = `hover:text-sky-400 hover:scale-110 z-10 transition-all duration-300 cursor-pointer`
 
 const Navbar = () => {
   const [signIn, setSignIn] = useState<boolean>(false)
@@ -18,20 +25,29 @@ const Navbar = () => {
   const [about, setAbout] = useState<boolean>(false)
   const user = useAppSelector(state => state.userSlice.user)
   const dispatch = useAppDispatch()
-
+  const pathName = usePathname()
+  
   const navbarLinks = (className: string) => {
     return (
       <nav className={`${flexCenter} ${className}`}>
-        <Link href={'/'} className={`${navbarLinkClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >Home</Link>
+        <Link href={'/'} className={`${navbarLinkClassName} ${pathName === '/' && navbarLinkBeforeClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >
+          <div className={`${navbarLinkTextClassName}`}>
+            Home
+          </div>
+        </Link>
         {user ? 
         <>
-          <Link href={'/dashboard'} className={`${navbarLinkClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >Dashboard</Link>
-          <Link href={'/'} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); setSignOut(true); mobileMenu && setMobileMenu(false)}}>Sign Out</Link>
+          <Link href={'/dashboard'} className={`${navbarLinkClassName} ${pathName.includes('/dashboard') && navbarLinkBeforeClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >
+            <div className={`${navbarLinkTextClassName}`}>
+            Dashboard
+            </div>
+          </Link>
+          <div className={`${navbarDivTextClassName}`} onClick={(e) => {setSignOut(true); mobileMenu && setMobileMenu(false)}}>Sign Out</div>
         </>
         :
-          <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); setSignIn(true); mobileMenu && setMobileMenu(false)}}>Sign In</Link>
+          <div className={`${navbarDivTextClassName}`} onClick={(e) => {setSignIn(true); mobileMenu && setMobileMenu(false)}}>Sign In</div>
         }
-        <Link href={''} className={`${navbarLinkClassName}`} onClick={(e) => {e.preventDefault(); mobileMenu && setMobileMenu(false) ; setAbout(true)}}>About</Link>
+        <div  className={`${navbarDivTextClassName}`} onClick={(e) => {mobileMenu && setMobileMenu(false) ; setAbout(true)}}>About</div>
       </nav>
     )
   }
@@ -39,7 +55,7 @@ const Navbar = () => {
   return (
     <>
     <header className={`w-full ${flexCenter}  border-b border-solid border-grayBorder z-20 bg-light`}>
-      <main className={`flex justify-between relative w-10/12 items-center py-2 md:w-11/12`}>
+      <main className={`flex justify-between relative w-10/12 items-center md:w-11/12`}>
         <Link href={'/'} className={`${flexCenter} gap-1`}>
         <LogoSVG className={``} height='28'/>
         <h1 className={`${flexCenter} font-bold`}>Hour Tracker</h1>

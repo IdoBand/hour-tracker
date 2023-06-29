@@ -64,7 +64,7 @@ export default function WorkPlaceComponent ({workPlace, removeButtons, handleChe
                             <span className='md:text-sm sm:text-xs'>{TimeHelper.calculateYearlyDuration(workPlace.employmentStartDate, workPlace.employmentEndDate)}</span>
                         </div>
                     </div>
-                    <div className={`flex justify-center items-end flex-col gap-4 w-max`}>
+                    <div className={`flex justify-center items-end flex-col gap-4`}>
                         <CustomButton 
                             className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
                             hoverText='Statistics'

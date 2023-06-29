@@ -120,7 +120,7 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
                   hoverText={isEditingWorkPlace ? 'Discard' : 'Edit'}
                   where={'down'}
                 >
-                    {isEditingWorkPlace ? <XCircleIcon className='w-4' /> : <EllipsisHorizontalCircleIcon className='w-4' />}
+                    {isEditingWorkPlace ? <XCircleIcon className='w-5' /> : <EllipsisHorizontalCircleIcon className='w-5' />}
                 </CustomButton>
 
             </div>
@@ -133,6 +133,8 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
               handleRemoveClick={() => setRemoveButtons((prev) => !prev)} 
               handleSelectAll={selectAll} 
               handleRemovePermanentlyClick={handleRemovePermanentlyClick}
+              addHoverText='Add a Shift'
+              removeHoverText='Remove Shifts'
               />
         </div>
         {addShiftForm &&

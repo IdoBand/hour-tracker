@@ -40,14 +40,27 @@ class ShiftsManipulatorClass {
   
     return startAndEndTimes;
     }
-  calculateSalary(shifts: Shift[]): number {
+  calculateSalary(shifts: Shift[]): string {
     let salary = 0
+    let salaryString = ''
     if (shifts.length) {
       for (const shift of shifts) {
       salary += TimeHelper.calculateHoursTwoDates(shift.shiftStart, shift.shiftEnd) * shift.wagePerHour + shift.tipBonus
+      }
+      if (salary > 999) {
+        let counter = 0
+        while (salary > 0) {
+          salaryString += (salary % 10).toString()
+          salary = Math.floor(salary / 10)
+          counter += 1
+          if (counter % 3 === 0) {
+            salaryString += ','
+          }
+        }
+        return salaryString.split('').reverse().join('');
+      }
     }
-}
-return salary
+    return salary.toString()
   }
 }
 

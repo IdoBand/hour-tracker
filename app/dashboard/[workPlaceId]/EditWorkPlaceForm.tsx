@@ -35,16 +35,16 @@ const EditWorkPlaceForm = ({workPlace, onClose}: EditWorkPlaceFormProps) => {
         className='relative'
     >
         <span className='flex xs:flex-col'>
-            {`Currently Employed: `}
-            <div className='flex ml-3 gap-5  xs:py-2 xs:gap-1'>
+            {`Currently Employed? `}
+            <div className='flex ml-3 gap-5 xs:py-2 '>
                 <button type='button' className={`${yesOrNoButtonsStyle} ${yesOrNo &&  yesOrNoButtonsSelectedStyle}`} onClick={() => setYesOrNo(true)}>Yes</button>
                 <button type='button' className={`${yesOrNoButtonsStyle} ${!yesOrNo && yesOrNoButtonsSelectedStyle}`} onClick={() => setYesOrNo(false)}>No</button>
             </div>
         </span>
         <span className='flex justify-between'>
-            <span className='flex xs:flex-col items-center'>
+            <span className='flex items-center gap-5 xs:flex-col xs:gap-0'>
             {`Wage Per Hour: `}
-                <span className='font-semibold'><input {...register('wagePerHour', {required: false})} type='number' min={0} defaultValue={workPlace.wagePerHour} className='w-14 appearance-none outline-none p-1 rounded-md'/>{`₪`}</span>
+                <span className='font-semibold'><input {...register('wagePerHour', {required: false})} type='number' min={0} defaultValue={workPlace.wagePerHour} className='w-14 appearance-none outline-none p-[2px] rounded-md'/>{`₪`}</span>
             </span>
         </span>
         <Button theme='full' type='submit' className='absolute right-0 bottom-0 text-xs mt-2 px-0 py-[3px] sm:mt-1' text='Save' />

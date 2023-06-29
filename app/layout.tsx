@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Navbar from './(components)/Navbar'
 import Footer from './(components)/Footer'
+import { scrollBar } from './(hooks)/mixin'
 const inter = Inter({ subsets: ['latin'] })
 import { Providers } from "@/redux/provider";
 export const metadata = {
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body className={`${inter.className} bg-light text-dark`}>
+        <body className={`${inter.className} bg-light text-dark ${scrollBar}`}>
           <Navbar />
           <div className='min-h-[90vh]'>
             {children}

@@ -74,6 +74,8 @@ const Dashboard = () => {
                         handleRemoveClick={() => setRemoveButtons((prev) => !prev)} 
                         handleSelectAll={selectAll} 
                         handleRemovePermanentlyClick={() => dispatch(removeWorkPlaces())}
+                        addHoverText='Add a Work Place'
+                        removeHoverText='Remove Work Places'
                         />
                 </div>
                 {addWorkPlaceForm && 
