@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
 import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
-import { TimeHelper } from '@/app/(hooks)/TimeHelper'
+import { TimeHelper } from '@/services/TimeHelper'
 import { format, parseISO } from 'date-fns'
 import { flexCenter } from '@/app/(hooks)/mixin'
 import Button from '@/app/(components)/Button'
@@ -11,19 +11,7 @@ import { useAppDispatch } from '@/redux/hooks'
 import { removeShifts } from '@/redux/placesSlice'
 import AddEditShift from './AddEditShiftForm'
 import CheckOrX from '@/app/(components)/CheckOrX';
-export interface Shift {
-    shiftId: string
-    placeId: string,
-    shiftStart: string
-    shiftEnd: string
-    breakStart: string
-    breakEnd: string
-    iWorkedOn: string
-    notes: string
-    checked: boolean
-    wagePerHour: number,
-    tipBonus: number
-}
+import { Shift } from '@/types/types';
 
 function parseISOString(string: string): string {
     const ISODate = parseISO(string)
@@ -48,7 +36,7 @@ const slideDownDiv = {
 interface ShiftComponentProps {
     shift: Shift
     removeButtons: boolean
-    handleCheckBoxClick: (shiftId: string) => void
+    handleCheckBoxClick: (id: string) => void
 }
 export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shift}: ShiftComponentProps) {
     const dispatch = useAppDispatch()
@@ -82,7 +70,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
   return (
     <div className={`w-full flex justify-between flex-col rounded-lg py-1 cursor-pointer relative`}>
         {removeButtons && <input 
-                data-key={shift.shiftId}
+                data-key={shift.id}
                 type='checkbox' 
                 checked={shift.checked} 
                 onClick={(e) => e.stopPropagation()} 
@@ -121,7 +109,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                         endDate={shift.shiftEnd}
                         breakStart={shift.breakStart}
                         breakEnd={shift.breakEnd}
-                        shiftId={shift.shiftId}
+                        id={shift.id}
                         wagePerHour={shift.wagePerHour}
                         tipBonus={shift.tipBonus}
                     />
@@ -199,7 +187,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                 Are you sure you want to remove this shift?
                 <div className={`${flexCenter} gap-4 `}>
                     <Button theme='blank' onClick={() => setRemovalModal(false)} className='' text='No' type='button'/>
-                    <Button theme='full' onClick={() => {dispatch(removeShifts([shift.shiftId])); setIsOpen(false); setRemovalModal(false)}} className='' text='Yes' type='button'/>
+                    <Button theme='full' onClick={() => {dispatch(removeShifts([shift.id])); setIsOpen(false); setRemovalModal(false)}} className='' text='Yes' type='button'/>
                 </div>
             </div>
             </Modal>}

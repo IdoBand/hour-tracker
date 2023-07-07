@@ -1,6 +1,6 @@
 import { startOfToday, isSameWeek, isSameMonth } from 'date-fns';
 import { Shift } from '../dashboard/[workPlaceId]/Shift';
-import { TimeHelper } from './TimeHelper';
+import { TimeHelper } from '../../services/TimeHelper';
 class ShiftsManipulatorClass {
 
   filterPastWeekShifts(shifts: Shift[]): Shift[] {

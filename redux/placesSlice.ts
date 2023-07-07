@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { WorkPlace } from '@/app/dashboard/WorkPlace'
-import { PLACES_OF_WORK } from './dummyUser'
 import { Shift } from '@/app/dashboard/[workPlaceId]/Shift'
 import { parseISO, compareAsc } from 'date-fns'
 interface PlacesState {
@@ -9,7 +8,7 @@ interface PlacesState {
 }
 
 const initialState: PlacesState = {
-    places: PLACES_OF_WORK,
+    places: [],
     currentWorkPlace: null
 }
 
@@ -20,14 +19,14 @@ const placesSlice = createSlice({
         setWorkPlaceCheckbox: {
             reducer: (state, action: PayloadAction<string>) => {
                 state.places! = state.places!.map((place: WorkPlace) => {
-                    if (place.placeId === action.payload) {
+                    if (place.id === action.payload) {
                         place.checked = !place.checked
                     }
                     return place
                 })
             },
-            prepare: (placeId: string) => {
-                return { payload: placeId }
+            prepare: (id: string) => {
+                return { payload: id }
             }
         },
         checkboxAll: {
@@ -73,21 +72,21 @@ const placesSlice = createSlice({
         },
         setCurrentWorkPlace: {
             reducer: (state, action: PayloadAction<string>) => {
-                for (const place of state.places) {
-                    if (action.payload === place.placeId) {
+                for (const place of state.places!) {
+                    if (action.payload === place.id) {
                         state.currentWorkPlace = place
                         break
                     }
                 }
             },
-            prepare: (placeId: string) => {
-                return { payload: placeId }
+            prepare: (id: string) => {
+                return { payload: id }
             }
         },
         editAWorkPlace: {
             reducer: (state, action: PayloadAction<WorkPlace>) => {
-                for (let workPlace of state.places) {
-                    if (action.payload.placeId === workPlace.placeId) {
+                for (let workPlace of state.places!) {
+                    if (action.payload.id === workPlace.id) {
                         workPlace = action.payload
                         break
                     }
@@ -103,13 +102,13 @@ const placesSlice = createSlice({
                 state.currentWorkPlace?.shifts.push(action.payload)
                 state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.sort((a, b) => compareAsc(parseISO(a.shiftStart), parseISO(b.shiftStart)));
                 let idx: number = -1
-                for (let i = 0 ; i < state.places.length ; i ++) {
-                    if (state.places[i].placeId === action.payload.placeId) {
+                for (let i = 0 ; i < state.places!.length ; i ++) {
+                    if (state.places![i].id === action.payload.id) {
                         idx = i
                         break
                     }
                 }
-                state.places[idx!] = state.currentWorkPlace as WorkPlace
+                state.places![idx!] = state.currentWorkPlace as WorkPlace
 
             },
             prepare: (shift: Shift) => {
@@ -118,19 +117,19 @@ const placesSlice = createSlice({
         },
         removeShifts: {
             reducer: (state, action: PayloadAction<Array<string>>) => {
-                const shiftIdsSet = new Set(action.payload)
+                const idsSet = new Set(action.payload)
                 state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.filter((shift: Shift) => {
-                    if (!shiftIdsSet.has(shift.shiftId)) {return shift}
+                    if (!idsSet.has(shift.id)) {return shift}
                 })
             },
-            prepare: (shiftIdsArray: Array<string>) => {
-                return { payload: shiftIdsArray }
+            prepare: (idsArray: Array<string>) => {
+                return { payload: idsArray }
             }
         },
         editShift: {
             reducer: (state, action: PayloadAction<Shift>) => {
                 state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.map((shift: Shift) => {
-                    return shift.shiftId === action.payload.shiftId ? action.payload : shift
+                    return shift.id === action.payload.id ? action.payload : shift
                 })
             },
             prepare: (shift: Shift) => {
@@ -140,14 +139,14 @@ const placesSlice = createSlice({
         setShiftCheckBox: {
             reducer: (state, action: PayloadAction<string>) => {
                 state.currentWorkPlace!.shifts = state.currentWorkPlace!.shifts.map((shift: Shift) => {
-                    if (shift.shiftId === action.payload) {
+                    if (shift.id === action.payload) {
                         shift.checked = !shift.checked
                     }
                     return shift
                 })
             },
-            prepare: (placeId: string) => {
-                return { payload: placeId }
+            prepare: (id: string) => {
+                return { payload: id }
             }
         },
         checkBoxAllShifts: {
@@ -168,6 +167,10 @@ const placesSlice = createSlice({
                 return { payload: isFirstSelectAllClick }
             }
         },
+        signOutPlaces(state) {
+            state.currentWorkPlace = null
+            state.places = []
+        }
         
     }
 })
@@ -185,5 +188,6 @@ export const {
     editShift,
     setShiftCheckBox,
     checkBoxAllShifts,
+    signOutPlaces,
     } = placesSlice.actions
 export default placesSlice.reducer

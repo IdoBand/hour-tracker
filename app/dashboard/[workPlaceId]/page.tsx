@@ -1,24 +1,25 @@
 'use client'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
 import { useCalendar } from '../../(hooks)/useCalender';
-import { Shift } from './Shift';
+import { Shift, WorkPlace } from '@/types/types';
 import { dashBoardWorkPlaceHeader, pageHeader } from '@/app/(hooks)/mixin';
 import ShiftComponent from './Shift'
-import { TimeHelper } from '@/app/(hooks)/TimeHelper';
+import { TimeHelper } from '@/services/TimeHelper';
 import { isSameMonth, parseISO, format } from 'date-fns'
 import AddRemoveEditButtons from '@/app/(components)/AddRemoveEditButtons';
 import { useState, useRef } from 'react';
 import FramerSpringRotate from '@/app/(components)/FramerSpringRotate';
 import AddEditShift from './AddEditShiftForm';
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
-import { removeShifts, setShiftCheckBox, checkBoxAllShifts } from '@/redux/placesSlice';
+import {  } from '@/redux/workPlaceSlice';
 import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import Redirect from '@/app/(components)/Redirect';
-import { WorkPlace } from '../WorkPlace';
 import { emptyWorkPlace } from '@/redux/dummyUser';
 import CheckOrX from '@/app/(components)/CheckOrX';
 import EditWorkPlaceForm from './EditWorkPlaceForm';
 import CustomButton from '@/app/(components)/CustomButton';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { redirect } from 'next/navigation'; 
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
     const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
@@ -39,7 +40,7 @@ interface WorkPlaceStatsViewProps {
   }
 }
 const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
-  
+ 
   const reduxCurrentWorkPlace = useAppSelector(state => state.placesSlice.currentWorkPlace)
   const currentWorkPlace: WorkPlace = reduxCurrentWorkPlace ? reduxCurrentWorkPlace : emptyWorkPlace
   
@@ -48,21 +49,17 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
   const [removeButtons, setRemoveButtons] = useState<boolean>(false)
   const [isEditingWorkPlace, setIsEditingWorkPlace] = useState<boolean>(false)
   const firstSelectAllClick = useRef<boolean>(false)
-  const user = useAppSelector(state => state.userSlice.user)
+
   const dispatch = useAppDispatch()
   const shifts: Shift[] = currentWorkPlace!.shifts.filter(shift => {
     if (isSameMonth(selectedDay, parseISO(shift.shiftStart))) {
       return shift
     }
   })
-  if (!reduxCurrentWorkPlace) {
-    return <Redirect to='/dashboard' />
-  }
-  
 
-  function handleCheckBoxClick(shiftId: string) {
+  function handleCheckBoxClick(id: string) {
     firstSelectAllClick.current = false
-    dispatch(setShiftCheckBox(shiftId))
+    dispatch(setShiftCheckBox(id))
   }
   function selectAll() {
     dispatch(checkBoxAllShifts(firstSelectAllClick.current))
@@ -73,7 +70,7 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
   function handleRemovePermanentlyClick() {
     const shiftsIdsArray: string[] = []
     for (const shift of shifts) {
-      shift.checked && shiftsIdsArray.push(shift.shiftId)
+      shift.checked && shiftsIdsArray.push(shift.id)
     }
     dispatch(removeShifts(shiftsIdsArray))
   }
@@ -92,10 +89,10 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
           <div className={`flex w-1/2 flex-col shadow-lg rounded-lg p-4 gap-4 md:w-full md:px-2 md:text-sm`}>
             
             <div className={`p-1 flex w-full flex-col rounded-lg gap-1`}>
-              <span className='w-full font-semibold text-lg underline md: text-center'>Monthly Overview</span>
+              {/* <span className='w-full font-semibold text-lg underline md: text-center'>Monthly Overview</span>
               <span className='font-semibold'>{`Expected Salary: `} <span className='font-normal'>{`${ShiftsManipulator.calculateSalary(shifts)} ₪`}</span></span>
               <span className='font-semibold'>{`Total Time: `}<span className='font-normal'>{`${totalHoursForPeriod(shifts)}`}</span></span>
-              <span className='font-semibold'>{`Total Break Time: `}<span className='font-normal'>{`${totalBreakTime(shifts)}`}</span></span>
+              <span className='font-semibold'>{`Total Break Time: `}<span className='font-normal'>{`${totalBreakTime(shifts)}`}</span></span> */}
             </div>
             
             <div className={`p-1 flex w-full flex-col rounded-lg gap-1 relative`}>
@@ -107,13 +104,13 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
                 </>
                 :
                 <>
-                <span className='flex'>{`Currently Employed: `}<CheckOrX itemToCheck={currentWorkPlace.isCurrent} /></span>
-                <span>{`Wage Per Hour: `} <span className='font-semibold'>{`${currentWorkPlace?.wagePerHour} ₪`}</span></span>
+                {/* <span className='flex'>{`Currently Employed: `}<CheckOrX itemToCheck={currentWorkPlace.isCurrent} /></span>
+                <span>{`Wage Per Hour: `} <span className='font-semibold'>{`${currentWorkPlace?.wagePerHour} ₪`}</span></span> */}
                 </>
                 }
-                <span>{`Started Working at: `}<span className='font-semibold'>{format(parseISO(currentWorkPlace.employmentStartDate), 'dd/MM/yyyy')}</span></span>
+                {/* <span>{`Started Working at: `}<span className='font-semibold'>{format(parseISO(currentWorkPlace.employmentStartDate as string), 'dd/MM/yyyy')}</span></span>
                 <span>{`Total Employment Duration: `}<span className='font-semibold'>{`${totalHoursForPeriod(currentWorkPlace!.shifts)}`}</span></span>
-                <span>{`Total Break Duration: `}<span className='font-semibold'>{`${totalBreakTime(currentWorkPlace!.shifts)}`}</span></span>
+                <span>{`Total Break Duration: `}<span className='font-semibold'>{`${totalBreakTime(currentWorkPlace!.shifts)}`}</span></span> */}
                 <CustomButton 
                   className='absolute top-10 right-1 w-5' 
                   onClick={() => setIsEditingWorkPlace(prev => !prev)}
@@ -159,7 +156,7 @@ const WorkPlaceStats = (props: WorkPlaceStatsViewProps) => {
           <div className='w-full gap-2 flex-col'>
             {shifts.length ? 
             shifts.map((shift) => {
-              return <div key={shift.shiftId} className='w-full'>
+              return <div key={shift.id} className='w-full'>
                 <ShiftComponent 
                   shift={shift} 
                   removeButtons={removeButtons} 

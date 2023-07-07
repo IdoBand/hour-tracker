@@ -1,0 +1,53 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("POSTGRES_PRISMA_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp")]
+}
+
+model users {
+  id         String      @id @db.VarChar(70)
+  email      String      @db.VarChar(70)
+  firstName  String      @db.VarChar(70)
+  lastName   String      @db.VarChar(70)
+  password   String?     @db.VarChar(16)
+  firstLogin DateTime    @db.Timestamp(6)
+  lastLogin  DateTime    @db.Timestamp(6)
+  shift      shift[]
+  workplace  workplace[]
+}
+
+model workplace {
+  id                  String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  userId              String    @db.VarChar(70)
+  name                String    @db.VarChar(50)
+  employmentStartDate DateTime? @db.Timestamp(6)
+  employmentEndDate   DateTime? @db.Timestamp(6)
+  isCurrent           Boolean
+  wagePerHour         Int
+  isBreakPaid         Boolean
+  lastShift           DateTime? @db.Timestamp(6)
+  shift               shift[]
+  users               users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model shift {
+  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id       String    @db.VarChar(70)
+  work_place_id String    @db.Uuid
+  shift_start   DateTime  @db.Timestamp(6)
+  shift_end     DateTime  @db.Timestamp(6)
+  break_start   DateTime  @db.Timestamp(6)
+  break_end     DateTime  @db.Timestamp(6)
+  i_worked_on   String    @db.VarChar(150)
+  notes         String    @db.VarChar(150)
+  wage_per_hour Int
+  tip_bonus     Int
+  is_break_paid Boolean
+  users         users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shift_userId_fkey")
+  workplace     workplace @relation(fields: [work_place_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shift_workPlaceId_fkey")
+}

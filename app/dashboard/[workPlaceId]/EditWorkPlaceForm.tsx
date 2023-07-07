@@ -1,10 +1,9 @@
 import { useForm } from 'react-hook-form'
-import { WorkPlace } from '../WorkPlace';
+import { WorkPlace } from '@/types/types';
 import { useState } from 'react';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import Button from '@/app/(components)/Button';
 import { useAppDispatch } from '@/redux/hooks';
-import { editAWorkPlace } from '@/redux/placesSlice';
+
 interface EditWorkPlaceFormProps {
     workPlace: WorkPlace
     onClose: () => void
@@ -23,11 +22,11 @@ const EditWorkPlaceForm = ({workPlace, onClose}: EditWorkPlaceFormProps) => {
     const dispatch = useAppDispatch()
 
     function extractFormData(data: EditWorkPlaceFormData) {
-        dispatch(editAWorkPlace({
-            ...workPlace,
-            wagePerHour: +data.wagePerHour,
-            isCurrent: yesOrNo
-        }))
+        // dispatch(editAWorkPlace({
+        //     ...workPlace,
+        //     wagePerHour: +data.wagePerHour,
+        //     isCurrent: yesOrNo
+        // }))
         onClose()
     }
   return (

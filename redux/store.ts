@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './userSlice'
 import placesSlice from './placesSlice'
-
+import windowSlice from './windowSlice'
+import workPlaceSlice from './workPlaceSlice'
 export const store = configureStore({
   reducer: {
     userSlice: userSlice,
     placesSlice,
+    windowSlice,
+    workPlaceSlice,
   }
 })
 

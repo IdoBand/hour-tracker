@@ -5,8 +5,12 @@ import Button from '../(components)/Button';
 import { useCalendar } from '../(hooks)/useCalender';
 import { format } from 'date-fns'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { WorkPlace } from './WorkPlace';
-import { addWorkPlace } from '@/redux/placesSlice';
+import { WorkPlace } from '@/types/types';
+import { fetchAddWorkPlace } from '@/util/workPlaceFetchers';
+import parseISO from 'date-fns/parseISO';
+import { useRouter } from 'next/navigation';
+import { useSnackbar } from '../(hooks)/useSnackbar';
+import { setIsFetching } from '@/redux/windowSlice';
 
 export interface FormProps {
     onClose: () => void
@@ -23,11 +27,12 @@ export interface TextLineInputProps {
 }
 
 const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
+    const router = useRouter()
     const user = useAppSelector(state => state.userSlice.user)
     const dispatch = useAppDispatch()
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
     const { visualCalendar, selectedDay } = useCalendar(false, [])
-  
+    const { show: showSnackbar, component: snackBar } = useSnackbar();
     const TextLineInput = ({name, label, type='text', isRequired, autoComplete, value}: TextLineInputProps) => {
         return (
         <div className={`flex flex-col mb-6`}>
@@ -68,25 +73,33 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
             </>
         )
     }
-    function extractData(data: any) {
+    async function extractData(data: any) {
         data.selectedDay = format(selectedDay, 'yyyy-MM-dd')
-
-        const newWorkPlace: WorkPlace = {
-            placeId: Date.now().toString(),
-            name: data.workPlaceName,
-            employmentStartDate: data.selectedDay,
-            employmentEndDate: '',
-            isCurrent: data.isCurrent,
-            wagePerHour: data.wagePerHour,
-            isBreakPaid: data.isCurrent,
-            link: '',
-            checked: false,
-            shifts: [],
+        dispatch(setIsFetching())
+        const response = await fetchAddWorkPlace(
+            {
+                userId: user!.email,
+                name: data.workPlaceName,
+                employmentStartDate: parseISO(data.selectedDay),
+                employmentEndDate: parseISO(data.selectedDay),
+                isCurrent: data.isCurrent,
+                wagePerHour: data.wagePerHour,
+                isBreakPaid: data.isBreakPaid,
+            }
+        )
+        
+        if (response.success) {
+            router.refresh()
+            showSnackbar('Work place added successfully', 'success')
+            onClose()
+            dispatch(setIsFetching())
+        } else {
+            showSnackbar('Failed to add work place', 'error')
         }
-        dispatch(addWorkPlace(newWorkPlace))
-        onClose()
+        
     }
   return (
+    <>
     <form onSubmit={handleSubmit(data => {
         extractData(data);
       })}
@@ -129,6 +142,8 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
             <Button type='submit' theme='full' text='Add' className='' />
         </div>
     </form>
+    {snackBar}
+    </>
   )
 }
 

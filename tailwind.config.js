@@ -15,6 +15,27 @@ module.exports = {
         secondary: 'rgb(56 189 248)',
         danger: 'rgb(190, 60, 60)',
       },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        upDownTop: {
+          '0%': { top: '-10px' },
+          '50%': { top: '40px' },
+          '100%': { top: '-10px' },
+        },
+        upDownBottom: {
+          '0%': { bottom: '0' },
+          '50%': { bottom: '-60px' },
+          '100%': { bottom: '0' },
+        },
+      },
+      animation: {
+        'fade-in': 'fadeIn 1.5s ease-in-out',
+        'up-down-top': 'upDownTop 6s ease-in-out infinite',
+        'up-down-bottom': 'upDownBottom 5s ease-in-out infinite',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

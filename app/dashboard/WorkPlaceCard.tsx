@@ -1,25 +1,17 @@
-import { Shift } from './[workPlaceId]/Shift'
+'use client'
+import { Shift, WorkPlace } from '@/types/types';
 import { dashBoardWorkPlaceHeader, checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import Link from 'next/link';
 import { TimeHelper } from '../../services/TimeHelper';
 import { ShiftsManipulator } from '../(hooks)/ShiftsManipulator';
 import { SquaresPlusIcon, ChartBarIcon } from '@heroicons/react/24/solid';
 import CustomButton from '../(components)/CustomButton';
-export interface WorkPlace {
-    id: string
-    userId: string
-    name: string
-    employmentStartDate: string
-    employmentEndDate: string
-    isCurrent: boolean
-    wagePerHour: number
-    isBreakPaid: boolean
-    link: string
-    checked: boolean
-    shifts: Shift[]
-}
-
-
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { deleteIdFromRemoveArray, addIdToRemoveArray, setCurrentWorkPlace } from '@/redux/workPlaceSlice';
+import { formatISO } from 'date-fns';
+import AddEditShift from './[workPlaceId]/AddEditShiftForm';
+import Modal from '../(components)/Modal';
+import { useState } from 'react';
 export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
     if (shifts.length) {
         const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
@@ -30,39 +22,64 @@ export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
 
 interface WorkPlaceCardProps {
     workPlace: WorkPlace
-    removeButtons: boolean
-    handleCheckBoxClick: (id: string) => void
-    handleWorkPlaceClick: (id: string) => void
-    setAddEditShiftForm: any
+    totalHours: string | number
+    hoursPastWeek: string | number
+    hoursPastMonth: string | number
+    employmentDuration: string
 }
-export default function WorkPlaceCard ({workPlace, removeButtons, handleCheckBoxClick, handleWorkPlaceClick, setAddEditShiftForm}: WorkPlaceCardProps) {
-        return (
+export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, hoursPastMonth, employmentDuration}: WorkPlaceCardProps) {
+        const removeButtons: boolean = useAppSelector(state => state.workPlaceSlice.removeButtons)
+        const idsRemoveArray: string[] = useAppSelector(state => state.workPlaceSlice.removePlacesIdArray)
+        const [quickAdd, setQuickAdd] = useState<boolean>(false)
+        const dispatch = useAppDispatch()
+
+        function handleCheckBoxClick(workPlaceId: string) {
+            if (idsRemoveArray.includes(workPlaceId)) {
+                dispatch(deleteIdFromRemoveArray(workPlaceId))
+            } else {
+                dispatch(addIdToRemoveArray(workPlaceId))
+            }
+        }
+
+        function handleWorkPlaceClick(workPlace: WorkPlace) {
+            // make dates serializable for redux
+            workPlace.employmentStartDate = formatISO(workPlace.employmentStartDate as Date)
+            if (workPlace.employmentEndDate) {
+                workPlace.employmentEndDate = formatISO(workPlace.employmentEndDate as Date)
+            }
+            if (workPlace.lastShift) {
+                workPlace.employmentEndDate = formatISO(workPlace.lastShift as Date)
+            }
+            dispatch(setCurrentWorkPlace(workPlace))
+        }
+    
+    return (
             <div>
                 {removeButtons && <input 
                                     data-key={workPlace.id}
                                     type='checkbox' 
-                                    checked={workPlace.checked} 
+                                    checked={idsRemoveArray.includes(workPlace.id as string)} 
                                     onClick={(e) => e.stopPropagation()} 
-                                    onChange={(e) => {handleCheckBoxClick(e.target.dataset.key as string)}}
+                                    onChange={() => handleCheckBoxClick(workPlace.id as string)}
                                     className={checkboxRemoveStyle}/>}
                 <div className='flex justify-between'>
                     <div className={`flex flex-col`}>
                         <div className={`${workPlace.isCurrent ? 'text-secondary' : 'DARK'} ${dashBoardWorkPlaceHeader} w-full mb-4`}>{workPlace.name}{workPlace.isCurrent &&<pre className='text-xs text-dark font-light h-full flex items-end'> Current</pre>}</div>
                         <div className='sm:flex xs:flex-col'>
                             <span className='font-semibold md:text-sm sm:text:xs'>Total Hours: </span>
-                            <span className='md:text-sm sm:text-xs'>{prepareShiftsForTotalTimeCalculation(workPlace.shifts)}</span>
+                            <span className='md:text-sm sm:text-xs'>{totalHours}</span>
                         </div>
                         <div className='sm:flex xs:flex-col'>
                             <span className='font-semibold md:text-sm sm:text:xs'>Hours Past Week: </span>
-                            <span className='md:text-sm sm:text-xs'>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastWeekShifts(workPlace.shifts))}</span>
+                            <span className='md:text-sm sm:text-xs'>{hoursPastWeek}</span>
                         </div>
                         <div className='sm:flex xs:flex-col'>
                             <span className='font-semibold md:text-sm sm:text:xs'>Hours Past Month: </span>
-                            <span className='md:text-sm sm:text-xs'>{prepareShiftsForTotalTimeCalculation(ShiftsManipulator.filterPastMonthShifts(workPlace.shifts))}</span>
+                            <span className='md:text-sm sm:text-xs'>{hoursPastMonth}</span>
                         </div>
                         <div className='sm:flex xs:flex-col'>
                             <span className='font-semibold md:text-sm sm:text:xs'>Employment Duration: </span>
-                            <span className='md:text-sm sm:text-xs'>{TimeHelper.calculateYearlyDuration(workPlace.employmentStartDate, workPlace.employmentEndDate)}</span>
+                            <span className='md:text-sm sm:text-xs'>{employmentDuration}</span>
                         </div>
                     </div>
                     <div className={`flex justify-center items-end flex-col gap-4`}>
@@ -70,7 +87,7 @@ export default function WorkPlaceCard ({workPlace, removeButtons, handleCheckBox
                             className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
                             hoverText='Statistics'
                             where='down'
-                            onClick={() => {handleWorkPlaceClick(workPlace.id)}}
+                            onClick={() => {handleWorkPlaceClick(workPlace)}}
                             >
                             <Link href={`/dashboard/${workPlace.id}`}>
                                     <ChartBarIcon className='w-6 h-6 group-hover:fill-secondary'/>
@@ -80,12 +97,17 @@ export default function WorkPlaceCard ({workPlace, removeButtons, handleCheckBox
                             className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
                             hoverText='Quick Add'
                             where='down'
-                            onClick={() => {handleWorkPlaceClick(workPlace.id); setAddEditShiftForm(true)}}
+                            onClick={() => {handleWorkPlaceClick(workPlace); }}
                             >
                                 <SquaresPlusIcon className='w-6 group-hover:fill-secondary'/>
                         </CustomButton>
                     </div>
                 </div>
+                {quickAdd &&
+                    <Modal>
+                        <AddEditShift addOrEdit='add' onClose={() => setQuickAdd(false)} />
+                    </Modal>
+                }
             </div>
         )
     }

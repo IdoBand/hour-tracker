@@ -1,8 +1,9 @@
+'use client'
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@/app/(components)/Button';
-import { Shift } from './Shift';
-import { TimeHelper } from '@/app/(hooks)/TimeHelper';
+import { Shift } from '@/types/types';
+import { TimeHelper } from '@/services/TimeHelper';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addShiftToCurrentWorkPlace, editShift } from '@/redux/placesSlice';
 import { formHeader } from '@/app/(hooks)/mixin';
@@ -18,7 +19,7 @@ interface AddEditShiftProps {
   iWorkedOn?: string
   notes?: string
   onClose: () => void
-  shiftId?: string
+  id?: string
   wagePerHour?: number
   tipBonus?: number
 }
@@ -35,10 +36,10 @@ const FullDateInput = ({label, fullDatePicker}: FullDateInputProps) => {
   )
 }
 
-const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, shiftId, wagePerHour, tipBonus }: AddEditShiftProps) => {
+const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, id, wagePerHour, tipBonus }: AddEditShiftProps) => {
 
   const [formIssues, setFormIssues] = useState<string[]>([])
-  const currentWorkPlace: WorkPlace = useAppSelector(state => state.placesSlice.currentWorkPlace!)
+  const currentWorkPlace: WorkPlace = useAppSelector(state => state.workPlaceSlice.currentWorkPlace)
   const dispatch = useAppDispatch()
 ////////////////////////////////////////////////////////////////////////////////////////
   const NumberLineInput = ({name, label, type='text', isRequired, value, autoComplete}: TextLineInputProps) => {
@@ -76,8 +77,8 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
 
     if (validation.isDataValid) {
       const newShift: Shift = {
-        shiftId: addOrEdit === 'add' ? Date.now().toString() : shiftId as string,
-        placeId: currentWorkPlace.placeId as string,
+
+        workPlaceId: currentWorkPlace.id as string,
         shiftStart: shiftStartDate,
         shiftEnd: shiftEndDate,
         breakStart: breakStartDate,

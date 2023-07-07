@@ -69,26 +69,22 @@ class TimeHelperClass {
             return `${Math.floor(minutes / 60)} Hr ${minutes % 60} mins`
         }
     }
-    calculateYearlyDuration(start: string, end?: string) {
+    calculateYearlyDuration(start: Date, end: Date) {
         /**
          * This function receives 2 ISO 8601 string and calculates the time difference between them in days,
          * and returns a string description in years / days.
          * @returns {string} - time unit in years / days.
          */
-        if (!end) {
-            end = formatISO(new Date())
-        } 
-        const startDate = new Date(start)
-        const endDate = new Date(end)
-        const daysDifference = differenceInDays(endDate, startDate)
+
+        const daysDifference = differenceInDays(end, start)
         if (daysDifference < 365){
-            return daysDifference.toString()
+            return `${daysDifference.toString()} days`
         } else if (daysDifference > 365 && daysDifference % 365 !== 0) {
-            const yearsDifference = differenceInYears(endDate, startDate)
+            const yearsDifference = differenceInYears(end, start)
             const remainingDays = daysDifference - yearsDifference * 365
             return `${yearsDifference} Year${yearsDifference > 1 ? 's' : ''} and ${remainingDays} Days`
         } else {
-            const yearsDifference = differenceInYears(endDate, startDate)
+            const yearsDifference = differenceInYears(end, start)
             return `${yearsDifference} Year${yearsDifference > 1 ? 's' : ''}`
         }
     }
@@ -146,6 +142,7 @@ class TimeHelperClass {
         }
         return validationResultObject
     }
+
 }
 
 export const TimeHelper = new TimeHelperClass()

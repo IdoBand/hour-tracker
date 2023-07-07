@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Button from '../(components)/Button';
@@ -8,7 +9,7 @@ import { signInUser } from '@/redux/userSlice';
 import { dummyUser, User, PLACES_OF_WORK } from '@/redux/dummyUser';
 import { setWorkPlaces } from '@/redux/placesSlice';
 import { WorkPlace } from '../dashboard/WorkPlace';
-
+import {signIn} from 'next-auth/react'
 interface TextLineInputProps {
     name: string
     label: string
@@ -71,16 +72,18 @@ const SignIn = ({onClose}: SignInProps) => {
     function extractFormData (data: any) {
         if (0) {
             dispatch(signInUser({
-                userId: data.email,
+
                 email: data.email,
-                firstName: 'Ido',
-                lastName: 'something',
+                name: 'Ido'
             }))
             onClose()
         }
         
         alert('Please sign in as a Dummy user :)')
         
+    }
+    function handleGoogle() {
+        signIn('google')
     }
 
   return (
@@ -112,7 +115,7 @@ const SignIn = ({onClose}: SignInProps) => {
             `}
             >Or Continue With</div>
             <div className={`${flexCenter}`}>
-                <NextSVG className='w-24'/>
+                <button type='button' onClick={handleGoogle}>Google</button>
             </div>
         </div>
         </>
@@ -132,8 +135,8 @@ const SignIn = ({onClose}: SignInProps) => {
                 <TextLineInput name='secondEmail' label='Repeat 2nd Email' isRequired={false} autoComplete='repeat-second-email' />
             </div>
             <div className={`${flexCenter} w-full gap-4 mt-4`}>
-                <Button onClick={handleSubmit} type='submit' theme='full' className='' text='Create Account' />
                 <Button onClick={reset} type='button' theme='blank' className='' text='Clear' />
+                <Button onClick={handleSubmit} type='submit' theme='full' className='' text='Create Account' />
             </div>
         </>
         }

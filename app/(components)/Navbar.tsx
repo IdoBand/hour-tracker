@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react'
+import { useEffect, useState, } from 'react'
 import Link from 'next/link'
 import { flexCenter } from '@/app/(hooks)/mixin';
 import Modal from './Modal';
@@ -10,9 +10,12 @@ import SignOut from '../(modalComponents)/SignOut';
 import { Bars3Icon } from '@heroicons/react/24/solid'
 import About from '../(modalComponents)/About';
 import { usePathname } from 'next/navigation';
-
-
-
+////////////////////////////////////////////////////////////////////////
+import { useSession } from 'next-auth/react'
+import { signInUser } from '@/redux/userSlice';
+import { User } from '@/redux/dummyUser'
+import { fetchSignIn } from '@/util/userFetchers';
+////////////////////////////////////////////////////////////////////////
 const navbarLinkClassName = 'h-[45px] group relative flex items-center'
 const navbarLinkBeforeClassName = 'before:absolute before:w-full before:h-[2px] before:bg-sky-400 before:bottom-0 before:rounded-xl'
 const navbarLinkTextClassName = `group-hover:text-sky-400 group-hover:scale-110 z-10 transition-all duration-300`
@@ -23,9 +26,21 @@ const Navbar = () => {
   const [signOut, setSignOut] = useState<boolean>(false)
   const [mobileMenu, setMobileMenu] = useState<boolean>(false)
   const [about, setAbout] = useState<boolean>(false)
-  const user = useAppSelector(state => state.userSlice.user)
   const dispatch = useAppDispatch()
   const pathName = usePathname()
+  const { data: session } = useSession()
+  const user = useAppSelector(state => state.userSlice.user)
+
+  useEffect(() => {
+    async function handleSignIn() {
+      await fetchSignIn(session!.user)
+    }
+
+    if (session) {
+      handleSignIn()
+      dispatch(signInUser(session!.user! as User))
+    }
+  }, [session])
   
   const navbarLinks = (className: string) => {
     return (
@@ -35,6 +50,7 @@ const Navbar = () => {
             Home
           </div>
         </Link>
+
         {user ? 
         <>
           <Link href={'/dashboard'} className={`${navbarLinkClassName} ${pathName.includes('/dashboard') && navbarLinkBeforeClassName}`} onClick={() => mobileMenu && setMobileMenu(false)} >

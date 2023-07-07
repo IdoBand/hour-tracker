@@ -1,0 +1,48 @@
+CREATE TABLE IF NOT EXISTS users (
+    "id" VARCHAR(70) PRIMARY KEY,
+    "email" VARCHAR(70) NOT NULL,
+	"firstName" VARCHAR(70) NOT NULL,
+	"lastName" VARCHAR(70) NOT NULL,
+    "password" VARCHAR(16),
+	"firstLogin" TIMESTAMP NOT NULL,
+    "lastLogin" TIMESTAMP NOT NULL
+);
+
+********  for unique id  ***********
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS workPlace (
+    "id" UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "userId" VARCHAR(70) NOT NULL,
+    FOREIGN KEY("userId") REFERENCES users("id"),
+    "name" VARCHAR(50) NOT NULL,
+    "employmentStartDate" TIMESTAMP,
+    "employmentEndDate" TIMESTAMP,
+    "isCurrent" BOOLEAN NOT NULL,
+    "wagePerHour" INTEGER NOT NULL,
+    "isBreakPaid" BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS shift (
+    "id" UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "userId" VARCHAR(70) NOT NULL,
+    FOREIGN KEY("userId") REFERENCES users ("id"),
+    "workPlaceId" UUID NOT NULL,
+    FOREIGN KEY("workPlaceId") REFERENCES workPlace ("id"),
+    "shiftStart" TIMESTAMP NOT NULL,
+    "shiftEnd" TIMESTAMP NOT NULL,
+    "BreakStart" TIMESTAMP NOT NULL,
+    "BreakEnd" TIMESTAMP NOT NULL,
+    "iWorkedOn" VARCHAR(150) NOT NULL,
+    "notes" VARCHAR(150) NOT NULL,
+    "wagePerHour" INTEGER NOT NULL,
+    "tipBonus" INTEGER NOT NULL,
+    "isBreakPaid" BOOLEAN NOT NULL
+);
+
+
+INSERT INTO shift ("id", "userId", "workPlaceId", "shiftStart", "shiftEnd", "BreakStart", "BreakEnd", "iWorkedOn", "notes", "wagePerHour", "tipBonus", "isBreakPaid")
+VALUES
+    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-07-05 09:00:00', '2023-07-05 17:00:00', '2023-07-05 12:00:00', '2023-07-05 13:00:00', 'Task A', 'Some notes', 10, 5, true),
+    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-07-06 09:00:00', '2023-07-06 17:00:00', '2023-07-06 12:00:00', '2023-07-06 13:00:00', 'Task B', 'Some notes', 10, 5, true),
+    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-07-07 09:00:00', '2023-07-07 17:00:00', '2023-07-07 12:00:00', '2023-07-07 13:00:00', 'Task C', 'Some notes', 10, 5, true);
