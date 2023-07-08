@@ -6,17 +6,17 @@ import { dashBoardWorkPlaceHeader, pageHeader } from '@/app/(hooks)/mixin';
 import ShiftComponent from './Shift'
 import { TimeHelper } from '@/services/TimeHelper';
 import { isSameMonth, parseISO, format } from 'date-fns'
-import AddRemoveEditButtons from '@/app/(components)/AddRemoveEditButtons';
+import AddRemoveEditButtons from '@/components/AddRemoveEditButtons';
 import { useState, useRef } from 'react';
-import FramerSpringRotate from '@/app/(components)/FramerSpringRotate';
+import FramerSpringRotate from '@/components/FramerSpringRotate';
 import AddEditShift from './AddEditShiftForm';
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator';
 import {  } from '@/redux/workPlaceSlice';
 import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { emptyWorkPlace } from '@/redux/dummyUser';
-import CheckOrX from '@/app/(components)/CheckOrX';
+import CheckOrX from '@/components/CheckOrX';
 import EditWorkPlaceForm from './EditWorkPlaceForm';
-import CustomButton from '@/app/(components)/CustomButton';
+import CustomButton from '@/components/CustomButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation'; 

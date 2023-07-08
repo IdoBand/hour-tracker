@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { WorkPlace } from '@/types/types';
 import { useState } from 'react';
-import Button from '@/app/(components)/Button';
+import Button from '@/components/Button';
 import { useAppDispatch } from '@/redux/hooks';
 
 interface EditWorkPlaceFormProps {

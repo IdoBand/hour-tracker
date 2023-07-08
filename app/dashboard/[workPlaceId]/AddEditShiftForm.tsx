@@ -1,7 +1,7 @@
 'use client'
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Button from '@/app/(components)/Button';
+import Button from '@/components/Button';
 import { Shift } from '@/types/types';
 import { TimeHelper } from '@/services/TimeHelper';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';

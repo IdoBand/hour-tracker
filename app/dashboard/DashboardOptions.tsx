@@ -1,15 +1,15 @@
 'use client'
-import AddRemoveEditButtons from "../(components)/AddRemoveEditButtons"
+import AddRemoveEditButtons from "../../components/AddRemoveEditButtons"
 import AddNewWorkPlaceForm from "./AddWorkPlaceForm"
 import { useState } from 'react'
 import { redirect, useRouter } from "next/navigation"
 import { useAppSelector, useAppDispatch } from "@/redux/hooks"
-import FramerSpringRotate from "../(components)/FramerSpringRotate"
+import FramerSpringRotate from "../../components/FramerSpringRotate"
 import { setCheckboxAll, setRemoveButtons, clearIdToRemoveArray } from "@/redux/workPlaceSlice"
 import { fetchRemoveWorkPlaces } from "@/util/workPlaceFetchers"
-import { useSnackbar } from '../(hooks)/useSnackbar';
 import { setIsFetching } from "@/redux/windowSlice"
-import FullScreenSpinner from "../(components)/FullScreenSpinner"
+import FullScreenSpinner from "../../components/FullScreenSpinner"
+import { useToast } from "@/components/ui/use-toast"
 const DashBoardOptions = () => {
     const router = useRouter() 
     const user = useAppSelector(state => state.userSlice.user)
@@ -20,7 +20,7 @@ const DashBoardOptions = () => {
     // }
 
     const dispatch = useAppDispatch()
-    const { show: showSnackbar, component: snackBar } = useSnackbar();
+    const { toast } = useToast()
     const [addWorkPlaceForm, setAddWorkPlaceForm] = useState<boolean>(false)
     const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
     const isFetching = useAppSelector(state => state.windowSlice.isFetching)
@@ -30,10 +30,18 @@ const DashBoardOptions = () => {
           dispatch(setIsFetching())
           const result = await fetchRemoveWorkPlaces(idsToRemove)
           router.refresh()
-          showSnackbar('Work place removed successfully', 'success')
+          toast({
+            title: "Success",
+            description: "Work Place added successfully",
+            variant: 'info'
+          })
           dispatch(clearIdToRemoveArray())
         } catch {
-  
+          toast({
+            title: "Error",
+            description: "Failed to remove Work Place",
+            variant: 'info'
+          })
         } finally {
           dispatch(setIsFetching())
         }
@@ -62,7 +70,7 @@ const DashBoardOptions = () => {
         {isFetching && 
                     <FullScreenSpinner />
                 }
-        {snackBar}
+
     </>
   )
 }

@@ -3,7 +3,7 @@ import { useHourPicker } from "./useHourPicker"
 import { useCalendar } from "./useCalender"
 import { ArrowDownCircleIcon } from '@heroicons/react/24/solid'
 import format from "date-fns/format"
-import Button from "../(components)/Button"
+import Button from "../../components/Button"
 
 export const useFullDate = (date?: Date | undefined, hour?: string) => {
   const [isCalender, setIsCalender] = useState<boolean>(false)

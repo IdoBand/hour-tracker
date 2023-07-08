@@ -5,12 +5,12 @@ import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import { TimeHelper } from '@/services/TimeHelper'
 import { format, parseISO } from 'date-fns'
 import { flexCenter } from '@/app/(hooks)/mixin'
-import Button from '@/app/(components)/Button'
-import Modal from '@/app/(components)/Modal'
+import Button from '@/components/Button'
+import Modal from '@/components/Modal'
 import { useAppDispatch } from '@/redux/hooks'
 import { removeShifts } from '@/redux/placesSlice'
 import AddEditShift from './AddEditShiftForm'
-import CheckOrX from '@/app/(components)/CheckOrX';
+import CheckOrX from '@/components/CheckOrX';
 import { Shift } from '@/types/types';
 
 function parseISOString(string: string): string {

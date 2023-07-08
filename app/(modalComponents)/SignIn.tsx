@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Button from '../(components)/Button';
+import Button from '../../components/Button';
 import { flexCenter } from '@/app/(hooks)/mixin';
 import { NextSVG } from '@/util/icons'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';

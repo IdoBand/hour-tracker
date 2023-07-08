@@ -15,7 +15,7 @@ import {
   parseISO,
   startOfToday,
 } from 'date-fns'
-import Button from '../(components)/Button'
+import Button from '../../components/Button'
 import { flexCenter } from '@/app/(hooks)/mixin'
 
 const chosenYearDateValue = 'rounded-md border border-solid border-black text-sky-500'

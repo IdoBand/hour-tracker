@@ -3,12 +3,12 @@ import { useEffect, useState, } from 'react'
 import Link from 'next/link'
 import { flexCenter } from '@/app/(hooks)/mixin';
 import Modal from './Modal';
-import SignIn from '../(modalComponents)/SignIn';
+import SignIn from '../app/(modalComponents)/SignIn';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { LogoSVG } from '@/util/icons';
-import SignOut from '../(modalComponents)/SignOut';
+import SignOut from '../app/(modalComponents)/SignOut';
 import { Bars3Icon } from '@heroicons/react/24/solid'
-import About from '../(modalComponents)/About';
+import About from '../app/(modalComponents)/About';
 import { usePathname } from 'next/navigation';
 ////////////////////////////////////////////////////////////////////////
 import { useSession } from 'next-auth/react'

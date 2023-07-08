@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from 'react-hook-form'
 import { formHeader } from '@/app/(hooks)/mixin';
-import Button from '../(components)/Button';
+import Button from '../../components/Button';
 import { useCalendar } from '../(hooks)/useCalender';
 import { format } from 'date-fns'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -9,7 +9,7 @@ import { WorkPlace } from '@/types/types';
 import { fetchAddWorkPlace } from '@/util/workPlaceFetchers';
 import parseISO from 'date-fns/parseISO';
 import { useRouter } from 'next/navigation';
-import { useSnackbar } from '../(hooks)/useSnackbar';
+import { useToast } from '@/components/ui/use-toast';
 import { setIsFetching } from '@/redux/windowSlice';
 
 export interface FormProps {
@@ -32,7 +32,7 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
     const dispatch = useAppDispatch()
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
     const { visualCalendar, selectedDay } = useCalendar(false, [])
-    const { show: showSnackbar, component: snackBar } = useSnackbar();
+    const { toast } = useToast()
     const TextLineInput = ({name, label, type='text', isRequired, autoComplete, value}: TextLineInputProps) => {
         return (
         <div className={`flex flex-col mb-6`}>
@@ -90,11 +90,19 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
         
         if (response.success) {
             router.refresh()
-            showSnackbar('Work place added successfully', 'success')
+            toast({
+                title: "Success",
+                description: "Work Place added successfully",
+                variant: 'info'
+              })
             onClose()
             dispatch(setIsFetching())
         } else {
-            showSnackbar('Failed to add work place', 'error')
+            toast({
+                title: "Error",
+                description: "Failed to add Work Place",
+                variant: 'destructive'
+              })
         }
         
     }
@@ -142,7 +150,7 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
             <Button type='submit' theme='full' text='Add' className='' />
         </div>
     </form>
-    {snackBar}
+
     </>
   )
 }

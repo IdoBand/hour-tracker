@@ -1,15 +1,15 @@
 'use client';
 import { HomeImage } from "@/util/icons"
 import { flexCenter } from "./(hooks)/mixin"
-import Button from "./(components)/Button";
+import Button from "../components/Button";
 import { StarIcon, CubeIcon } from '@heroicons/react/24/solid'
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useAppSelector } from "@/redux/hooks";
-import Redirect from "./(components)/Redirect";
-import Modal from "./(components)/Modal";
+import Modal from "../components/Modal";
 import SignIn from "./(modalComponents)/SignIn";
 import { redirect } from "next/navigation";
+
 ////////////////////////////////////////////////////////////////////////////////////////
 interface BulletProps {
   header: string
@@ -70,7 +70,7 @@ const motionChild = {
 
 
 export default function Home() {
-  
+
   const [isMobile, setIsMobile] = useState<boolean>(false)
   const [signIn, setSignIn] = useState<boolean>(false)
   const [shouldRedirect, setShouldRedirect] = useState<boolean>(false)

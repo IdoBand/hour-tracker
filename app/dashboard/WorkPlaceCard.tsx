@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { TimeHelper } from '../../services/TimeHelper';
 import { ShiftsManipulator } from '../(hooks)/ShiftsManipulator';
 import { SquaresPlusIcon, ChartBarIcon } from '@heroicons/react/24/solid';
-import CustomButton from '../(components)/CustomButton';
+import CustomButton from '../../components/CustomButton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { deleteIdFromRemoveArray, addIdToRemoveArray, setCurrentWorkPlace } from '@/redux/workPlaceSlice';
 import { formatISO } from 'date-fns';
 import AddEditShift from './[workPlaceId]/AddEditShiftForm';
-import Modal from '../(components)/Modal';
+import Modal from '../../components/Modal';
 import { useState } from 'react';
 export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
     if (shifts.length) {
@@ -51,6 +51,7 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
                 workPlace.employmentEndDate = formatISO(workPlace.lastShift as Date)
             }
             dispatch(setCurrentWorkPlace(workPlace))
+            setQuickAdd(true)
         }
     
     return (
