@@ -15,6 +15,7 @@ import { useSession } from 'next-auth/react'
 import { signInUser } from '@/redux/userSlice';
 import { User } from '@/redux/dummyUser'
 import { fetchSignIn } from '@/util/userFetchers';
+import FullScreenSpinner from './FullScreenSpinner';
 ////////////////////////////////////////////////////////////////////////
 const navbarLinkClassName = 'h-[45px] group relative flex items-center'
 const navbarLinkBeforeClassName = 'before:absolute before:w-full before:h-[2px] before:bg-sky-400 before:bottom-0 before:rounded-xl'
@@ -30,7 +31,7 @@ const Navbar = () => {
   const pathName = usePathname()
   const { data: session } = useSession()
   const user = useAppSelector(state => state.userSlice.user)
-
+  const isFetching = useAppSelector(state => state.windowSlice.isFetching)
   useEffect(() => {
     async function handleSignIn() {
       await fetchSignIn(session!.user)
@@ -106,6 +107,9 @@ const Navbar = () => {
                 <About />
                 </Modal>
     }
+    {isFetching && 
+              <FullScreenSpinner />
+                }
     </>
   )
 }

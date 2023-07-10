@@ -26,14 +26,15 @@ export interface WorkPlace {
 
 export interface Shift {
     id?: string
+    userId: string
     workPlaceId: string,
-    shiftStart: string | Date 
-    shiftEnd: string | Date
-    breakStart: string | Date | null
-    breakEnd: string | Date | null
+    shiftStart: Date 
+    shiftEnd: Date
+    breakStart: Date | null
+    breakEnd: Date | null
     iWorkedOn: string
     notes: string
-    checked: boolean
+    checked?: boolean
     wagePerHour: number,
     tipBonus: number
     isBreakPaid: boolean

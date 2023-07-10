@@ -1,6 +1,8 @@
 import prisma from "@/prisma/client";
+import { Shift } from "@/types/types";
 import { PrismaClient } from "@prisma/client";
 import { startOfWeek, startOfToday, startOfMonth, endOfMonth  } from 'date-fns'
+import { workPlaceDao } from "./WorkPlaceDao";
 export class ShiftDao {
   private client: PrismaClient
   constructor() {
@@ -98,6 +100,62 @@ export class ShiftDao {
     } catch (e) {
 
     }
+  }
+  async addShift(shift: Shift) {
+    try {
+      const response = await this.client.shift.create({
+        data: {
+            // id: "uuid_generate_v4()" is automatically invoked by Prisma!,
+            userId: shift.userId,
+            workPlaceId: shift.workPlaceId,
+            shiftStart: shift.shiftStart,
+            shiftEnd: shift.shiftEnd,
+            breakStart: shift.breakStart as Date,
+            breakEnd: shift.breakEnd as Date,
+            iWorkedOn: shift.iWorkedOn,
+            notes: shift.notes,
+            wagePerHour: +shift.wagePerHour,
+            tipBonus: +shift.tipBonus,
+            isBreakPaid: shift.isBreakPaid,
+        },
+      })
+      const workPlaceResponse = await workPlaceDao.updateLastShift(shift.shiftStart, shift.workPlaceId)
+      
+      return {success: true}
+    } catch (err) {
+      console.log(err);
+      return {
+        success: false
+      }
+    }
+  }
+  async editShift(shift: Shift) {
+    // try {
+    //   const response = await this.client.shift.create({
+    //     data: {
+    //         // id: "uuid_generate_v4()" is automatically invoked by Prisma!,
+    //         userId: shift.userId,
+    //         workPlaceId: shift.workPlaceId,
+    //         shiftStart: shift.shiftStart,
+    //         shiftEnd: shift.shiftEnd,
+    //         breakStart: shift.breakStart as Date,
+    //         breakEnd: shift.breakEnd as Date,
+    //         iWorkedOn: shift.iWorkedOn,
+    //         notes: shift.notes,
+    //         wagePerHour: +shift.wagePerHour,
+    //         tipBonus: +shift.tipBonus,
+    //         isBreakPaid: shift.isBreakPaid,
+    //     },
+    //   })
+    //   return {
+    //     success: true
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   return {
+    //     success: false
+    //   }
+    // }
   }
   
   // async sumOfHours(workPlacesIdsArray: string[], timeBackwards: 'past week' | 'past month', shiftOrBreak: 'shift' | 'break') {

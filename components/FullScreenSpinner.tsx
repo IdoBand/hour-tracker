@@ -16,7 +16,7 @@ const modalMotion = {
 export default function FullScreenSpinner({onClose, children, className}: FullScreenSpinnerProps) {
     return ReactDom.createPortal(
         <>
-                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} z-10`} onClick={onClose}>
+                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} z-50`} onClick={onClose}>
                         <motion.div 
                         variants={modalMotion}
                         initial="initial"
@@ -24,7 +24,6 @@ export default function FullScreenSpinner({onClose, children, className}: FullSc
                         exit="exit"
                         onClick={(e) => e.stopPropagation()}
                         >
-     
                             <Spinner />
                         </motion.div>
                     </div>  

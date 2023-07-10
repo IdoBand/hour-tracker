@@ -2,6 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { shiftDao } from "../../../daos/ShiftDao";
+import { shiftService } from "@/services/ShiftService";
 
 export async function GET(req: NextRequest, res: Response, context: {}) {
     const { searchParams } = new URL(req.url)
@@ -18,5 +19,28 @@ export async function GET(req: NextRequest, res: Response, context: {}) {
             console.log(e);
             return NextResponse.json({success: false}, { status: 500 })
         }
+    }
+}
+
+
+
+// Add a shift
+export async function POST(req: NextRequest, res: NextResponse , context: {}) {
+    
+    try {
+        const body: any = await req.json()
+        console.log(`$$$$$$$$$$$$$$$$$$$$$$$$`);
+        console.log(body);
+        
+        const response = await shiftService.addShift(body)
+        if (response?.success) {
+            return NextResponse.json({success: true}, { status: 200 })
+        } else {
+            throw new Error
+        }
+    } catch (e) {
+        console.log('Error occurred while Add Shift Request');
+        console.log(e);
+        return NextResponse.json({success: false}, { status: 500 })
     }
 }

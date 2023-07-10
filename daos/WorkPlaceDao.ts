@@ -79,6 +79,19 @@ export class WorkPlaceDao {
       console.log(err);
     }
   }
+  async updateLastShift(date: Date, workPlaceId: string) {
+    try {
+      const response = await prisma.workplace.update({
+        where: { id: workPlaceId },
+        data: { 
+          lastShift: date 
+        },
+      });
+      return
+    } catch (err) {
+      console.log(`Failed to update last shift for ${workPlaceId}`);
+      console.log(err);
+    }
+  }
 }
-
 export const workPlaceDao = new WorkPlaceDao()

@@ -9,22 +9,27 @@ import { formHeader } from '@/app/(hooks)/mixin';
 import { WorkPlace } from '@/types/types';
 import { TextLineInputProps } from '../AddWorkPlaceForm';
 import { useFullDate } from '@/app/(hooks)/useFullDate';
+import startOfToday from 'date-fns/startOfToday';
+import { fetchAddShift } from '@/util/shiftFetchers';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
+import { setIsFetching } from '@/redux/windowSlice';
 interface AddEditShiftProps {
   addOrEdit: 'add' | 'edit'
-  startDate?: string | Date
-  endDate?: string | Date
-  breakStart?: string | Date
-  breakEnd?: string | Date
-  iWorkedOn?: string
-  notes?: string
   onClose: () => void
-  id?: string
-  wagePerHour?: number
-  tipBonus?: number
+  shift?: Shift
 }
 interface FullDateInputProps {
   label: string
   fullDatePicker: ReactNode
+}
+interface ShiftFormData {
+  iWorkedOn: string
+  notes: string,
+  wagePerHour: number
+  tipBonus: number
+  isBreakPaid: boolean
 }
 const FullDateInput = ({label, fullDatePicker}: FullDateInputProps) => {
   return (
@@ -35,11 +40,13 @@ const FullDateInput = ({label, fullDatePicker}: FullDateInputProps) => {
   )
 }
 
-const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, id, wagePerHour, tipBonus }: AddEditShiftProps) => {
-
+const AddEditShift = ({addOrEdit, onClose, shift }: AddEditShiftProps) => {
+  const session = useSession()
   const [formIssues, setFormIssues] = useState<string[]>([])
   const currentWorkPlace: WorkPlace = useAppSelector(state => state.workPlaceSlice.currentWorkPlace as WorkPlace)
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const { toast } = useToast()
 ////////////////////////////////////////////////////////////////////////////////////////
   const NumberLineInput = ({name, label, type='text', isRequired, value, autoComplete}: TextLineInputProps) => {
     return (
@@ -61,22 +68,31 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
 
   const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
 
-  const { setIsCalender: a, visualFullDate: shiftStartVD, selectedFullDate: shiftStartFD } = useFullDate('add' ? undefined : new Date(startDate as string), startDate ? startDate!.slice(11,16) : '')
-  const { setIsCalender: b, visualFullDate: shiftEndVD, selectedFullDate: shiftEndFD } = useFullDate(addOrEdit === 'add' ? undefined : new Date(endDate as string), endDate ? endDate!.slice(11,16) : '')
-  const { setIsCalender: c, visualFullDate: breakStartVD, selectedFullDate: breakStartFD } = useFullDate(addOrEdit === 'add' ? undefined : new Date(breakStart as string), breakStart ? breakStart!.slice(11,16) : '')
-  const { setIsCalender: d, visualFullDate: breakEndVD, selectedFullDate: breakEndFD } = useFullDate(addOrEdit === 'add' ? undefined : new Date(breakEnd as string), breakEnd ? breakEnd!.slice(11,16) : '')
+  const { setIsCalender: a, visualFullDate: shiftStartVD, selectedFullDate: shiftStartFD } = useFullDate(
+    'add' ? undefined : shift!.shiftStart as Date,
+    shift ? TimeHelper.serializeDate(shift!.shiftStart).slice(11,16) : '')
+  const { setIsCalender: b, visualFullDate: shiftEndVD, selectedFullDate: shiftEndFD } = useFullDate(
+    addOrEdit === 'add' ? undefined : shift!.shiftEnd as Date,
+    shift ? TimeHelper.serializeDate(shift!.shiftEnd).slice(11,16) : '')
+  const { setIsCalender: c, visualFullDate: breakStartVD, selectedFullDate: breakStartFD } = useFullDate(
+    addOrEdit === 'add' ? undefined : shift!.breakStart as Date,
+    shift ? TimeHelper.serializeDate(shift!.breakStart as Date).slice(11,16) : '')
+  const { setIsCalender: d, visualFullDate: breakEndVD, selectedFullDate: breakEndFD } = useFullDate(
+    addOrEdit === 'add' ? undefined : shift!.breakEnd as Date,
+    shift ? TimeHelper.serializeDate(shift!.breakEnd as Date).slice(11,16) : '')
 
-  function extractData(data: any) {
+  async function extractData(data: ShiftFormData) {
 
     const shiftStartDate = shiftStartFD
     const shiftEndDate = shiftEndFD
     const breakStartDate = breakStartFD
     const breakEndDate = breakEndFD
     const validation = TimeHelper.validateShiftTimes(shiftStartDate, shiftEndDate, breakStartDate, breakEndDate)
-
+    
     if (validation.isDataValid) {
+      dispatch(setIsFetching())
       const newShift: Shift = {
-
+        userId: session.data?.user?.email as string,
         workPlaceId: currentWorkPlace.id as string,
         shiftStart: shiftStartDate,
         shiftEnd: shiftEndDate,
@@ -84,25 +100,45 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
         breakEnd: breakEndDate,
         iWorkedOn: data.iWorkedOn,
         notes: data.notes,
-        checked: false,
-        wagePerHour: +data.wagePerHour,
-        tipBonus: +data.tipBonus
+        wagePerHour: data.wagePerHour,
+        tipBonus: data.tipBonus,
+        isBreakPaid: data.isBreakPaid,
       }
+      try {
       if (addOrEdit === 'add') {
-        dispatch(addShiftToCurrentWorkPlace(newShift))
+        const result = await fetchAddShift(newShift as Shift)
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: "Shift added Successfully",
+            variant: 'info'
+          })
+        } else {
+          throw new Error('')
+        }
       } else if (addOrEdit == 'edit') {
-        dispatch(editShift(newShift))
+        // const result = await fetchEditShift(newShift as Shift)
       }
-      setFormIssues([])
-      onClose()
+      
+
+      } catch (err) {
+        toast({
+          title: "Error",
+          description: "Failed to complete shift request",
+          variant: 'destructive'
+        })
+      } finally {
+        dispatch(setIsFetching())
+        onClose()
+      }
     } else {
       setFormIssues(validation.issues)
+
     }
   }
-
   return (
     <form onSubmit={handleSubmit(data => {
-      extractData(data);
+      extractData(data as ShiftFormData);
     })}
       className={`min-w-[45rem] max-w-full flex flex-col rounded-br-2xl rounded-3xl p-8 bg-light lg:p-2 md:min-w-[5rem]`}
     >
@@ -119,20 +155,33 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
         `}>
           <div className={`w-full flex flex-col justify-center items-center`}>
             <label className='w-[80%] mb-1'>I Worked On:</label>
-            <textarea defaultValue={iWorkedOn}
+            <textarea defaultValue={addOrEdit === 'edit' ? shift!.iWorkedOn : ''}
               className={`w-[80%] outline-none p-1 mb-10`}
               {...register('iWorkedOn', {required: false})}
             />
           </div>
           <div className={`w-full flex flex-col justify-center items-center`}>
             <label className='w-[80%] mb-1'>Notes:</label>
-            <textarea defaultValue={notes}
+            <textarea defaultValue={addOrEdit === 'edit' ? shift!.notes : ''}
               className={`w-[80%] outline-none p-1 mb-10`}
               {...register('notes', {required: false})}
             />
           </div>
-          <NumberLineInput name='wagePerHour' label='Wage Per Hour' type='number' isRequired={true} value={addOrEdit === 'add' ? currentWorkPlace.wagePerHour.toString() : wagePerHour} />
-          <NumberLineInput name='tipBonus' label='Tip / Bonus' type='number' isRequired={true} value={addOrEdit === 'add' ? 0 : tipBonus} />
+          <NumberLineInput name='wagePerHour' label='Wage Per Hour' type='number' isRequired={true} value={addOrEdit === 'add' ? currentWorkPlace.wagePerHour.toString() : shift!.wagePerHour} />
+          <NumberLineInput name='tipBonus' label='Tip / Bonus' type='number' isRequired={true} value={addOrEdit === 'add' ? 0 : shift!.tipBonus} />
+          <div className={`flex flex-col mb-6 w-[80%]`}>
+            <div className={`flex justify-between w-full flex-col`}>
+              <label htmlFor="isBreakPaid">Are You paid On Break?</label>
+              <input 
+                {...register('isBreakPaid', {required: false})}
+                type="checkBox"
+                className='w-full' 
+                name="isBreakPaid" 
+                defaultChecked={addOrEdit === 'edit' ? shift!.isBreakPaid : currentWorkPlace.isBreakPaid} />
+            </div>
+        </div>
+          
+          
         </div>
 
       </div>

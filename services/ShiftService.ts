@@ -1,5 +1,6 @@
 import { ShiftDao } from "@/daos/ShiftDao"
 import { startOfWeek, startOfToday, startOfMonth, endOfMonth, differenceInHours, compareAsc } from 'date-fns'
+import { Shift } from "@/types/types"
 export class ShiftService {
     private shiftDao: ShiftDao
     constructor() {
@@ -58,6 +59,31 @@ export class ShiftService {
             return shifts
         } catch (err) {
             console.log(err)
+        }
+    }
+    async addShift(shift: Shift) {
+        try {
+            const response = await this.shiftDao.addShift(shift)
+            return response
+        } catch (err) {
+            console.log('Service Failed to add shift');
+            console.log(err);
+        }
+    }
+    async editShift(shift: Shift) {
+        try {
+            const response = await this.shiftDao.editShift(shift)
+            return response
+        } catch (err) {
+            console.log('Service Failed to add shift');
+            console.log(err);
+        }
+    }
+    async deleteShifts(ids: string[]) {
+        try {
+
+        } catch (err) {
+            
         }
     }
 }

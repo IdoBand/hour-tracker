@@ -34,15 +34,19 @@ const slideDownDiv = {
         transition: {
             duration: 1
         },
+    },
+    exit: {
+        opacity: 0,
+        height: 0
     }
 }
 
-interface ShiftComponentProps {
+interface ShiftCardProps {
     shift: Shift
     removeButtons: boolean
     handleCheckBoxClick: (id: string) => void
 }
-export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shift}: ShiftComponentProps) {
+export default function ShiftCard ({removeButtons, handleCheckBoxClick, shift}: ShiftCardProps) {
     const dispatch = useAppDispatch()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [removalModal, setRemovalModal] = useState<boolean>(false)
@@ -104,20 +108,13 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                 variants={slideDownDiv}
                 initial="initial"
                 animate="animate"
+                exit="exit"
             className={`w-full min-h-max shadow-md rounded-lg px-2 py-1 overflow-hidden cursor-default`}>
                 {editMode ?
                     <AddEditShift 
                         addOrEdit='edit'
                         onClose={() => setEditMode(false)}
-                        iWorkedOn={shift.iWorkedOn}
-                        notes={shift.notes}
-                        startDate={shift.shiftStart}
-                        endDate={shift.shiftEnd}
-                        breakStart={shift.breakStart!}
-                        breakEnd={shift.breakEnd!}
-                        id={shift.id}
-                        wagePerHour={shift.wagePerHour}
-                        tipBonus={shift.tipBonus}
+                        shift={shift}
                     />
                 :
                     <div className='p-8 flex gap-4 relative md:flex-col md:p-2'>

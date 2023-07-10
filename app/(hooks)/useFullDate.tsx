@@ -4,12 +4,12 @@ import { useCalendar } from "./useCalender"
 import { ArrowDownCircleIcon } from '@heroicons/react/24/solid'
 import format from "date-fns/format"
 import Button from "../../components/Button"
-
+import parseISO from "date-fns/parseISO"
 export const useFullDate = (date?: Date | undefined, hour?: string) => {
   const [isCalender, setIsCalender] = useState<boolean>(false)
   const { visualCalendar, selectedDay } = useCalendar(false, [], undefined, date ? date : undefined)
   const { visualHourPicker, selectedHour } = useHourPicker(hour)
-  const selectedFullDate = format(selectedDay, 'yyyy-MM-dd')+'T'+selectedHour
+  const selectedFullDate: Date = parseISO(format(selectedDay, 'yyyy-MM-dd')+'T'+selectedHour)
   
   const calendarRef = useRef<HTMLDivElement>(null)
 

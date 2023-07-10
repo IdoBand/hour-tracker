@@ -67,10 +67,6 @@ const DashBoardOptions = () => {
                         <AddNewWorkPlaceForm onClose={() => setAddWorkPlaceForm(false)} />
                     </FramerSpringRotate>
                 }
-        {isFetching && 
-                    <FullScreenSpinner />
-                }
-
     </>
   )
 }

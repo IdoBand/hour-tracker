@@ -2,7 +2,6 @@
 import { useState } from 'react'
 import ShiftCard from './ShiftCard'
 import { Shift } from '@/types/types'
-import ShiftComponent from './ShiftCard'
 import AddRemoveEditButtons from '@/components/AddRemoveEditButtons'
 import FramerSpringRotate from '@/components/FramerSpringRotate'
 import AddEditShift from './AddEditShiftForm'
@@ -57,7 +56,7 @@ const MonthlyShiftsStack = ({shifts}: Props) => {
             currentMonthShifts.map((shift) => {
               return (
               <div key={shift.id} className='w-full'>
-                <ShiftComponent 
+                <ShiftCard 
                   shift={shift} 
                   removeButtons={removeButtons} 
                   handleCheckBoxClick={() => {return}} />

@@ -62,7 +62,7 @@ const Overview = async ({ params }: OverviewProps) => {
             {shifts.length ? 
             shifts.map((shift) => {
               return <div key={shift.id} className='w-full'>
-                <ShiftComponent 
+                <ShiftCard 
                   shift={shift} 
                   removeButtons={removeButtons} 
                   handleCheckBoxClick={handleCheckBoxClick} />

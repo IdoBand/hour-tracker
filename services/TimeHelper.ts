@@ -19,19 +19,17 @@ import {
     differenceInHours
   } from 'date-fns'
 class TimeHelperClass {
-    calculateHoursTwoDates(start: string, end: string) {
+    calculateHoursTwoDates(start: Date, end: Date) {
         /**
-         * This function receives 2 ISO 8601 string and calculates the hours difference between them.
+         * This function receives 2 Date instances and calculates the hours difference between them.
          * @returns {number} - time unit in hours.
          */
-        const startDate = new Date(start)
-        const endDate = new Date(end)
-        const totalHours = differenceInMinutes(endDate, startDate) / 60
+        const totalHours = differenceInMinutes(end, start) / 60
         return totalHours
     }
     calculateTimeTwoDates(start: Date, end: Date) {
         /**
-         * This function receives 2 Date instances string and calculates the difference in time between them.
+         * This function receives 2 Date instances and calculates the difference in time between them.
          * @returns {sting} - time in hours/hours+minutes.
          */
         const minutesDifference = differenceInMinutes(end, start)
@@ -86,7 +84,7 @@ class TimeHelperClass {
             return `${yearsDifference} Year${yearsDifference > 1 ? 's' : ''}`
         }
     }
-    validateShiftTimes(shiftStartDate: string, shiftEndDate: string, breakStartDate: string, breakEndDate: string) {
+    validateShiftTimes(shiftStartDate: Date, shiftEndDate: Date, breakStartDate: Date, breakEndDate: Date) {
         /**
          * This function receives 4 date strings and compares them.
          * constrains covered:

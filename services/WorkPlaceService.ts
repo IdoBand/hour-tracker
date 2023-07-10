@@ -10,9 +10,6 @@ export class WorkPlaceService {
     }
     async getAllWorkPlacesById(userId: string) {
         const workPlaces = await this.dao.getAllWorkPlacesById(userId)
-        console.log(`-&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&`);
-        console.log(workPlaces);
-        
         return workPlaces
     }
 
