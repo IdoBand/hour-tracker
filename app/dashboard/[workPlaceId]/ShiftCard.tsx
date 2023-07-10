@@ -3,20 +3,24 @@ import { motion } from 'framer-motion'
 import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
 import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import { TimeHelper } from '@/services/TimeHelper'
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, formatISO } from 'date-fns'
 import { flexCenter } from '@/app/(hooks)/mixin'
 import Button from '@/components/Button'
 import Modal from '@/components/Modal'
 import { useAppDispatch } from '@/redux/hooks'
-import { removeShifts } from '@/redux/placesSlice'
+// import { removeShifts } from '@/redux/placesSlice'
 import AddEditShift from './AddEditShiftForm'
 import CheckOrX from '@/components/CheckOrX';
 import { Shift } from '@/types/types';
 
-function parseISOString(string: string): string {
-    const ISODate = parseISO(string)
-    return format(ISODate, 'dd-MM-yyyy')
+function parseToISOString(date: Date): string {
+    const ISODateString = formatISO(date)
+    return ISODateString
 }
+function sliceDateFromIso8601String(date: string) {
+    return date.slice(8,10) + date.slice(4,8) + date.slice(0,4)
+}
+
 const shiftPropertyContainer = 'w-full'
 const slideDownDiv = {
     // when using this -> add to motion.div className 'overflow-hidden'
@@ -44,14 +48,16 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
     const [removalModal, setRemovalModal] = useState<boolean>(false)
     const [shiftOptionsMenu, setShiftOptionsMenu] = useState<boolean>(false)
     const [editMode, setEditMode] = useState<boolean>(false)
+
+    // shiftData is holds the shift info after manipulation in order to show to the user
     const shiftData = {
-        shiftDate: parseISOString(shift.shiftStart),
-        shiftStart: shift.shiftStart.slice(11, 16),
-        shiftEnd: shift.shiftEnd.slice(11, 16),
-        shiftDuration: TimeHelper.calculateTimeTwoDatesString(shift.shiftStart, shift.shiftEnd),
-        breakStart: shift.breakStart.slice(11, 16),
-        breakEnd: shift.breakEnd.slice(11, 16),
-        breakDuration: TimeHelper.calculateTimeTwoDatesString(shift.breakStart, shift.breakEnd),
+        shiftDate: sliceDateFromIso8601String(parseToISOString(shift.shiftStart as Date)),
+        shiftStart: parseToISOString(shift.shiftStart as Date).slice(11, 16),
+        shiftEnd: parseToISOString(shift.shiftEnd as Date).slice(11, 16),
+        shiftDuration: TimeHelper.calculateTimeTwoDates(shift.shiftStart as Date, shift.shiftEnd  as Date),
+        breakStart: parseToISOString(shift.breakStart as Date).slice(11, 16),
+        breakEnd: parseToISOString(shift.breakEnd as Date).slice(11, 16),
+        breakDuration: TimeHelper.calculateTimeTwoDates(shift.breakStart  as Date, shift.breakEnd  as Date),
     }
 
     const MotionArrow = () => {
@@ -107,8 +113,8 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                         notes={shift.notes}
                         startDate={shift.shiftStart}
                         endDate={shift.shiftEnd}
-                        breakStart={shift.breakStart}
-                        breakEnd={shift.breakEnd}
+                        breakStart={shift.breakStart!}
+                        breakEnd={shift.breakEnd!}
                         id={shift.id}
                         wagePerHour={shift.wagePerHour}
                         tipBonus={shift.tipBonus}
@@ -187,7 +193,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                 Are you sure you want to remove this shift?
                 <div className={`${flexCenter} gap-4 `}>
                     <Button theme='blank' onClick={() => setRemovalModal(false)} className='' text='No' type='button'/>
-                    <Button theme='full' onClick={() => {dispatch(removeShifts([shift.id])); setIsOpen(false); setRemovalModal(false)}} className='' text='Yes' type='button'/>
+                    <Button theme='full' onClick={() => { setIsOpen(false); setRemovalModal(false)}} className='' text='Yes' type='button'/>
                 </div>
             </div>
             </Modal>}

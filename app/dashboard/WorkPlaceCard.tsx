@@ -8,7 +8,6 @@ import { SquaresPlusIcon, ChartBarIcon } from '@heroicons/react/24/solid';
 import CustomButton from '../../components/CustomButton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { deleteIdFromRemoveArray, addIdToRemoveArray, setCurrentWorkPlace } from '@/redux/workPlaceSlice';
-import { formatISO } from 'date-fns';
 import AddEditShift from './[workPlaceId]/AddEditShiftForm';
 import Modal from '../../components/Modal';
 import { useState } from 'react';
@@ -28,31 +27,35 @@ interface WorkPlaceCardProps {
     employmentDuration: string
 }
 export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, hoursPastMonth, employmentDuration}: WorkPlaceCardProps) {
-        const removeButtons: boolean = useAppSelector(state => state.workPlaceSlice.removeButtons)
-        const idsRemoveArray: string[] = useAppSelector(state => state.workPlaceSlice.removePlacesIdArray)
-        const [quickAdd, setQuickAdd] = useState<boolean>(false)
-        const dispatch = useAppDispatch()
 
-        function handleCheckBoxClick(workPlaceId: string) {
-            if (idsRemoveArray.includes(workPlaceId)) {
-                dispatch(deleteIdFromRemoveArray(workPlaceId))
-            } else {
-                dispatch(addIdToRemoveArray(workPlaceId))
-            }
-        }
+    const removeButtons: boolean = useAppSelector(state => state.workPlaceSlice.removeButtons)
+    const idsRemoveArray: string[] = useAppSelector(state => state.workPlaceSlice.removePlacesIdArray)
+    const [quickAdd, setQuickAdd] = useState<boolean>(false)
+    const dispatch = useAppDispatch()
 
-        function handleWorkPlaceClick(workPlace: WorkPlace) {
-            // make dates serializable for redux
-            workPlace.employmentStartDate = formatISO(workPlace.employmentStartDate as Date)
-            if (workPlace.employmentEndDate) {
-                workPlace.employmentEndDate = formatISO(workPlace.employmentEndDate as Date)
-            }
-            if (workPlace.lastShift) {
-                workPlace.employmentEndDate = formatISO(workPlace.lastShift as Date)
-            }
-            dispatch(setCurrentWorkPlace(workPlace))
-            setQuickAdd(true)
+    function handleCheckBoxClick(workPlaceId: string) {
+        if (idsRemoveArray.includes(workPlaceId)) {
+            dispatch(deleteIdFromRemoveArray(workPlaceId))
+        } else {
+            dispatch(addIdToRemoveArray(workPlaceId))
         }
+    }
+
+    function handleWorkPlaceClick(workPlace: WorkPlace) {
+        // make dates serializable for redux
+        // console.log(`--------------------start`);
+        workPlace.employmentStartDate = TimeHelper.serializeDate(workPlace.employmentStartDate as Date)
+        if (workPlace.employmentEndDate) {
+            // console.log(`--------------------end`);
+            workPlace.employmentEndDate = TimeHelper.serializeDate(workPlace.employmentEndDate as Date)
+        }  
+        if (workPlace.lastShift) {
+            // console.log(`--------------------last shift`);
+            
+            workPlace.lastShift = TimeHelper.serializeDate(workPlace.lastShift as Date)
+        }
+        dispatch(setCurrentWorkPlace({...workPlace, employmentDuration}))
+    }
     
     return (
             <div>
@@ -93,19 +96,19 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
                             <Link href={`/dashboard/${workPlace.id}`}>
                                     <ChartBarIcon className='w-6 h-6 group-hover:fill-secondary'/>
                             </Link>
-                            </CustomButton>
+                        </CustomButton>
                         <CustomButton
                             className='shadow-xl rounded-full p-2 ml-4 mt-3 w-max group'
                             hoverText='Quick Add'
                             where='down'
-                            onClick={() => {handleWorkPlaceClick(workPlace); }}
+                            onClick={(e: MouseEvent) => {e.preventDefault() ; handleWorkPlaceClick(workPlace); setQuickAdd(true)}}
                             >
-                                <SquaresPlusIcon className='w-6 group-hover:fill-secondary'/>
+                                <SquaresPlusIcon className='w-6 group-hover:fill-secondary' />
                         </CustomButton>
                     </div>
                 </div>
                 {quickAdd &&
-                    <Modal>
+                    <Modal onClose={() => setQuickAdd(false)}>
                         <AddEditShift addOrEdit='add' onClose={() => setQuickAdd(false)} />
                     </Modal>
                 }

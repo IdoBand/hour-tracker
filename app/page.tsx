@@ -99,7 +99,8 @@ export default function Home() {
   return (
     <main className={`flex justify-center items-start w-full min-h-screen relative overflow-x-hidden
     before:absolute before:left-10 before:top-3 before:w-96 before:h-96 before:rounded-full before:bg-sky-200 before:animate-up-down-top
-    after:absolute after:left-1/2 after:-top-9 after:w-36 after:h-36 after:rounded-full after:bg-sky-200 after:-z-10 after:animate-up-down-top
+    md:before:w-44 md:before:h-44
+    after:absolute after:left-1/2 after:-top-9 after:w-36 after:h-36 after:rounded-full after:bg-sky-200 after:animate-up-down-top
     `}>
 
       <div className="w-10/12 h-full flex flex-col z-10 lg:w-[95%]">
@@ -144,6 +145,7 @@ export default function Home() {
           </div>
           <div className={`w-1/2 flex justify-center relative
             before:absolute before:-left-20 before:bottom-0 before:w-36 before:h-36 before:rounded-full before:bg-sky-200 before:-z-10 before:animate-up-down-bottom
+            md:before:left-0
             after:absolute after:-right-12 after:top-3 after:w-72 after:h-72 after:rounded-full after:bg-sky-200 after:animate-up-down-top
             lg:w-full
           `}>

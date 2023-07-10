@@ -5,17 +5,16 @@ import Button from '@/components/Button';
 import { Shift } from '@/types/types';
 import { TimeHelper } from '@/services/TimeHelper';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addShiftToCurrentWorkPlace, editShift } from '@/redux/placesSlice';
 import { formHeader } from '@/app/(hooks)/mixin';
-import { WorkPlace } from '../WorkPlace';
+import { WorkPlace } from '@/types/types';
 import { TextLineInputProps } from '../AddWorkPlaceForm';
 import { useFullDate } from '@/app/(hooks)/useFullDate';
 interface AddEditShiftProps {
   addOrEdit: 'add' | 'edit'
-  startDate?: string
-  endDate?: string
-  breakStart?: string,
-  breakEnd?: string
+  startDate?: string | Date
+  endDate?: string | Date
+  breakStart?: string | Date
+  breakEnd?: string | Date
   iWorkedOn?: string
   notes?: string
   onClose: () => void
@@ -39,7 +38,7 @@ const FullDateInput = ({label, fullDatePicker}: FullDateInputProps) => {
 const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWorkedOn, notes, onClose, id, wagePerHour, tipBonus }: AddEditShiftProps) => {
 
   const [formIssues, setFormIssues] = useState<string[]>([])
-  const currentWorkPlace: WorkPlace = useAppSelector(state => state.workPlaceSlice.currentWorkPlace)
+  const currentWorkPlace: WorkPlace = useAppSelector(state => state.workPlaceSlice.currentWorkPlace as WorkPlace)
   const dispatch = useAppDispatch()
 ////////////////////////////////////////////////////////////////////////////////////////
   const NumberLineInput = ({name, label, type='text', isRequired, value, autoComplete}: TextLineInputProps) => {
@@ -107,7 +106,7 @@ const AddEditShift = ({addOrEdit, startDate, endDate, breakStart, breakEnd, iWor
     })}
       className={`min-w-[45rem] max-w-full flex flex-col rounded-br-2xl rounded-3xl p-8 bg-light lg:p-2 md:min-w-[5rem]`}
     >
-      <h1 className={formHeader}>Add a Shift to {useAppSelector(state => state.placesSlice.currentWorkPlace?.name)}</h1>
+      <h1 className={formHeader}>Add a Shift to {useAppSelector(state => state.workPlaceSlice.currentWorkPlace?.name)}</h1>
       <div className={`flex w-full lg:flex-col lg:justify-center lg:items-center`}>
         <div className={`w-1/3 pb-16 pt-8 lg:w-full lg:pb-0`}>
           <FullDateInput label="Shift Start" fullDatePicker={shiftStartVD} />

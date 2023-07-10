@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS shift (
     FOREIGN KEY("workPlaceId") REFERENCES workPlace ("id"),
     "shiftStart" TIMESTAMP NOT NULL,
     "shiftEnd" TIMESTAMP NOT NULL,
-    "BreakStart" TIMESTAMP NOT NULL,
-    "BreakEnd" TIMESTAMP NOT NULL,
+    "breakStart" TIMESTAMP NOT NULL,
+    "breakEnd" TIMESTAMP NOT NULL,
     "iWorkedOn" VARCHAR(150) NOT NULL,
     "notes" VARCHAR(150) NOT NULL,
     "wagePerHour" INTEGER NOT NULL,
@@ -41,8 +41,14 @@ CREATE TABLE IF NOT EXISTS shift (
 );
 
 
-INSERT INTO shift ("id", "userId", "workPlaceId", "shiftStart", "shiftEnd", "BreakStart", "BreakEnd", "iWorkedOn", "notes", "wagePerHour", "tipBonus", "isBreakPaid")
+INSERT INTO shift ("id", "userId", "workPlaceId", "shiftStart", "shiftEnd", "breakStart", "breakEnd", "iWorkedOn", "notes", "wagePerHour", "tipBonus", "isBreakPaid")
 VALUES
     (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-07-05 09:00:00', '2023-07-05 17:00:00', '2023-07-05 12:00:00', '2023-07-05 13:00:00', 'Task A', 'Some notes', 10, 5, true),
     (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-07-06 09:00:00', '2023-07-06 17:00:00', '2023-07-06 12:00:00', '2023-07-06 13:00:00', 'Task B', 'Some notes', 10, 5, true),
-    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-07-07 09:00:00', '2023-07-07 17:00:00', '2023-07-07 12:00:00', '2023-07-07 13:00:00', 'Task C', 'Some notes', 10, 5, true);
+    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-07-07 09:00:00', '2023-07-07 17:00:00', '2023-07-07 12:00:00', '2023-07-07 13:00:00', 'Task C', 'Some notes', 10, 5, true),
+    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-06-05 09:00:00', '2023-06-05 17:00:00', '2023-06-05 12:00:00', '2023-06-05 12:28:00', 'Task A', 'Some notes', 10, 5, true),
+    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-06-06 09:00:00', '2023-06-06 17:00:00', '2023-06-06 12:00:00', '2023-06-06 12:22:00', 'Task B', 'Some notes', 10, 5, true),
+    (uuid_generate_v4(), 'ido.bandd@gmail.com', 'cfbbf97d-8db0-49e9-830e-d3c6ab5dd473', '2023-06-07 09:00:00', '2023-06-07 17:00:00', '2023-06-07 12:00:00', '2023-06-07 12:30:00', 'Task C', 'Some notes', 10, 5, true);
+
+
+

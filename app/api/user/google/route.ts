@@ -1,7 +1,7 @@
 // GET /api/user
 
 import { NextRequest, NextResponse } from "next/server";
-import { UserDao } from "@/app/postres/UserDao";
+import { UserDao } from "@/daos/UserDao";
 import { User } from "@/redux/dummyUser";
 import prisma from "@/prisma/client";
 

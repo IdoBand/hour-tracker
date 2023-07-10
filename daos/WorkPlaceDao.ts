@@ -1,4 +1,4 @@
-import { WorkPlace } from "@/app/dashboard/WorkPlace";
+import { WorkPlace } from "@/types/types";
 import prisma from "@/prisma/client";
 import { PrismaClient } from "@prisma/client";
 export class WorkPlaceDao {
@@ -28,13 +28,12 @@ export class WorkPlaceDao {
             isCurrent: newData.isCurrent,
             wagePerHour: +newData.wagePerHour,
             isBreakPaid: newData.isBreakPaid,
+            lastShift: null
         },
         include: {
             users: true,
         },
       })
-      console.log(response);
-      
       return response
     } catch(err) {
       console.log('-----------> Failed to create a new workplace');

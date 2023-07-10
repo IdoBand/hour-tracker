@@ -7,8 +7,7 @@ import { NextSVG } from '@/util/icons'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { signInUser } from '@/redux/userSlice';
 import { dummyUser, User, PLACES_OF_WORK } from '@/redux/dummyUser';
-import { setWorkPlaces } from '@/redux/placesSlice';
-import { WorkPlace } from '../dashboard/WorkPlace';
+import { WorkPlace } from '@/types/types';
 import {signIn} from 'next-auth/react'
 interface TextLineInputProps {
     name: string
@@ -27,11 +26,11 @@ const SignIn = ({onClose}: SignInProps) => {
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
     const user = useAppSelector(state => state.userSlice)
     const dispatch = useAppDispatch()
-    function signInDummy(dummyUser: User, PLACES_OF_WORK: WorkPlace[]){
-        dispatch(signInUser(dummyUser))
-        dispatch(setWorkPlaces(PLACES_OF_WORK))
-        onClose()
-    }
+    // function signInDummy(dummyUser: User, PLACES_OF_WORK: WorkPlace[]){
+    //     dispatch(signInUser(dummyUser))
+    //     dispatch(setWorkPlaces(PLACES_OF_WORK))
+    //     onClose()
+    // }
     function validateEmailRegex(email: string): boolean {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(email)) {

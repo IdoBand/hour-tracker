@@ -1,15 +1,15 @@
-import { startOfToday, isSameWeek, isSameMonth } from 'date-fns';
-import { Shift } from '../dashboard/[workPlaceId]/Shift';
+import { startOfToday, isSameWeek, isSameMonth, isSameYear } from 'date-fns';
+import { Shift } from '@/types/types';
 import { TimeHelper } from '../../services/TimeHelper';
-class ShiftsManipulatorClass {
 
+class ShiftsManipulatorClass {
   filterPastWeekShifts(shifts: Shift[]): Shift[] {
     const today = startOfToday()
       return (shifts.filter(shift => {
           const startingDate = new Date(shift.shiftStart)
-              if (isSameWeek(startingDate, today)) {
-                  return shift
-              }
+            if (isSameWeek(startingDate, today)) {
+                return shift
+            }
       }))
   }
   filterPastMonthShifts(shifts: Shift[]): Shift[] {
@@ -20,6 +20,13 @@ class ShiftsManipulatorClass {
               return shift
           }
       }))
+  }
+  filterShiftsByMonthAndYear(shifts: Shift[], date: Date) {
+    return (shifts.filter(shift => {
+      if (isSameMonth(shift.shiftStart as Date, date) && isSameYear(shift.shiftStart as Date, date)) {
+          return shift
+      }
+  }))
   }
   prepareShiftsDatesForTotalCalculation(shifts: Shift[]): {start: string, end: string}[] {
     const startAndEndTimes = shifts.map((shift) => {
@@ -45,7 +52,11 @@ class ShiftsManipulatorClass {
     let salaryString = ''
     if (shifts.length) {
       for (const shift of shifts) {
-      salary += TimeHelper.calculateHoursTwoDates(shift.shiftStart, shift.shiftEnd) * shift.wagePerHour + shift.tipBonus
+        let currentShiftSalary = TimeHelper.calculateHoursTwoDates(shift.shiftStart, shift.shiftEnd) * shift.wagePerHour + shift.tipBonus
+        if (!shift.isBreakPaid) {
+          currentShiftSalary -= TimeHelper.calculateHoursTwoDates(shift.breakStart, shift.breakEnd) * shift.wagePerHour
+        }
+        salary += currentShiftSalary
       }
       if (salary > 999) {
         let counter = 0

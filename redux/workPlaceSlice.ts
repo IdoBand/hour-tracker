@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { WorkPlace } from '@/types/types'
+import { formatISO, startOfToday } from 'date-fns'
 
 interface PlacesState {
     currentWorkPlace: null | WorkPlace
@@ -7,6 +8,7 @@ interface PlacesState {
     checkboxAll: boolean
     removePlacesIdArray: string[]
     checkedArray: string[]
+    currentDate: string
 }
 
 const initialState: PlacesState = {
@@ -15,6 +17,7 @@ const initialState: PlacesState = {
     checkboxAll: false,
     removePlacesIdArray: [],
     checkedArray: [],
+    currentDate: formatISO(startOfToday()),
 }
 
 const workPlaceSlice = createSlice({
@@ -55,6 +58,14 @@ const workPlaceSlice = createSlice({
         clearIdToRemoveArray(state) {
             state.removePlacesIdArray = []
         },
+        setCurrentDate: {
+            reducer: (state, action: PayloadAction<string>) => {
+                state.currentDate = action.payload
+            },
+            prepare: (date: string) => {
+                return { payload: date }
+            }
+        },
     }
 })
 
@@ -65,5 +76,6 @@ export const {
     addIdToRemoveArray,
     deleteIdFromRemoveArray,
     clearIdToRemoveArray,
+    setCurrentDate,
     } = workPlaceSlice.actions
 export default workPlaceSlice.reducer

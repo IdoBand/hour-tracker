@@ -29,15 +29,13 @@ class TimeHelperClass {
         const totalHours = differenceInMinutes(endDate, startDate) / 60
         return totalHours
     }
-    calculateTimeTwoDatesString(start: string, end: string) {
+    calculateTimeTwoDates(start: Date, end: Date) {
         /**
-         * This function receives 2 ISO 8601 string and calculates the difference in time between them.
+         * This function receives 2 Date instances string and calculates the difference in time between them.
          * @returns {sting} - time in hours/hours+minutes.
          */
-        const startDate = new Date(start)
-        const endDate = new Date(end)
-        const minutesDifference = differenceInMinutes(endDate, startDate)
-        return this.generateTimeDescriptionString(minutesDifference)
+        const minutesDifference = differenceInMinutes(end, start)
+        return this.generateHourlyDurationString(minutesDifference)
     }
     calculateTimeMultipleDates(events: any[]) {
         /**
@@ -51,9 +49,9 @@ class TimeHelperClass {
             const end = new Date(event.end)
             total += differenceInMinutes(end ,start)
         }
-        return this.generateTimeDescriptionString(total)
+        return this.generateHourlyDurationString(total)
     }
-    generateTimeDescriptionString(minutes: number): string {
+    generateHourlyDurationString(minutes: number): string {
         /**
          * This function receives a number that represents minutes and returns time in hours/hours+minutes.
          * for example: '1 Hr 30 mins', '7Hr' .
@@ -63,7 +61,7 @@ class TimeHelperClass {
             return '0'
         } else if (minutes % 60 === 0) {
             return `${minutes / 60} Hr`
-        } else if(minutes / 60 < 1) {
+        } else if (minutes / 60 < 1) {
             return `${minutes} mins`
         } else {
             return `${Math.floor(minutes / 60)} Hr ${minutes % 60} mins`
@@ -71,8 +69,8 @@ class TimeHelperClass {
     }
     calculateYearlyDuration(start: Date, end: Date) {
         /**
-         * This function receives 2 ISO 8601 string and calculates the time difference between them in days,
-         * and returns a string description in years / days.
+         * This function receives 2 Date instances and calculates the time difference between them in days,
+         * then returns a string description in years / days.
          * @returns {string} - time unit in years / days.
          */
 
@@ -91,7 +89,7 @@ class TimeHelperClass {
     validateShiftTimes(shiftStartDate: string, shiftEndDate: string, breakStartDate: string, breakEndDate: string) {
         /**
          * This function receives 4 date strings and compares them.
-         * constrains:
+         * constrains covered:
          * 1. Shift duration cannot be <= 0.
          * 2. Shift start date cannot occur after shift end.
          * 3. Break start date cannot occur before shift start or after.
@@ -142,7 +140,13 @@ class TimeHelperClass {
         }
         return validationResultObject
     }
-
+    serializeDate(date: Date): string {
+        return formatISO(date)
+    }
+    deserializeDate(date: string): Date {
+        return parseISO(date)
+    }
+    
 }
 
 export const TimeHelper = new TimeHelperClass()

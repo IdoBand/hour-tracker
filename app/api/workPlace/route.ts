@@ -1,7 +1,7 @@
 // /api/workPlace
 
 import { NextRequest, NextResponse } from "next/server";
-import { WorkPlace } from "@/app/dashboard/WorkPlace";
+import { WorkPlace } from "@/types/types";
 import { workPlaceDao } from "../../../daos/WorkPlaceDao";
 
 // Add a work place 

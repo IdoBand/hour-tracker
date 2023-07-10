@@ -3,7 +3,6 @@ import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { signOutUser } from '@/redux/userSlice';
 import Button from '../../components/Button';
 import { flexCenter } from '@/app/(hooks)/mixin';
-import { signOutPlaces } from '@/redux/placesSlice';
 import { signOut } from 'next-auth/react'
 interface SignOutProps {
   onClose: () => void
@@ -14,7 +13,6 @@ const SignOut = ({ onClose }: SignOutProps) => {
   
   function handleSignOut() {
     dispatch(signOutUser())
-    dispatch(signOutPlaces())
     signOut()
     onClose()
   }

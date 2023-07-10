@@ -10,7 +10,7 @@ import { WorkPlaceService } from '@/services/WorkPlaceService';
 import { TimeHelper } from '../../services/TimeHelper';
 const workPlaceService = new WorkPlaceService()
 
-function generateEmploymentDurationString(workPlace: WorkPlace) {    
+function generateEmploymentDurationString(workPlace: WorkPlace): string {    
     if (!workPlace.employmentEndDate && !workPlace.lastShift) {
         return '0'
     }
@@ -29,11 +29,13 @@ const Dashboard = async () => {
     let totals: any[]
     let employmentDurations: string[]
 
+    console.log(workPlaces);
+    
     if (workPlaces && workPlaces.length > 0) {
         const workPlacesIds = workPlaces.map(workPlace => {return workPlace.id})
         totals = await shiftService.getSumOfHours(workPlacesIds,  'shift')
         employmentDurations = workPlaces.map(workPlace => {
-        return generateEmploymentDurationString(workPlace)
+        return generateEmploymentDurationString(workPlace as WorkPlace)
     }) 
     }
 
@@ -52,7 +54,7 @@ const Dashboard = async () => {
                                 lg:col-span-4 animate-fade-in
                             `}>
                                 <WorkPlaceCard 
-                                    workPlace={workPlace} 
+                                    workPlace={workPlace as WorkPlace} 
                                     totalHours={totals[idx].total}
                                     hoursPastWeek={totals[idx].totalPastWeek}
                                     hoursPastMonth={totals[idx].totalPastMonth}
@@ -70,7 +72,7 @@ const Dashboard = async () => {
                               Add a Work Place In Order To Start Tracking :)
                             </article>
                     }
-       
+                    
                 </div>
             </div>
         </main>

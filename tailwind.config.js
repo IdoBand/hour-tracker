@@ -28,6 +28,7 @@ module.exports = {
         primary: '#B63E96',
         secondary: 'rgb(56 189 248)',
         danger: 'rgb(190, 60, 60)',
+        skeletonLoading: 'rgb(186 230 253)',
         // primary: {
         //   DEFAULT: "hsl(var(--primary))",
         //   foreground: "hsl(var(--primary-foreground))",

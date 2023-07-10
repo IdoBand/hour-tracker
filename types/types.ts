@@ -10,25 +10,31 @@ export interface WorkPlace {
     id?: string
     userId: string
     name: string
-    employmentStartDate: string | Date | null
+    employmentStartDate: string | Date
     employmentEndDate: string | Date | null
     lastShift: string | Date | null
     isCurrent: boolean
     wagePerHour: number
     isBreakPaid: boolean
+    // frontend only properties
     shifts?: Shift[]
+    totalHours?: string | number
+    hoursPastWeek?: string | number
+    hoursPastMonth?: string | number
+    employmentDuration?: string
 }
 
 export interface Shift {
     id?: string
     workPlaceId: string,
-    shiftStart: string
-    shiftEnd: string
-    breakStart: string
-    breakEnd: string
+    shiftStart: string | Date 
+    shiftEnd: string | Date
+    breakStart: string | Date | null
+    breakEnd: string | Date | null
     iWorkedOn: string
     notes: string
     checked: boolean
     wagePerHour: number,
     tipBonus: number
+    isBreakPaid: boolean
 }

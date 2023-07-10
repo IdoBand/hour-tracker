@@ -36,18 +36,18 @@ model workplace {
 }
 
 model shift {
-  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id       String    @db.VarChar(70)
-  work_place_id String    @db.Uuid
-  shift_start   DateTime  @db.Timestamp(6)
-  shift_end     DateTime  @db.Timestamp(6)
-  break_start   DateTime  @db.Timestamp(6)
-  break_end     DateTime  @db.Timestamp(6)
-  i_worked_on   String    @db.VarChar(150)
-  notes         String    @db.VarChar(150)
-  wage_per_hour Int
-  tip_bonus     Int
-  is_break_paid Boolean
-  users         users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shift_userId_fkey")
-  workplace     workplace @relation(fields: [work_place_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shift_workPlaceId_fkey")
+  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  userId      String    @db.VarChar(70)
+  workPlaceId String    @db.Uuid
+  shiftStart  DateTime  @db.Timestamp(6)
+  shiftEnd    DateTime  @db.Timestamp(6)
+  breakStart  DateTime  @db.Timestamp(6)
+  breakEnd    DateTime  @db.Timestamp(6)
+  iWorkedOn   String    @db.VarChar(150)
+  notes       String    @db.VarChar(150)
+  wagePerHour Int
+  tipBonus    Int
+  isBreakPaid Boolean
+  users       users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  workplace   workplace @relation(fields: [workPlaceId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

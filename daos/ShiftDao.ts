@@ -1,5 +1,4 @@
 import prisma from "@/prisma/client";
-import { duration } from "@mui/material";
 import { PrismaClient } from "@prisma/client";
 import { startOfWeek, startOfToday, startOfMonth, endOfMonth  } from 'date-fns'
 export class ShiftDao {
@@ -7,14 +6,26 @@ export class ShiftDao {
   constructor() {
     this.client = prisma
   }
-
+  async getAllShiftsByWorkPlaceId(workPlaceId: string) {
+    try {
+      const shifts = await this.client.shift.findMany({
+        where: {
+          workPlaceId: workPlaceId
+        }
+      })
+      return shifts
+    } catch(err) {
+      console.log('Failed to get all shifts from DB')
+      console.log(err)
+    }
+  }
   async getShiftsByMonthAndYear(month: number, year: number, workPlaceId: string) {
     const startDayOfMonth: Date = new Date(year, month - 1, 1)
     const endDayOfMonth: Date = endOfMonth(startDayOfMonth)
     const shifts = await prisma.shift.findMany({
         where: {
-          work_place_id: workPlaceId,
-          shift_start: {
+          workPlaceId: workPlaceId,
+          shiftStart: {
             gte: startDayOfMonth, // Set the start of the month
             lt: endDayOfMonth, // Set the start of the next month
           },
@@ -26,8 +37,8 @@ export class ShiftDao {
 
   async findFirstAndLastShift(workPlaceId: string) {
     const shifts = await prisma.shift.findMany({
-        where: { work_place_id: workPlaceId },
-        orderBy: { shift_start: 'asc' },
+        where: { workPlaceId: workPlaceId },
+        orderBy: { shiftStart: 'asc' },
       });
     if (shifts.length) {
         const earliest = shifts[0]
@@ -57,16 +68,16 @@ export class ShiftDao {
   async getShiftsByWorkPlaceIdLimitEarliestDate(earliest: Date, workPlaceId: string) {
       const shifts = await this.client.shift.findMany({
         where: {
-          shift_start: {
+          workPlaceId: workPlaceId,
+          shiftStart: {
             gte: earliest,
           },
-          work_place_id: workPlaceId,
         },
         select: {
-          shift_start: true,
-          shift_end: true,
-          break_start: true,
-          break_end: true
+          shiftStart: true,
+          shiftEnd: true,
+          breakStart: true,
+          breakEnd: true
         }
       });
 
@@ -105,7 +116,7 @@ export class ShiftDao {
   //         SELECT SUM(EXTRACT(EPOCH FROM (CAST($1 AS TIMESTAMP) - CAST($2 AS TIMESTAMP)))) / 3600 AS "totalDuration"
   //         FROM shift
   //         WHERE $2::timestamp > $3::timestamp
-  //         AND work_place_id = $4::uuid
+  //         AND 'workPlaceId' = $4::uuid
   //       `,
   //       end,
   //       start,

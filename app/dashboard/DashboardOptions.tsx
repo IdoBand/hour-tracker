@@ -32,7 +32,7 @@ const DashBoardOptions = () => {
           router.refresh()
           toast({
             title: "Success",
-            description: "Work Place added successfully",
+            description: "Work Place removed successfully",
             variant: 'info'
           })
           dispatch(clearIdToRemoveArray())
