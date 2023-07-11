@@ -50,8 +50,6 @@ export class WorkPlaceDao {
           },
         },
       });
-
-      
       return response
     } catch(err) {
       console.log('-----------> Failed to delete workplaces');

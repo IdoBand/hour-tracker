@@ -1,13 +1,14 @@
-// /api/workPlace/delete
+// /api/shift/delete
+
 import { NextRequest, NextResponse } from "next/server";
-import { workPlaceDao } from "../../../../daos/WorkPlaceDao";
+import { shiftDao } from "@/daos/ShiftDao";
 
 export async function POST(req: Request, res: NextResponse , context: {}) {
 
     try {
         const body: any = await req.json()
         
-        const response = await workPlaceDao.deleteWorkPlace(body.ids)
+        const response = await shiftDao.deleteShifts(body.ids)
         if (response?.count) {
             return NextResponse.json({success: true,}, { status: 200 })
         }

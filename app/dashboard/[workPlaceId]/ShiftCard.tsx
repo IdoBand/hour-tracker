@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
+import { EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
 import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import { TimeHelper } from '@/services/TimeHelper'
-import { format, parseISO, formatISO } from 'date-fns'
+import { formatISO } from 'date-fns'
 import { flexCenter } from '@/app/(hooks)/mixin'
 import Button from '@/components/Button'
 import Modal from '@/components/Modal'
-import { useAppDispatch } from '@/redux/hooks'
-// import { removeShifts } from '@/redux/placesSlice'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { deleteIdFromRemoveArray, addIdToRemoveArray } from '@/redux/shiftSlice';
 import AddEditShift from './AddEditShiftForm'
 import CheckOrX from '@/components/CheckOrX';
 import { Shift } from '@/types/types';
-
+import MotionArrow from '@/components/MotionArrow';
 function parseToISOString(date: Date): string {
     const ISODateString = formatISO(date)
     return ISODateString
 }
-function sliceDateFromIso8601String(date: string) {
+function sliceDateFromISO8601String(date: string) {
     return date.slice(8,10) + date.slice(4,8) + date.slice(0,4)
 }
 
@@ -44,18 +44,17 @@ const slideDownDiv = {
 interface ShiftCardProps {
     shift: Shift
     removeButtons: boolean
-    handleCheckBoxClick: (id: string) => void
 }
-export default function ShiftCard ({removeButtons, handleCheckBoxClick, shift}: ShiftCardProps) {
+export default function ShiftCard ({removeButtons, shift}: ShiftCardProps) {
     const dispatch = useAppDispatch()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [removalModal, setRemovalModal] = useState<boolean>(false)
     const [shiftOptionsMenu, setShiftOptionsMenu] = useState<boolean>(false)
     const [editMode, setEditMode] = useState<boolean>(false)
-
+    const removeShiftsIdArray = useAppSelector(state => state.shiftSlice.removeShiftsIdArray)
     // shiftData is holds the shift info after manipulation in order to show to the user
     const shiftData = {
-        shiftDate: sliceDateFromIso8601String(parseToISOString(shift.shiftStart as Date)),
+        shiftDate: sliceDateFromISO8601String(parseToISOString(shift.shiftStart as Date)),
         shiftStart: parseToISOString(shift.shiftStart as Date).slice(11, 16),
         shiftEnd: parseToISOString(shift.shiftEnd as Date).slice(11, 16),
         shiftDuration: TimeHelper.calculateTimeTwoDates(shift.shiftStart as Date, shift.shiftEnd  as Date),
@@ -63,26 +62,20 @@ export default function ShiftCard ({removeButtons, handleCheckBoxClick, shift}: 
         breakEnd: parseToISOString(shift.breakEnd as Date).slice(11, 16),
         breakDuration: TimeHelper.calculateTimeTwoDates(shift.breakStart  as Date, shift.breakEnd  as Date),
     }
-
-    const MotionArrow = () => {
-        return (
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={{ rotate: isOpen ? -180 : 0 }}
-            transition={{ duration: 1}}
-            className={`${flexCenter}`}
-          >
-            <ArrowUpCircleIcon className='w-5' />
-          </motion.div>
-        );
-    };
+    function handleCheckBoxClick(shiftId: string) {
+        if (removeShiftsIdArray.includes(shiftId)) {
+            dispatch(deleteIdFromRemoveArray(shiftId))
+        } else {
+            dispatch(addIdToRemoveArray(shiftId))
+        }
+    }
 
   return (
     <div className={`w-full flex justify-between flex-col rounded-lg py-1 cursor-pointer relative`}>
         {removeButtons && <input 
                 data-key={shift.id}
                 type='checkbox' 
-                checked={shift.checked} 
+                checked={removeShiftsIdArray.includes(shift.id!)} 
                 onClick={(e) => e.stopPropagation()} 
                 onChange={(e) => {handleCheckBoxClick(e.target.dataset.key as string)}}
                 className={checkboxRemoveStyle} />}
@@ -93,7 +86,7 @@ export default function ShiftCard ({removeButtons, handleCheckBoxClick, shift}: 
                 `}
                 onClick={() => setIsOpen(prev => !prev)}
             >
-                <span className={`w-full order-8`}>{MotionArrow()}</span>
+                <span className={`w-full order-8`}><MotionArrow isOpen={isOpen} /></span>
                 <span className={`col-start-1 col-end-2 w-full`}>{shiftData.shiftDate}</span>
                 <span className={`col-start-2 col-end-3 w-full lg:flex lg:justify-center`}>{shiftData.shiftStart}</span>
                 <span className={`col-start-3 col-end-4 w-full lg:flex lg:justify-center`}>{shiftData.shiftEnd}</span>

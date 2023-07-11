@@ -129,6 +129,22 @@ export class ShiftDao {
       }
     }
   }
+  async deleteShifts(ids: string[]) {
+    try {
+  
+      const response = await this.client.shift.deleteMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      });
+      return response
+    } catch(err) {
+      console.log('-----------> Failed to delete workplaces');
+      console.log(err);
+    }
+  }
   async editShift(shift: Shift) {
     // try {
     //   const response = await this.client.shift.create({

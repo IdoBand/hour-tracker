@@ -32,4 +32,6 @@ export async function fetchRemoveWorkPlaces(ids: string[]) {
                 body: JSON.stringify({ ids })
             }
         )
+        const result = await response.json()
+        return result
   }

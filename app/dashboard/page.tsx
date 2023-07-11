@@ -64,13 +64,13 @@ const Dashboard = async () => {
                         })
                     :
                     <article 
-                                className={`col-span-4 w-full relative rounded-br-2xl rounded-3xl p-6
-                                border border-solid dark:border-light
-                                bg-light shadow-2xl text-center
-                                animate-fade-in
-                            `}>
-                              Add a Work Place In Order To Start Tracking :)
-                            </article>
+                        className={`col-span-4 w-full relative rounded-br-2xl rounded-3xl p-6
+                        border border-solid dark:border-light
+                        bg-light shadow-2xl text-center
+                        animate-fade-in
+                    `}>
+                        Add a Work Place In Order To Start Tracking :)
+                    </article>
                     }
                     
                 </div>

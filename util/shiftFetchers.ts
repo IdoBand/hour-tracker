@@ -1,14 +1,19 @@
 import { Shift } from "@/types/types"
-
+const errorObject = {success: false}
 export async function fetchShifts(month: string) {
-    const response = await fetch(
-        '/api/shift',
-        {
-            method: 'GET'
-        }
-    )
-    const result = await response.json()
-    return result
+    try {
+        const response = await fetch(
+            '/api/shift',
+            {
+                method: 'GET'
+            }
+        )
+        const result = await response.json()
+        return result
+    } catch (err) {
+        console.log(err)
+        return errorObject
+    }
 }
 export async function fetchAddShift(shift: Shift) {
     try {
@@ -23,8 +28,27 @@ export async function fetchAddShift(shift: Shift) {
         const result = await response.json()
         return result
     } catch (err) {
-        console.log(err);  
+        console.log(err)
+        return errorObject
     }
+}
+export async function fetchRemoveShifts(ids: string[]) {
+    try {
+        const response = await fetch(
+            'http://localhost:3000/api/shift/delete',
+            {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ ids })
+            }
+        )
+        const result = await response.json()
+        return result
+    } catch (err) {
+        console.log(err)
+        return errorObject
+    }
+    
 }
 export async function fetchEditShift(shift: Shift) {
     try {
@@ -39,7 +63,7 @@ export async function fetchEditShift(shift: Shift) {
         const result = await response.json()
         return result
     } catch (err) {
-        console.log(err);  
+        console.log(err)
+        return errorObject 
     }
-    
 }

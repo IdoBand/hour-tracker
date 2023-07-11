@@ -1,5 +1,5 @@
 'use client'
-import AddRemoveEditButtons from "../../components/AddRemoveEditButtons"
+import AddRemoveButtons from "../../components/AddRemoveButtons"
 import AddNewWorkPlaceForm from "./AddWorkPlaceForm"
 import { useState } from 'react'
 import { redirect, useRouter } from "next/navigation"
@@ -53,7 +53,7 @@ const DashBoardOptions = () => {
     <>
         <div className={`flex w-full`}>
                         <h1 className={`text-xl w-full md:text-base`}>Hello, {user ? user.name : ''}</h1>
-                        <AddRemoveEditButtons 
+                        <AddRemoveButtons 
                             handleAddClick={() => setAddWorkPlaceForm(true)} 
                             handleRemoveClick={() => dispatch(setRemoveButtons())} 
                             handleSelectAll={() => dispatch(setCheckboxAll())} 

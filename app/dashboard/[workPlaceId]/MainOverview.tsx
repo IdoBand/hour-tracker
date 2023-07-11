@@ -13,6 +13,7 @@ import { parseISO, format } from 'date-fns';
 import CheckOrX from "@/components/CheckOrX";
 import { redirect } from "next/navigation";
 import { setCurrentDate } from "@/redux/workPlaceSlice";
+import { pageHeader } from "@/app/(hooks)/mixin";
 interface MainOverviewProps {
     shifts: Shift[]
 }
@@ -40,7 +41,7 @@ const MainOverview = ({shifts}: MainOverviewProps) => {
   const { visualCalendar, selectedDay } = useCalendar(true, shifts, handleDayButtonClick)
   const currentMonthShifts = ShiftsManipulator.filterShiftsByMonthAndYear(shifts, TimeHelper.deserializeDate(currentDate))
   const [isEditingWorkPlace, setIsEditingWorkPlace] = useState<boolean>(false)
-
+  
   function handleDayButtonClick(day: Date) {
     const serializedDate = TimeHelper.serializeDate(day)
     dispatch(setCurrentDate(serializedDate))
@@ -48,6 +49,7 @@ const MainOverview = ({shifts}: MainOverviewProps) => {
 
   return (
     <div className='flex w-full md:flex-col'>
+      {/* <div className={`${pageHeader}`}>{currentWorkPlace.name}</div> */}
     <div className='w-1/2 p-3 shadow-lg rounded-lg md:w-full'>
       {visualCalendar}
     </div>

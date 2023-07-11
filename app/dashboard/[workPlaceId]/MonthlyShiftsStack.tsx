@@ -2,14 +2,19 @@
 import { useState } from 'react'
 import ShiftCard from './ShiftCard'
 import { Shift } from '@/types/types'
-import AddRemoveEditButtons from '@/components/AddRemoveEditButtons'
+import AddRemoveButtons from '@/components/AddRemoveButtons'
 import FramerSpringRotate from '@/components/FramerSpringRotate'
 import AddEditShift from './AddEditShiftForm'
 import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin'
 import { TimeHelper } from '@/services/TimeHelper'
-import { useAppSelector } from '@/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator'
+import { addAllShiftsIdsToRemoveArray } from '@/redux/shiftSlice'
+import { fetchRemoveShifts } from '@/util/shiftFetchers'
+import { setIsFetching } from '@/redux/windowSlice'
+import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from 'next/navigation'
 interface Props {
     shifts: Shift[]
 }
@@ -17,17 +22,50 @@ const MonthlyShiftsStack = ({shifts}: Props) => {
     const [removeButtons, setRemoveButtons] = useState<boolean>(false)
     const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
     const currentDate = useAppSelector(state => state.workPlaceSlice.currentDate)
+    const idsToRemove = useAppSelector(state => state.shiftSlice.removeShiftsIdArray)
     const currentMonthShifts = ShiftsManipulator.filterShiftsByMonthAndYear(shifts, TimeHelper.deserializeDate(currentDate))
+    const dispatch = useAppDispatch()
+    const { toast } = useToast()
+    const router = useRouter()
+    function handleSelectAllClick() {
+      const ids = currentMonthShifts.map((shift: Shift) => {
+        return shift.id
+      })
+      dispatch(addAllShiftsIdsToRemoveArray(ids as string[]))
+    }
+    async function handleRemovePermanentlyClick() {
+
+      if (idsToRemove.length) {
+        dispatch(setIsFetching())
+        const result = await fetchRemoveShifts(idsToRemove)
+        if (result.success) {
+          router.refresh()
+          toast({
+            title: "Success",
+            description: "Shift removed Successfully",
+            variant: 'info'
+          })
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed remove shift",
+            variant: 'destructive'
+          })
+        }
+        dispatch(setIsFetching())
+      }
+    }
+
   return (
     <>
     
     <div className={`flex justify-between w-full`}>
         <h1 className={`${dashBoardWorkPlaceHeader}`}>Shifts</h1>
-            <AddRemoveEditButtons 
+            <AddRemoveButtons 
               handleAddClick={() => setAddEditShiftForm(true)} 
               handleRemoveClick={() => setRemoveButtons((prev) => !prev)} 
-              handleSelectAll={() => {return}} 
-              handleRemovePermanentlyClick={() => {return}}
+              handleSelectAll={handleSelectAllClick} 
+              handleRemovePermanentlyClick={handleRemovePermanentlyClick}
               addHoverText='Add a Shift'
               removeHoverText='Remove Shifts'
             />
@@ -59,7 +97,7 @@ const MonthlyShiftsStack = ({shifts}: Props) => {
                 <ShiftCard 
                   shift={shift} 
                   removeButtons={removeButtons} 
-                  handleCheckBoxClick={() => {return}} />
+                />
               </div>)
             })
             :
