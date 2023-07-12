@@ -4,11 +4,10 @@ import { useState } from "react";
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
 import EditWorkPlaceForm from "./EditWorkPlaceForm";
 import CustomButton from "@/components/CustomButton";
-import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import { EllipsisHorizontalCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { Shift } from "@/types/types";
 import { ShiftsManipulator } from "@/app/(hooks)/ShiftsManipulator";
 import { TimeHelper } from "@/services/TimeHelper";
-import { parseISO, format } from 'date-fns';
 import CheckOrX from "@/components/CheckOrX";
 import { redirect } from "next/navigation";
 import { setCurrentDate } from "@/redux/workPlaceSlice";

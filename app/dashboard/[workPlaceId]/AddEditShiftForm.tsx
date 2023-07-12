@@ -68,16 +68,16 @@ const AddEditShift = ({addOrEdit, onClose, shift }: AddEditShiftProps) => {
   }
 
 
-  const { setIsCalender: a, visualFullDate: shiftStartVD, selectedFullDate: shiftStartFD } = useFullDate(
+  const { visualFullDate: shiftStartVD, selectedFullDate: shiftStartFD } = useFullDate(
     addOrEdit === 'add' ? undefined : shift!.shiftStart as Date,
     shift ? TimeHelper.extractHourFromDate(shift!.shiftStart) : '')
-  const { setIsCalender: b, visualFullDate: shiftEndVD, selectedFullDate: shiftEndFD } = useFullDate(
+  const { visualFullDate: shiftEndVD, selectedFullDate: shiftEndFD } = useFullDate(
     addOrEdit === 'add' ? undefined : shift!.shiftEnd as Date,
     shift ? TimeHelper.extractHourFromDate(shift!.shiftEnd) : '')
-  const { setIsCalender: c, visualFullDate: breakStartVD, selectedFullDate: breakStartFD } = useFullDate(
+  const { visualFullDate: breakStartVD, selectedFullDate: breakStartFD } = useFullDate(
     addOrEdit === 'add' ? undefined : shift!.breakStart as Date,
     shift ? TimeHelper.extractHourFromDate(shift!.breakStart as Date) : '')
-  const { setIsCalender: d, visualFullDate: breakEndVD, selectedFullDate: breakEndFD } = useFullDate(
+  const { visualFullDate: breakEndVD, selectedFullDate: breakEndFD } = useFullDate(
     addOrEdit === 'add' ? undefined : shift!.breakEnd as Date,
     shift ? TimeHelper.extractHourFromDate(shift!.breakEnd as Date) : '')
 

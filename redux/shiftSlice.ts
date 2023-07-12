@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Shift } from '@/types/types'
-import { formatISO, startOfToday } from 'date-fns'
 
 interface PlacesState {
     removeButtons: boolean
     checkboxAll: boolean
     removeShiftsIdArray: string[]
     checkedArray: string[]
-    currentDate: string
 }
 
 const initialState: PlacesState = {
@@ -15,7 +13,6 @@ const initialState: PlacesState = {
     checkboxAll: false,
     removeShiftsIdArray: [],
     checkedArray: [],
-    currentDate: formatISO(startOfToday()),
 }
 
 const shiftSlice = createSlice({

@@ -43,15 +43,12 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
 
     function handleWorkPlaceClick(workPlace: WorkPlace) {
         // make dates serializable for redux
-        // console.log(`--------------------start`);
+        if (typeof(workPlace.employmentStartDate) !== 'string')
         workPlace.employmentStartDate = TimeHelper.serializeDate(workPlace.employmentStartDate as Date)
-        if (workPlace.employmentEndDate) {
-            // console.log(`--------------------end`);
+        if (workPlace.employmentEndDate && typeof(workPlace.employmentEndDate) !== 'string') {
             workPlace.employmentEndDate = TimeHelper.serializeDate(workPlace.employmentEndDate as Date)
         }  
-        if (workPlace.lastShift) {
-            // console.log(`--------------------last shift`);
-            
+        if (workPlace.lastShift && typeof(workPlace.lastShift) !== 'string') {
             workPlace.lastShift = TimeHelper.serializeDate(workPlace.lastShift as Date)
         }
         dispatch(setCurrentWorkPlace({...workPlace, employmentDuration}))
@@ -93,7 +90,7 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
                             where='down'
                             onClick={() => {handleWorkPlaceClick(workPlace)}}
                             >
-                            <Link href={`/dashboard/${workPlace.id}`}>
+                            <Link href={`/dashboard/${workPlace.id}`} className='w-full h-full'>
                                     <ChartBarIcon className='w-6 h-6 group-hover:fill-secondary'/>
                             </Link>
                         </CustomButton>

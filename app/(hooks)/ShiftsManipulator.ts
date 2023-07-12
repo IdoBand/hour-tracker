@@ -28,7 +28,7 @@ class ShiftsManipulatorClass {
       }
   }))
   }
-  prepareShiftsDatesForTotalCalculation(shifts: Shift[]): {start: string, end: string}[] {
+  prepareShiftsDatesForTotalCalculation(shifts: Shift[]): {start: Date, end: Date}[] {
     const startAndEndTimes = shifts.map((shift) => {
         const startAndEnd = { 
           start: shift.shiftStart,
@@ -38,26 +38,29 @@ class ShiftsManipulatorClass {
       })
     return startAndEndTimes
   }
-  prepareBreakDatesForTotalCalculation(shifts: Shift[]): {start: string, end: string}[] {
+  prepareBreakDatesForTotalCalculation(shifts: Shift[]): {start: Date, end: Date}[] {
     const startAndEndTimes = shifts.filter((shift) => shift.breakStart && shift.breakEnd)
       .map((shift) => ({
         start: shift.breakStart,
         end: shift.breakEnd,
       }));
   
-    return startAndEndTimes;
+    return startAndEndTimes as {start: Date, end: Date}[];
     }
   calculateSalary(shifts: Shift[]): string {
     let salary = 0
     let salaryString = ''
+
     if (shifts.length) {
       for (const shift of shifts) {
-        let currentShiftSalary = TimeHelper.calculateHoursTwoDates(shift.shiftStart, shift.shiftEnd) * shift.wagePerHour + shift.tipBonus
+        let currentShiftSalary = TimeHelper.calculateHoursTwoDates(shift.shiftStart as Date, shift.shiftEnd  as Date) * shift.wagePerHour + shift.tipBonus
         if (!shift.isBreakPaid) {
-          currentShiftSalary -= TimeHelper.calculateHoursTwoDates(shift.breakStart, shift.breakEnd) * shift.wagePerHour
+          currentShiftSalary -= TimeHelper.calculateHoursTwoDates(shift.breakStart as Date, shift.breakEnd  as Date) * shift.wagePerHour
         }
         salary += currentShiftSalary
       }
+      const agorot = (salary % 1).toFixed(2)
+      salary = Math.floor(salary / 1)
       if (salary > 999) {
         let counter = 0
         while (salary > 0) {
@@ -68,10 +71,13 @@ class ShiftsManipulatorClass {
             salaryString += ','
           }
         }
-        return salaryString.split('').reverse().join('');
+        salaryString = salaryString.split('').reverse().join('');
+      } else {
+        salaryString = salary.toString()
       }
+      salaryString += agorot.toString().slice(1)
     }
-    return salary.toString()
+    return salaryString ? salaryString : '0'
   }
 }
 
