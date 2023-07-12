@@ -1,22 +1,9 @@
 import {
-    add,
-    eachDayOfInterval,
-    endOfMonth,
-    format,
-    getDay,
-    getYear,
-    isEqual,
-    isSameDay,
-    isSameMonth,
-    isToday,
-    parse,
     parseISO,
     formatISO,
-    startOfToday,
     differenceInDays,
     differenceInYears,
     differenceInMinutes,
-    differenceInHours
   } from 'date-fns'
 class TimeHelperClass {
     calculateHoursTwoDates(start: Date, end: Date) {
@@ -65,13 +52,17 @@ class TimeHelperClass {
             return `${Math.floor(minutes / 60)} Hr ${minutes % 60} mins`
         }
     }
-    calculateYearlyDuration(start: Date, end: Date) {
+    generateYearlyDurationString(start: Date, end: Date) {
         /**
          * This function receives 2 Date instances and calculates the time difference between them in days,
          * then returns a string description in years / days.
          * @returns {string} - time unit in years / days.
          */
-
+        // console.log('------------------- START');
+        // console.log(start);
+        // console.log('-------------------  END');
+        // console.log(end);
+        
         const daysDifference = differenceInDays(end, start)
         if (daysDifference < 365){
             return `${daysDifference.toString()} days`
@@ -144,7 +135,22 @@ class TimeHelperClass {
     deserializeDate(date: string): Date {
         return parseISO(date)
     }
-    
+    ddmmyyyyDate(date: Date): string {
+        /**
+         * This function receives a Date instance and converts it to dd-mm-yyy string.
+         * @returns {sting} - dd-mm-yyy string.
+         */
+        const ISO8601String = formatISO(date)
+        return ISO8601String.slice(8,10) + ISO8601String.slice(4,8) + ISO8601String.slice(0,4)
+    }
+    extractHourFromDate(date: Date): string {
+        /**
+         * This function receives a Date instance and extracts the hour.
+         * @returns {sting} - hh:mm.
+         */
+        const ISO8601String = formatISO(date)
+        return ISO8601String.slice(11, 16)
+    }
 }
 
 export const TimeHelper = new TimeHelperClass()

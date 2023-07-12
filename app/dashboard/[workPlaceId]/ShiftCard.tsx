@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
 import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
 import { TimeHelper } from '@/services/TimeHelper'
-import { formatISO } from 'date-fns'
 import { flexCenter } from '@/app/(hooks)/mixin'
 import Button from '@/components/Button'
 import Modal from '@/components/Modal'
@@ -13,13 +12,7 @@ import AddEditShift from './AddEditShiftForm'
 import CheckOrX from '@/components/CheckOrX';
 import { Shift } from '@/types/types';
 import MotionArrow from '@/components/MotionArrow';
-function parseToISOString(date: Date): string {
-    const ISODateString = formatISO(date)
-    return ISODateString
-}
-function sliceDateFromISO8601String(date: string) {
-    return date.slice(8,10) + date.slice(4,8) + date.slice(0,4)
-}
+
 
 const shiftPropertyContainer = 'w-full'
 const slideDownDiv = {
@@ -54,12 +47,12 @@ export default function ShiftCard ({removeButtons, shift}: ShiftCardProps) {
     const removeShiftsIdArray = useAppSelector(state => state.shiftSlice.removeShiftsIdArray)
     // shiftData is holds the shift info after manipulation in order to show to the user
     const shiftData = {
-        shiftDate: sliceDateFromISO8601String(parseToISOString(shift.shiftStart as Date)),
-        shiftStart: parseToISOString(shift.shiftStart as Date).slice(11, 16),
-        shiftEnd: parseToISOString(shift.shiftEnd as Date).slice(11, 16),
+        shiftDate: TimeHelper.ddmmyyyyDate(shift.shiftStart as Date),
+        shiftStart: TimeHelper.extractHourFromDate(shift.shiftStart as Date),
+        shiftEnd: TimeHelper.extractHourFromDate(shift.shiftEnd as Date),
         shiftDuration: TimeHelper.calculateTimeTwoDates(shift.shiftStart as Date, shift.shiftEnd  as Date),
-        breakStart: parseToISOString(shift.breakStart as Date).slice(11, 16),
-        breakEnd: parseToISOString(shift.breakEnd as Date).slice(11, 16),
+        breakStart: TimeHelper.extractHourFromDate(shift.breakStart as Date),
+        breakEnd: TimeHelper.extractHourFromDate(shift.breakEnd as Date),
         breakDuration: TimeHelper.calculateTimeTwoDates(shift.breakStart  as Date, shift.breakEnd  as Date),
     }
     function handleCheckBoxClick(shiftId: string) {
@@ -148,6 +141,10 @@ export default function ShiftCard ({removeButtons, shift}: ShiftCardProps) {
                                     </div>
                                 </>
                             }
+                            <div className={`${shiftPropertyContainer}`}>
+                                <span className='font-semibold'>Paid On Break: </span> 
+                                <span>{shift.isBreakPaid ? 'Yes' : 'No'}</span>
+                            </div>
                         </div>
                         <div className={'w-4/6 flex flex-col gap-2 lg:w-full'}>
                             <div className='flex flex-col'>

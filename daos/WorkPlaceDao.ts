@@ -40,16 +40,15 @@ export class WorkPlaceDao {
       console.log(err);
     }
   }
-  async deleteWorkPlace(ids: string[]) {
+  async deleteWorkPlace(workPlaceId: string) {
+
     try {
   
-      const response = await prisma.workplace.deleteMany({
+      const response = await this.client.workplace.delete({
         where: {
-          id: {
-            in: ids,
-          },
-        },
-      });
+          id: workPlaceId
+        }
+      })
       return response
     } catch(err) {
       console.log('-----------> Failed to delete workplaces');
@@ -57,26 +56,6 @@ export class WorkPlaceDao {
     }
   }
 
-
-  getEmploymentStartAndEnd(workPlaceId: string) {
-    try {
-      const startAndEnd = this.client.workplace.findUnique({
-        where: {
-          id: workPlaceId
-        },
-        select: {
-          employmentStartDate: true,
-          employmentEndDate: true
-        }
-      })
-      console.log(startAndEnd);
-      
-      return startAndEnd
-    } catch (err) {
-      console.log('-----------> Failed to get Employment times');
-      console.log(err);
-    }
-  }
   async updateLastShift(date: Date, workPlaceId: string) {
     try {
       const response = await prisma.workplace.update({
@@ -88,6 +67,22 @@ export class WorkPlaceDao {
       return
     } catch (err) {
       console.log(`Failed to update last shift for ${workPlaceId}`);
+      console.log(err);
+    }
+  }
+  async getLastShift(workPlaceId: string) {
+    try {
+      const response = await this.client.workplace.findUnique({
+        where: {
+          id: workPlaceId
+        },
+        select: {
+          lastShift: true
+        }
+      })
+      return response
+    } catch (err) {
+      console.log('-----------> Failed to get lastShift');
       console.log(err);
     }
   }

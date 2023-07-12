@@ -8,6 +8,7 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 import { shiftService } from '@/services/ShiftService';
 import { WorkPlaceService } from '@/services/WorkPlaceService';
 import { TimeHelper } from '../../services/TimeHelper';
+import startOfTomorrow from 'date-fns/startOfToday';
 const workPlaceService = new WorkPlaceService()
 
 function generateEmploymentDurationString(workPlace: WorkPlace): string {    
@@ -15,8 +16,8 @@ function generateEmploymentDurationString(workPlace: WorkPlace): string {
         return '0'
     }
     const start = workPlace.employmentStartDate
-    const end = workPlace.employmentEndDate ? workPlace.employmentEndDate : workPlace.lastShift
-    return TimeHelper.calculateYearlyDuration(start as Date, end as Date)
+    const end = workPlace.employmentEndDate ? workPlace.employmentEndDate : startOfTomorrow()
+    return TimeHelper.generateYearlyDurationString(start as Date, end as Date)
 }
 
 const Dashboard = async () => {
@@ -29,8 +30,6 @@ const Dashboard = async () => {
     let totals: any[]
     let employmentDurations: string[]
 
-    console.log(workPlaces);
-    
     if (workPlaces && workPlaces.length > 0) {
         const workPlacesIds = workPlaces.map(workPlace => {return workPlace.id})
         totals = await shiftService.getSumOfHours(workPlacesIds,  'shift')

@@ -14,10 +14,6 @@ const DashBoardOptions = () => {
     const router = useRouter() 
     const user = useAppSelector(state => state.userSlice.user)
     const idsToRemove = useAppSelector(state => state.workPlaceSlice.removePlacesIdArray)
-    // if (!user) {
-    //     console.log('redirect');
-    //     (redirect('/'))
-    // }
 
     const dispatch = useAppDispatch()
     const { toast } = useToast()
@@ -29,18 +25,20 @@ const DashBoardOptions = () => {
         try {
           dispatch(setIsFetching())
           const result = await fetchRemoveWorkPlaces(idsToRemove)
-          router.refresh()
-          toast({
-            title: "Success",
-            description: "Work Place removed successfully",
-            variant: 'info'
-          })
-          dispatch(clearIdToRemoveArray())
+          if (result.success) {
+            router.refresh()
+            toast({
+              title: "Success",
+              description: "Work Places removed successfully",
+              variant: 'info'
+            })
+            dispatch(clearIdToRemoveArray())
+          }
         } catch {
           toast({
             title: "Error",
-            description: "Failed to remove Work Place",
-            variant: 'info'
+            description: "Failed to remove Work Places",
+            variant: 'destructive'
           })
         } finally {
           dispatch(setIsFetching())

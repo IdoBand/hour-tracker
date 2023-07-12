@@ -8,7 +8,11 @@ export class ShiftDao {
   constructor() {
     this.client = prisma
   }
-  async getAllShiftsByWorkPlaceId(workPlaceId: string) {
+  async getAllShifts(workPlaceId: string) {
+     /**
+    * Gets all shifts that belongs to the 'workPlaceId'.
+    * @param {string} workPlaceId string in uuid format.
+    */
     try {
       const shifts = await this.client.shift.findMany({
         where: {
@@ -22,6 +26,12 @@ export class ShiftDao {
     }
   }
   async getShiftsByMonthAndYear(month: number, year: number, workPlaceId: string) {
+   /**
+    * Gets all shifts that belongs to the 'workPlaceId' and that their 'shiftStart' date falls under the Date created by 'month' and 'year'.
+    * @param {string} workPlaceId string in uuid format.
+    * @param {number} month       example July --> 07.
+    * @param {number} year        1990 / 2009 / 2018 and so on.
+    */
     const startDayOfMonth: Date = new Date(year, month - 1, 1)
     const endDayOfMonth: Date = endOfMonth(startDayOfMonth)
     const shifts = await prisma.shift.findMany({
@@ -67,7 +77,11 @@ export class ShiftDao {
   }
 
   
-  async getShiftsByWorkPlaceIdLimitEarliestDate(earliest: Date, workPlaceId: string) {
+  async getShifts(earliest: Date, workPlaceId: string) {/**
+    * Gets all shifts that belongs to the 'workPlaceId' and that their 'shiftStart' is AFTER the Date created by 'month' and 'year'.
+    * @param {string} workPlaceId string in uuid format.
+    * @param {Date}   earliest
+    */
       const shifts = await this.client.shift.findMany({
         where: {
           workPlaceId: workPlaceId,
@@ -82,23 +96,29 @@ export class ShiftDao {
           breakEnd: true
         }
       });
-
       return shifts
 
   }
   async getLastShiftByWorkPlaceId(workPlaceId: string) {
     try {
-      const lastShift = await this.client.$queryRaw`
-      SELECT shiftEnd
-      FROM shift
-      WHERE shift."workPlaceId" = ${workPlaceId}::uuid
-      ORDER BY shiftEnd DESC
-      LIMIT 1
-    `;
-    console.log(lastShift);
-    
-    } catch (e) {
-
+      const lastShift = await this.client.shift.findMany({
+        where: {
+          workPlaceId: workPlaceId
+        },
+        select: {
+          shiftStart: true
+        },
+        orderBy: [{shiftStart: 'desc'}],
+        take: 1
+      })
+      if (lastShift.length > 0) {
+        return lastShift[0]
+      } else {
+        return { shiftStart: null }
+      }
+    } catch (err) {
+      console.log('-----------> Failed to get last shift');
+      console.log(err);
     }
   }
   async addShift(shift: Shift) {
@@ -119,8 +139,6 @@ export class ShiftDao {
             isBreakPaid: shift.isBreakPaid,
         },
       })
-      const workPlaceResponse = await workPlaceDao.updateLastShift(shift.shiftStart, shift.workPlaceId)
-      
       return {success: true}
     } catch (err) {
       console.log(err);
@@ -141,37 +159,56 @@ export class ShiftDao {
       });
       return response
     } catch(err) {
-      console.log('-----------> Failed to delete workplaces');
+      console.log('-----------> Failed to delete shifts');
       console.log(err);
     }
   }
   async editShift(shift: Shift) {
-    // try {
-    //   const response = await this.client.shift.create({
-    //     data: {
-    //         // id: "uuid_generate_v4()" is automatically invoked by Prisma!,
-    //         userId: shift.userId,
-    //         workPlaceId: shift.workPlaceId,
-    //         shiftStart: shift.shiftStart,
-    //         shiftEnd: shift.shiftEnd,
-    //         breakStart: shift.breakStart as Date,
-    //         breakEnd: shift.breakEnd as Date,
-    //         iWorkedOn: shift.iWorkedOn,
-    //         notes: shift.notes,
-    //         wagePerHour: +shift.wagePerHour,
-    //         tipBonus: +shift.tipBonus,
-    //         isBreakPaid: shift.isBreakPaid,
-    //     },
-    //   })
-    //   return {
-    //     success: true
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   return {
-    //     success: false
-    //   }
-    // }
+    try {
+      const response = await this.client.shift.update({
+        where: {
+          id: shift.id
+        },
+        data: {
+            // id: "uuid_generate_v4()" is automatically invoked by Prisma!,
+            userId: shift.userId,
+            workPlaceId: shift.workPlaceId,
+            shiftStart: shift.shiftStart,
+            shiftEnd: shift.shiftEnd,
+            breakStart: shift.breakStart as Date,
+            breakEnd: shift.breakEnd as Date,
+            iWorkedOn: shift.iWorkedOn,
+            notes: shift.notes,
+            wagePerHour: +shift.wagePerHour,
+            tipBonus: +shift.tipBonus,
+            isBreakPaid: shift.isBreakPaid,
+        },
+      })
+      return {
+        success: true
+      }
+    } catch (err) {
+      console.log('-----------> Failed to update shift');
+      console.log(`-----------> shift id: ${shift.id}`);
+      console.log(err);
+      return {
+        success: false
+      }
+    }
+  }
+  async deleteAllShifts(workPlaceId: string) {
+    try {
+      const response = await this.client.shift.deleteMany({
+        where: {
+          workPlaceId: workPlaceId
+        }
+      })
+      return response
+    } catch (err) {
+      console.log('-----------> Failed to delete all shifts');
+      console.log(`-----------> shift id: ${workPlaceId}`);
+      console.log(err);
+    }
   }
   
   // async sumOfHours(workPlacesIdsArray: string[], timeBackwards: 'past week' | 'past month', shiftOrBreak: 'shift' | 'break') {

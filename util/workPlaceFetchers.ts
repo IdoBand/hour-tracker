@@ -33,5 +33,8 @@ export async function fetchRemoveWorkPlaces(ids: string[]) {
             }
         )
         const result = await response.json()
-        return result
+        if (result.success) {
+            return result
+        }
+        throw new Error('Failed to delete work places')
   }

@@ -29,10 +29,24 @@ export async function POST(req: NextRequest, res: NextResponse , context: {}) {
     
     try {
         const body: any = await req.json()
-        console.log(`$$$$$$$$$$$$$$$$$$$$$$$$`);
-        console.log(body);
-        
         const response = await shiftService.addShift(body)
+        if (response?.success) {
+            return NextResponse.json({success: true}, { status: 200 })
+        } else {
+            throw new Error
+        }
+    } catch (e) {
+        console.log('Error occurred while Add Shift Request');
+        console.log(e);
+        return NextResponse.json({success: false}, { status: 500 })
+    }
+}
+// edit a shift
+export async function PATCH(req: NextRequest, res: NextResponse , context: {}) {
+    
+    try {
+        const body: any = await req.json()
+        const response = await shiftService.editShift(body)
         if (response?.success) {
             return NextResponse.json({success: true}, { status: 200 })
         } else {

@@ -11,11 +11,3 @@ export async function GET(req: Request, res: NextResponse, context: {}) {
        id: 3
     })
 }
-export async function POST(req: NextRequest, res: NextResponse, context: {}) {
-    const { searchParams } = new URL(req.url)
-    const id = searchParams.get('id')
-
-    return NextResponse.json({
-       id: 3
-    })
-}

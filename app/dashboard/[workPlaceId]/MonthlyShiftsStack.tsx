@@ -23,6 +23,7 @@ const MonthlyShiftsStack = ({shifts}: Props) => {
     const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
     const currentDate = useAppSelector(state => state.workPlaceSlice.currentDate)
     const idsToRemove = useAppSelector(state => state.shiftSlice.removeShiftsIdArray)
+    const currentWorkPlace = useAppSelector(state => state.workPlaceSlice.currentWorkPlace)
     const currentMonthShifts = ShiftsManipulator.filterShiftsByMonthAndYear(shifts, TimeHelper.deserializeDate(currentDate))
     const dispatch = useAppDispatch()
     const { toast } = useToast()
@@ -37,7 +38,7 @@ const MonthlyShiftsStack = ({shifts}: Props) => {
 
       if (idsToRemove.length) {
         dispatch(setIsFetching())
-        const result = await fetchRemoveShifts(idsToRemove)
+        const result = await fetchRemoveShifts(idsToRemove, currentWorkPlace!.id as string)
         if (result.success) {
           router.refresh()
           toast({

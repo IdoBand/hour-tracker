@@ -1,10 +1,13 @@
 import { ShiftDao } from "@/daos/ShiftDao"
 import { startOfWeek, startOfToday, startOfMonth, endOfMonth, differenceInHours, compareAsc } from 'date-fns'
 import { Shift } from "@/types/types"
+import { WorkPlaceDao, workPlaceDao } from "@/daos/WorkPlaceDao"
 export class ShiftService {
     private shiftDao: ShiftDao
+    private workPlaceDao: WorkPlaceDao
     constructor() {
-        this.shiftDao = new ShiftDao() 
+        this.shiftDao = new ShiftDao()
+        this.workPlaceDao = workPlaceDao 
     }
     async getSumOfHours(workPlacesIdsArray: string[], shiftOrBreak: 'shift' | 'break') {
         /**
@@ -18,7 +21,7 @@ export class ShiftService {
         const firstDayOfThisWeek = startOfWeek(today)
         
         const workPlacesDurations = await Promise.all( workPlacesIdsArray.map( async (id) =>{
-            const shifts = await this.shiftDao.getShiftsByWorkPlaceIdLimitEarliestDate(firstDayOfThisMonth, id)
+            const shifts = await this.shiftDao.getShifts(firstDayOfThisMonth, id)
             const duration = this.calculateTimeMultipleDates(shifts, 'shift', firstDayOfThisWeek, firstDayOfThisMonth)
             return duration
             })
@@ -30,7 +33,11 @@ export class ShiftService {
         /**
          * This function receives an array of objects which contain 4 properties shiftStart, shiftEnd, breakStart, breakEnd,
          *  calculate the time difference between start-end for each pair, and returns the sum of all.
-         * @returns {sting} - time in hours/hours+minutes.
+         * @param {events} 
+         * @param {string} shiftOrBreak        states which pair to calculate.
+         * @param {Date}   firstDayOfThisWeek
+         * @param {Date}   firstDayOfThisMonth
+         * @returns {string} - time in hours/hours+minutes.
          */
         let totalPastMonth = 0
         let totalPastWeek = 0
@@ -43,7 +50,7 @@ export class ShiftService {
                 total += hoursDifference
                 // check if the current shift is from the past week
                 if (compareAsc(start, firstDayOfThisWeek) >= 0) totalPastWeek += hoursDifference
-                // check if the current shift is from the past week
+                // check if the current shift is from the past month
                 if (compareAsc(start, firstDayOfThisMonth) >= 0) totalPastMonth += hoursDifference
             }
         }
@@ -51,11 +58,11 @@ export class ShiftService {
     }
     async getAllShifts(workPlaceId: string) {
         /**
-         * Gets all shifts by work place id
+         * Gets all shifts by work place id.
          * @returns {Shift[]}.
          */
         try {
-            const shifts = await this.shiftDao.getAllShiftsByWorkPlaceId(workPlaceId)
+            const shifts = await this.shiftDao.getAllShifts(workPlaceId)
             return shifts
         } catch (err) {
             console.log(err)
@@ -64,6 +71,7 @@ export class ShiftService {
     async addShift(shift: Shift) {
         try {
             const response = await this.shiftDao.addShift(shift)
+
             return response
         } catch (err) {
             console.log('Service Failed to add shift');
@@ -73,18 +81,58 @@ export class ShiftService {
     async editShift(shift: Shift) {
         try {
             const response = await this.shiftDao.editShift(shift)
+
             return response
         } catch (err) {
             console.log('Service Failed to add shift');
             console.log(err);
         }
     }
-    async deleteShifts(ids: string[]) {
+    async deleteShifts(ids: string[], workPlaceId: string) {
         try {
+            const response = await this.shiftDao.deleteShifts(ids)
+            if (response!.count > 0) {
 
+                return response
+            }
+            
         } catch (err) {
+            console.log(err);
             
         }
+    }
+    async determineLastShift(workPlaceId: string) {
+        //             NOT IN USE FOR NOW
+        /**
+         * Every time a shift is added/edited/deleted, this function will determine if the lastShift column in the 'workplace' table
+         * needs to be updated or not and act accordingly.
+         * lastShiftInShiftTable:     {shiftStart: Date | null}
+         * lastShiftInWorkPlaceTable: {lastShift: Date | null}
+         * @param {string} workPlaceId string in uuid format.
+         * @returns { null }
+         */
+        const lastShiftInShiftTable = await this.shiftDao.getLastShiftByWorkPlaceId(workPlaceId)
+        const lastShiftInWorkPlaceTable = await this.workPlaceDao.getLastShift(workPlaceId)
+        console.log('--------------------------------- shit table');
+        
+        console.log(lastShiftInShiftTable);
+        console.log('--------------------------------- workplace table');
+        console.log(lastShiftInWorkPlaceTable);
+
+        if (!lastShiftInShiftTable!.shiftStart || !lastShiftInWorkPlaceTable!.lastShift) {
+            console.log(' no check has been made');
+            
+            return
+        }
+        const check = compareAsc(lastShiftInShiftTable!.shiftStart, lastShiftInWorkPlaceTable!.lastShift)
+        console.log(`--------->>>>>>>>>>>>>>>>>>>>>>>>>`);
+        console.log(check);
+        console.log(`--------->>>>>>>>>>>>>>>>>>>>>>>>>`);
+        
+        if (check > 0) {
+            const update = await this.workPlaceDao.updateLastShift(lastShiftInShiftTable!.shiftStart, workPlaceId)
+        }
+        return
     }
 }
 
