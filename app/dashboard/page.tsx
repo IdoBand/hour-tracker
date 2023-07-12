@@ -12,9 +12,6 @@ import startOfTomorrow from 'date-fns/startOfToday';
 const workPlaceService = new WorkPlaceService()
 
 function generateEmploymentDurationString(workPlace: WorkPlace): string {    
-    if (!workPlace.employmentEndDate && !workPlace.lastShift) {
-        return '0'
-    }
     const start = workPlace.employmentStartDate
     const end = workPlace.employmentEndDate ? workPlace.employmentEndDate : startOfTomorrow()
     return TimeHelper.generateYearlyDurationString(start as Date, end as Date)

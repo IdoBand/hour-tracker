@@ -43,6 +43,7 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
 
     function handleWorkPlaceClick(workPlace: WorkPlace) {
         // make dates serializable for redux
+
         if (typeof(workPlace.employmentStartDate) !== 'string')
         workPlace.employmentStartDate = TimeHelper.serializeDate(workPlace.employmentStartDate as Date)
         if (workPlace.employmentEndDate && typeof(workPlace.employmentEndDate) !== 'string') {

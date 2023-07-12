@@ -1,3 +1,5 @@
+import { WorkPlace } from "@/types/types";
+
 const BASE_URL = process.env.BASE_URL
 export async function fetchWorkPlaces() {
     const response = await fetch(
@@ -11,13 +13,13 @@ export async function fetchWorkPlaces() {
     const result = await response.json()
     return result
 }
-export async function fetchAddWorkPlace(workPlaceInfo: any) {
+export async function fetchAddWorkPlace(workPlace: WorkPlace) {
     const response = await fetch(
         `/api/workPlace`,
          {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(workPlaceInfo)
+            body: JSON.stringify(workPlace)
         }
     )
     const res = await response.json()
@@ -38,3 +40,15 @@ export async function fetchRemoveWorkPlaces(ids: string[]) {
         }
         throw new Error('Failed to delete work places')
   }
+export async function fetchEditWorkPlace(workPlace: WorkPlace) {
+    const response = await fetch(
+        `/api/workPlace`,
+         {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(workPlace)
+        }
+    )
+    const res = await response.json()
+    return res
+}

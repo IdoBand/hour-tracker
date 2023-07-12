@@ -66,7 +66,7 @@ export class WorkPlaceDao {
       });
       return
     } catch (err) {
-      console.log(`Failed to update last shift for ${workPlaceId}`);
+      console.log(`-----------> Failed to update last shift for ${workPlaceId}`);
       console.log(err);
     }
   }
@@ -84,6 +84,31 @@ export class WorkPlaceDao {
     } catch (err) {
       console.log('-----------> Failed to get lastShift');
       console.log(err);
+    }
+  }
+  async editWorkPlace(workPlace: WorkPlace) {
+    try {
+      const response = await this.client.workplace.update({
+        where: {
+          id: workPlace.id
+        },
+        data: {
+          name: workPlace.name,
+          employmentStartDate: workPlace.employmentStartDate,
+          employmentEndDate: workPlace.employmentEndDate,
+          isCurrent: workPlace.isCurrent,
+          wagePerHour: +workPlace.wagePerHour,
+          isBreakPaid: workPlace.isBreakPaid,
+          lastShift: null
+        }
+      })
+      if (response) {
+        return { success: true }
+      }
+    } catch (err) {
+      console.log('-----------> Failed to update Work Place');
+      console.log(err);
+      return { success: false }
     }
   }
 }

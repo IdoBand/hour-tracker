@@ -58,11 +58,6 @@ class TimeHelperClass {
          * then returns a string description in years / days.
          * @returns {string} - time unit in years / days.
          */
-        // console.log('------------------- START');
-        // console.log(start);
-        // console.log('-------------------  END');
-        // console.log(end);
-        
         const daysDifference = differenceInDays(end, start)
         if (daysDifference < 365){
             return `${daysDifference.toString()} days`
@@ -134,6 +129,28 @@ class TimeHelperClass {
     }
     deserializeDate(date: string): Date {
         return parseISO(date)
+    }
+    serializeWorkPlaceDates(employStartDate: Date | null, employEndDate: Date | null, lShift: Date | null) {
+        /**
+         * This function is responsible to serialize all the dates in a WorkPlace instance AT ONCE.
+         * 'employmentStartDate' is required to create a WorkPlace instance so it can't be null.
+         * @returns {string}        employmentStartDate
+         * @returns {string | null} employmentEndDate
+         * @returns {string | null} lastShift
+         */
+        let employmentStartDate = null
+        let employmentEndDate = null
+        let lastShift = null
+        if (typeof(employStartDate) !== 'string') {
+            employmentStartDate = this.serializeDate(employStartDate as Date)
+        }
+        if (employEndDate && typeof(employmentEndDate) !== 'string') {
+            employmentEndDate = this.serializeDate(employEndDate as Date)
+        }  
+        if (lShift && typeof(lShift) !== 'string') {
+            lastShift = this.serializeDate(lShift as Date)
+        }
+        return { employmentStartDate, employmentEndDate, lastShift }
     }
     ddmmyyyyDate(date: Date): string {
         /**

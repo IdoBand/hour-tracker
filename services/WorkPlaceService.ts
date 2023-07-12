@@ -1,6 +1,7 @@
 import { workPlaceDao, WorkPlaceDao } from "@/daos/WorkPlaceDao"
 import { ShiftService, shiftService } from "./ShiftService"
 import { ShiftDao, shiftDao } from "@/daos/ShiftDao"
+import { WorkPlace } from "@/types/types"
 
 export class WorkPlaceService {
     private workPlaceDao: WorkPlaceDao
@@ -24,6 +25,10 @@ export class WorkPlaceService {
             })
         )
         return result
+    }
+    async editWorkPlace(workPlace: WorkPlace) {
+        const response = await this.workPlaceDao.editWorkPlace(workPlace)
+        return response
     }
 }
 export const workPlaceService = new WorkPlaceService()

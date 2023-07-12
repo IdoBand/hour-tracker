@@ -1,5 +1,5 @@
 'use client'
-import { useCalendar } from "@/app/(hooks)/useCalender"
+import { useCalendar } from "@/app/(hooks)/useCalendar"
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
 import EditWorkPlaceForm from "./EditWorkPlaceForm";
@@ -72,11 +72,11 @@ const MainOverview = ({shifts}: MainOverviewProps) => {
             <>
             <span className='font-semibold flex'>{`Currently Employed: `}<CheckOrX itemToCheck={currentWorkPlace!.isCurrent} /></span>
             <span className="font-semibold">{`Wage Per Hour: `} <span className='font-normal'>{`${currentWorkPlace?.wagePerHour} ₪`}</span></span>
-            </>
-            }
             <span className="font-semibold">{`Started Working at: `}<span className='font-normal'>{TimeHelper.ddmmyyyyDate(TimeHelper.deserializeDate(currentWorkPlace.employmentStartDate as string))}</span></span>
             <span className="font-semibold">{`Employment Duration: `}<span className='font-normal'>{currentWorkPlace.employmentDuration}</span></span>
             <span className="font-semibold">{`Breaks Duration: `}<span className='font-normal'>{`${totalBreakTime(shifts)}`}</span></span>
+            </>
+            }
             <CustomButton 
               className='absolute top-10 right-1 w-5' 
               onClick={() => setIsEditingWorkPlace(prev => !prev)}
