@@ -7,10 +7,11 @@ import { ShiftsManipulator } from '../(hooks)/ShiftsManipulator';
 import { SquaresPlusIcon, ChartBarIcon } from '@heroicons/react/24/solid';
 import CustomButton from '../../components/CustomButton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { deleteIdFromRemoveArray, addIdToRemoveArray, setCurrentWorkPlace } from '@/redux/workPlaceSlice';
+import { deleteIdFromRemoveArray, addIdToRemoveArray, setCurrentWorkPlace, setCurrentDate } from '@/redux/workPlaceSlice';
 import AddEditShift from './[workPlaceId]/AddEditShiftForm';
 import Modal from '../../components/Modal';
 import { useState } from 'react';
+import { startOfToday } from 'date-fns';
 export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
     if (shifts.length) {
         const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts)
@@ -52,6 +53,7 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
         if (workPlace.lastShift && typeof(workPlace.lastShift) !== 'string') {
             workPlace.lastShift = TimeHelper.serializeDate(workPlace.lastShift as Date)
         }
+        dispatch(setCurrentDate(TimeHelper.serializeDate(startOfToday())))
         dispatch(setCurrentWorkPlace({...workPlace, employmentDuration}))
     }
     
@@ -90,6 +92,7 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
                             hoverText='Statistics'
                             where='down'
                             onClick={() => {handleWorkPlaceClick(workPlace)}}
+                            type='button'
                             >
                             <Link href={`/dashboard/${workPlace.id}`} className='w-full h-full'>
                                     <ChartBarIcon className='w-6 h-6 group-hover:fill-secondary'/>
@@ -100,6 +103,7 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
                             hoverText='Quick Add'
                             where='down'
                             onClick={(e: MouseEvent) => {e.preventDefault() ; handleWorkPlaceClick(workPlace); setQuickAdd(true)}}
+                            type='button'
                             >
                                 <SquaresPlusIcon className='w-6 group-hover:fill-secondary' />
                         </CustomButton>

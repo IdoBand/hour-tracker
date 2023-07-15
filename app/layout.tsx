@@ -24,13 +24,14 @@ export default async function RootLayout({
     <html lang="en">
       <Providers>
         <SessionProvider session={session}>
-          <body className={`${inter.className}  text-dark ${scrollBar}`}>
+          <body className={`${inter.className} bg-light text-dark ${scrollBar}`}>
             <Navbar />
-            <div className='min-h-[90vh] bg-light'>
+            <div className='min-h-[calc(99vh-90px)] '>
               {children}
             </div>
             <Footer />
-            <div id="portal" />
+            <div id="modal-portal" className='z-50'/>
+            <div id="spinner-portal" className='relative z-20'/>
             <Toaster />
           </body>
         </SessionProvider>

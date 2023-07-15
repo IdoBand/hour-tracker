@@ -36,7 +36,7 @@ const Dashboard = async () => {
     }
 
     return (
-        <main className={`w-full flex justify-center items-center relative`}>
+        <main className={`w-full flex justify-center items-center`}>
             <div className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}>
                 <h1 className={`${pageHeader}`}>Dashboard</h1>
                 <DashBoardOptions />
@@ -44,8 +44,8 @@ const Dashboard = async () => {
                     {workPlaces && workPlaces.length > 0 ? 
                         workPlaces.map((workPlace, idx) => {
                             return <article key={workPlace.id}
-                                className={`col-span-2 w-full relative rounded-br-2xl rounded-3xl p-6
-                                border border-solid dark:border-light
+                                className={`col-span-2 w-full rounded-br-2xl rounded-3xl p-6
+                                border border-solid 
                                 bg-light shadow-2xl 
                                 lg:col-span-4 animate-fade-in
                             `}>
@@ -61,7 +61,7 @@ const Dashboard = async () => {
                     :
                     <article 
                         className={`col-span-4 w-full relative rounded-br-2xl rounded-3xl p-6
-                        border border-solid dark:border-light
+                        border border-solid 
                         bg-light shadow-2xl text-center
                         animate-fade-in
                     `}>

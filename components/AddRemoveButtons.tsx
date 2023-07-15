@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/react/24/solid';
+import { PlusCircleIcon, MinusCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import CustomButton from './CustomButton';
-import { XCircleIcon } from '@heroicons/react/24/solid'
 interface AddRemoveButtonsProps {
   handleAddClick: any
   handleSelectAll: any
@@ -19,7 +18,7 @@ const AddRemoveButtons = ({handleAddClick, handleSelectAll, handleRemoveClick, h
       <CustomButton hoverText={addHoverText} onClick={handleAddClick} className='mx-3 z-50' where='down'>
         <PlusCircleIcon className='w-6' />
       </CustomButton>
-      <CustomButton hoverText={removeButtons ? 'Exit Remove' : removeHoverText} onClick={() => {handleRemoveClick() ; setRemoveButtons(prev => !prev)}} className='ml-3 z-50' where='down'>
+      <CustomButton hoverText={removeButtons ? 'Exit Remove' : removeHoverText} onClick={() => {handleRemoveClick() ; setRemoveButtons(prev => !prev)}} className='ml-3 z-50' where='left'>
         {
           removeButtons ?
           <XCircleIcon className='w-6' />

@@ -58,7 +58,7 @@ export class ShiftService {
     }
     async getAllShifts(workPlaceId: string) {
         /**
-         * Gets all shifts by work place id.
+         * Gets all shifts by 'workPlaceId' ordered by 'shiftStart' date in descending order.
          * @returns {Shift[]}.
          */
         try {

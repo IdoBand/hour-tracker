@@ -2,12 +2,9 @@
 import { useForm } from 'react-hook-form'
 import { formHeader } from '@/app/(hooks)/mixin';
 import Button from '../../components/Button';
-import { useCalendar } from '../(hooks)/useCalendar';
-import { format } from 'date-fns'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { WorkPlace } from '@/types/types';
 import { fetchAddWorkPlace } from '@/util/workPlaceFetchers';
-import parseISO from 'date-fns/parseISO';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 import { setIsFetching } from '@/redux/windowSlice';
@@ -111,7 +108,7 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
     <form onSubmit={handleSubmit(data => {
         extractData(data);
       })}
-        className={`w-full flex-col relative rounded-br-2xl rounded-3xl p-8
+        className={`w-full flex-col rounded-br-2xl rounded-3xl p-8
         bg-light shadow-2xl
         lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
         >

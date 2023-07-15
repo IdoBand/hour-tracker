@@ -48,7 +48,7 @@ const DashBoardOptions = () => {
     }
 
   return (
-    <>
+    <div className="w-full relative z-10">
         <div className={`flex w-full`}>
                         <h1 className={`text-xl w-full md:text-base`}>Hello, {user ? user.name : ''}</h1>
                         <AddRemoveButtons 
@@ -65,7 +65,7 @@ const DashBoardOptions = () => {
                         <AddNewWorkPlaceForm onClose={() => setAddWorkPlaceForm(false)} />
                     </FramerSpringRotate>
                 }
-    </>
+    </div>
   )
 }
 

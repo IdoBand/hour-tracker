@@ -19,11 +19,10 @@ const EditWorkPlaceForm = ({workPlace, onClose}: EditWorkPlaceFormProps) => {
     const router = useRouter()
     const currentWorkPlace = useAppSelector(state => state.workPlaceSlice.currentWorkPlace)
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
-    const [currentlyEmployed, setCurrentlyEmployed] = useState<boolean>(workPlace.isCurrent)
     const dispatch = useAppDispatch()
     const { toast } = useToast()
+    const { calendarRow , selectedDate } = useCalendarRow(TimeHelper.deserializeDate(workPlace.employmentStartDate as string), 'right')
 
-    const { calendarRow , selectedDate } = useCalendarRow(TimeHelper.deserializeDate(workPlace.employmentStartDate as string))
     async function extractFormData(data: WorkPlace) {
         const updatedInfo: WorkPlace = {
             id: currentWorkPlace!.id,

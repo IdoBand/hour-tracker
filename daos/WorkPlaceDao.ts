@@ -7,11 +7,18 @@ export class WorkPlaceDao {
     this.client = prisma
   }
   async getAllWorkPlacesById(userId: string) {
-
+  /**
+  * Gets all workPlaces that belongs to the 'userId' ordered by 'employmentStartDate' descending order.
+  * @param {string} workPlaceId string in uuid format.
+  */
     const workPlaces = await this.client.workplace.findMany({
       where: {
         userId: userId
-      }}
+      },
+      orderBy: {
+        employmentStartDate: 'desc'
+      }
+    },
     )
     return workPlaces
   }

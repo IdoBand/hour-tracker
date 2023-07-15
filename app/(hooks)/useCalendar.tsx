@@ -61,23 +61,22 @@ function handleDateButtonClick(day: Date, onDateClick: any) {
 }
 export function useCalendar(isSideBar: boolean, events: any[], onDateClick?: any, preChosenDay?: Date | undefined) {
 
-    const today = startOfToday()
-    const [selectedDay, setSelectedDay] = useState<Date>(preChosenDay? preChosenDay : today)
-    // ***current*** Month / Year is what displayed in calender itself after approving default value is today for first render,
-    // and the 1st of the month at each time the year/month is changed.
-    // ***chosen*** Month / Year is what displayed when you pick a year/month from the menu before approving.
-    const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMMM'))
-    const [currentYear, setCurrentYear] = useState<string>(format(today, 'yyyy'))
-    const [chosenYear, setChosenYear] = useState<string>(format(today, 'yyyy'))
-    const [chosenMonth, setChosenMonth] =  useState<string>(format(today, 'MMMM'))
-    const firstDayCurrentMonth = parse(`${currentMonth}-${currentYear}`, 'MMMM-yyyy', new Date())
-    const [sideBar, setSideBar] = useState<boolean>(isSideBar)
-    const yearsAndMonthsOptionsRef = useRef<boolean>(false)
-    const [yearsAndMonthsOptions, setYearsAndMonthsOptions] = useState<boolean>(yearsAndMonthsOptionsRef.current)
+  const today = startOfToday()
+  const [selectedDay, setSelectedDay] = useState<Date>(preChosenDay? preChosenDay : today)
+  // ***current*** Month / Year is what displayed in calender itself after approving. default value is today for first render.
+  // ***chosen*** Month / Year is what displayed when you pick a year/month from the menu before approving.
+  const [currentMonth, setCurrentMonth] = useState<string>(format(today, 'MMMM'))
+  const [currentYear, setCurrentYear] = useState<string>(format(today, 'yyyy'))
+  const [chosenYear, setChosenYear] = useState<string>(format(today, 'yyyy'))
+  const [chosenMonth, setChosenMonth] =  useState<string>(format(today, 'MMMM'))
+  const firstDayCurrentMonth = parse(`${currentMonth}-${currentYear}`, 'MMMM-yyyy', new Date())
+  const [sideBar, setSideBar] = useState<boolean>(isSideBar)
+  const yearsAndMonthsOptionsRef = useRef<boolean>(false)
+  const [yearsAndMonthsOptions, setYearsAndMonthsOptions] = useState<boolean>(yearsAndMonthsOptionsRef.current)
 
-    const days = eachDayOfInterval({
-    start: firstDayCurrentMonth,
-    end: endOfMonth(firstDayCurrentMonth),
+  const days = eachDayOfInterval({
+  start: firstDayCurrentMonth,
+  end: endOfMonth(firstDayCurrentMonth),
   })
 
   function previousMonth() {
@@ -158,31 +157,31 @@ export function useCalendar(isSideBar: boolean, events: any[], onDateClick?: any
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     const visualCalendar = 
-    <div className="w-full">
+    <div className="w-full relative">
       <div className={`max-w-full flex justify-center items-start px-4 sm:px-7 md:max-w-4xl md:px-6 lg:justify-center`}>
         <div className="flex md:flex-col gap-4 lg:justify-center md:divide-y divide-gray-200">
           <div className="min-w-[180px] flex flex-col items-center justify-between">
-            <div className="w-full flex items-center justify-between relative">
-              <CustomButton hoverText='Choose Date' where='down' className=' font-semibold text-gray-900' onClick={() => {setYearsAndMonthsOptions(true); yearsAndMonthsOptionsRef.current = true}}>
+            <div className="w-full flex items-center justify-between">
+              <CustomButton hoverText='Choose Date' where='down' className=' font-semibold text-gray-900' type='button' onClick={() => {setYearsAndMonthsOptions(true); yearsAndMonthsOptionsRef.current = true}}>
                 {format(firstDayCurrentMonth, 'MMMM yyyy')}
               </CustomButton>
               {yearsAndMonthsOptions &&
                       <SelectMonthAndYearMenu />
                     }
               <div className='flex gap-2 justify-between'>
-              <CustomButton hoverText='Previous Month' where='down' className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500" onClick={previousMonth}>
+              <CustomButton hoverText='Previous Month' where='down' type='button' className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500" onClick={previousMonth}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                   </svg>
               </CustomButton>
-              <CustomButton hoverText='Next Month' where='down' className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500" onClick={nextMonth}>
+              <CustomButton hoverText='Next Month' where='down' type='button' className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500" onClick={nextMonth}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </CustomButton>
             </div>
             </div>
-            <div className="w-full grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
+            <div className="w-full grid grid-cols-7 mt-5 text-xs leading-6 text-center text-gray-500">
               <div>S</div>
               <div>M</div>
               <div>T</div>

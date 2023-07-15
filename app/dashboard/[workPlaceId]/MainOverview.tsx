@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks';
 import EditWorkPlaceForm from "./EditWorkPlaceForm";
 import CustomButton from "@/components/CustomButton";
-import { EllipsisHorizontalCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import { EllipsisHorizontalCircleIcon, XCircleIcon, InformationCircleIcon } from '@heroicons/react/24/solid'
 import { Shift } from "@/types/types";
 import { ShiftsManipulator } from "@/app/(hooks)/ShiftsManipulator";
 import { TimeHelper } from "@/services/TimeHelper";
@@ -12,6 +12,7 @@ import CheckOrX from "@/components/CheckOrX";
 import { redirect } from "next/navigation";
 import { setCurrentDate } from "@/redux/workPlaceSlice";
 import { pageHeader } from "@/app/(hooks)/mixin";
+import Modal from "@/components/Modal";
 interface MainOverviewProps {
     shifts: Shift[]
 }
@@ -39,7 +40,7 @@ const MainOverview = ({shifts}: MainOverviewProps) => {
   const { visualCalendar, selectedDay } = useCalendar(true, shifts, handleDayButtonClick)
   const currentMonthShifts = ShiftsManipulator.filterShiftsByMonthAndYear(shifts, TimeHelper.deserializeDate(currentDate))
   const [isEditingWorkPlace, setIsEditingWorkPlace] = useState<boolean>(false)
-  
+  const [isCalendarHelp, setIsCalendarHelp] = useState<boolean>(false)
   function handleDayButtonClick(day: Date) {
     const serializedDate = TimeHelper.serializeDate(day)
     dispatch(setCurrentDate(serializedDate))
@@ -49,10 +50,21 @@ const MainOverview = ({shifts}: MainOverviewProps) => {
   <>
     <div className={`${pageHeader}`}>{currentWorkPlace.name}</div>
     <div className='flex w-full md:flex-col'>
-      <div className='w-1/2 p-3 shadow-lg rounded-lg md:w-full'>
+      <div className='w-max p-3 shadow-lg rounded-lg md:w-full'>
         {visualCalendar}
+        <div className="text-sm border-t-[1px] border-t-grayBorder pt-1">
+          <CustomButton 
+            className=""
+            where="right"
+            hoverText='How To Use Calender' 
+            onClick={() => setIsCalendarHelp(prev => !prev)}
+            >
+            <InformationCircleIcon className="w-6" />
+          </CustomButton>
+          
+        </div>
       </div>
-      <div className={`flex w-1/2 flex-col shadow-lg rounded-lg p-4 gap-4 md:w-full md:px-2 md:text-sm`}>
+      <div className={`flex flex-grow w-1/2 flex-col shadow-lg rounded-lg p-4 gap-4 md:w-full md:px-2 md:text-sm`}>
         
         <div className={`p-1 flex w-full flex-col rounded-lg gap-1`}>
           <span className='w-full font-semibold text-lg underline md: text-center'>Monthly Overview</span>
@@ -89,6 +101,16 @@ const MainOverview = ({shifts}: MainOverviewProps) => {
         </div>
       </div>
     </div>
+    {isCalendarHelp &&
+      <Modal onClose={() => setIsCalendarHelp(false)}>
+      
+      <div className="w-full flex justify-center">
+        <div className="p-10 max-w-lg">
+          <div className={`${pageHeader} pb-6`}>How To Use Calendar</div>
+        Use the arrow buttons or the month's name that are located at the top to select a month and then click any day in order to get a full list of the month's shifts.
+        </div>
+      </div>  
+    </Modal>}
   </>
     
   )

@@ -10,13 +10,16 @@ export class ShiftDao {
   }
   async getAllShifts(workPlaceId: string) {
      /**
-    * Gets all shifts that belongs to the 'workPlaceId'.
+    * Gets all shifts that belongs to the 'workPlaceId' ordered by 'shiftStart' date in descending order.
     * @param {string} workPlaceId string in uuid format.
     */
     try {
       const shifts = await this.client.shift.findMany({
         where: {
           workPlaceId: workPlaceId
+        },
+        orderBy: {
+          shiftStart: 'desc'
         }
       })
       return shifts

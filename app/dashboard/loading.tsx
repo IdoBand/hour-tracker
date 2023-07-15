@@ -18,10 +18,10 @@ const loading = () => {
                     <div className='flex justify-between w-full'>
                         <div className={`flex flex-col w-5/6`}>
                             <Skeleton className='bg-skeletonLoading w-[100px] h-[30px] mb-4' />
-                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] mb-4' />
-                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] mb-4' />
-                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] mb-4' />
-                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] mb-4' />
+                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] mb-3' />
+                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] mb-3' />
+                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] mb-3' />
+                            <Skeleton className='bg-skeletonLoading w-4/6 h-[15px] ' />
                         </div>
                         <div className={`flex justify-center items-end flex-col gap-4`}>
                             <Skeleton className='shadow-xl rounded-full p-2 ml-4 mt-3group w-10 h-10 bg-skeletonLoading' />

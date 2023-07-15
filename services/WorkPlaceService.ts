@@ -12,6 +12,10 @@ export class WorkPlaceService {
         this.shiftDao = shiftDao
     }
     async getAllWorkPlacesById(userId: string) {
+    /**
+    * Gets all workPlaces that belongs to the 'userId' ordered by 'employmentStartDate' in descending order.
+    * @param {string} workPlaceId string in uuid format.
+    */
         const workPlaces = await this.workPlaceDao.getAllWorkPlacesById(userId)
         return workPlaces
     }

@@ -65,21 +65,19 @@ const SignIn = ({onClose}: SignInProps) => {
         } 
     function extractFormData (data: any) {
         if (0) {
-            dispatch(signInUser({
-
-                email: data.email,
-                name: 'Ido'
-            }))
             onClose()
         }
         
-        alert('Please sign in as a Dummy user :)')
+        alert('Please sign in as a Dummy user or continue with Google :)')
         
     }
-    function handleGoogle() {
-        signIn('google')
+    async function handleGoogle() {
+        await signIn('google')
     }
-
+    async function handleDummyUser() {
+        const res = await signIn('credentials', {...dummyUser, redirect: false})
+        return
+    }
   return (
     <main className='px-8 pb-8 pt-2 md:px-2'>
     <div className={`w-full ${flexCenter} gap-6 mb-10`}>
@@ -96,7 +94,7 @@ const SignIn = ({onClose}: SignInProps) => {
         </div>
         <button type="button" className='underline text-blue-500 mt-2 mb-8'>I forgot my password</button>
         <div className={`${flexCenter} flex-col w-full gap-3 `}>
-                <Button onClick={(e: React.MouseEvent) => {e.preventDefault() }} type='button' theme='full' className='' text='Sign In as Dummy User' />
+                <Button onClick={(e: React.MouseEvent) => {e.preventDefault(); handleDummyUser() }} type='button' theme='full' className='' text='Sign In as Dummy User' />
             <div className={`${flexCenter} w-full gap-4 md:gap-2`}>
                 <Button onClick={reset} type='button' theme='blank' className='px-6' text='Clear' />
                 <Button onClick={handleSubmit} type='submit' theme='full' className='px-6' text='Sign In' />
@@ -124,9 +122,6 @@ const SignIn = ({onClose}: SignInProps) => {
                 <span className='px-0 py-2 lg:px-0'>Your password is personal and should not be shared</span>
                 <TextLineInput name='password' label='Password' type='password' isRequired={true} autoComplete='password' />
                 <TextLineInput name='repeatPassword' label='Repeat Password' type='password' isRequired={true} autoComplete='repeat-password' />
-                <span className='px-8 lg:px-0'>In case of loosing your password</span>
-                <TextLineInput name='secondEmail' label='2nd Email' isRequired={false} autoComplete='second-email' />
-                <TextLineInput name='secondEmail' label='Repeat 2nd Email' isRequired={false} autoComplete='repeat-second-email' />
             </div>
             <div className={`${flexCenter} w-full gap-4 mt-4`}>
                 <Button onClick={reset} type='button' theme='blank' className='' text='Clear' />

@@ -17,7 +17,7 @@ interface BulletProps {
 }
 const Bullet = ({header, text}: BulletProps) => {
   return (
-    <div className={`flex flex-col w-[25%] lg:w-11/12 lg:my-4 lg:text-sm group`}>
+    <div className={`flex flex-col w-[30%] group border border-grayBorder p-5 mb-5 bg-sky-100 shadow-xl rounded-xl lg:w-11/12 lg:my-4 lg:text-sm`}>
       <div className="flex gap-3 w-full">
         <CubeIcon className="w-5 group-hover:rotate-180 group-hover:fill-sky-400 transition-all duration-300"/>
         <h2 className="text-lg font-medium">{header}</h2>
@@ -97,10 +97,10 @@ export default function Home() {
     }
   }
   return (
-    <main className={`flex justify-center items-start w-full min-h-screen relative overflow-x-hidden
-    before:absolute before:left-10 before:top-3 before:w-96 before:h-96 before:rounded-full before:bg-sky-200 before:animate-up-down-top
+    <main className={`flex justify-center items-start w-full relative overflow-x-hidden
+    before:absolute before:left-10 before:top-3 before:w-96 before:h-96 before:rounded-full before:bg-sky-200 before:shadow-xl before:animate-up-down-top
     md:before:w-44 md:before:h-44
-    after:absolute after:left-1/2 after:-top-9 after:w-36 after:h-36 after:rounded-full after:bg-sky-200 after:animate-up-down-top
+    after:absolute after:left-1/2 after:-top-9 after:w-36 after:h-36 after:rounded-full after:bg-sky-200 after:animate-up-down-top after:shadow-xl
     `}>
 
       <div className="w-10/12 h-full flex flex-col z-10 lg:w-[95%]">
@@ -144,15 +144,15 @@ export default function Home() {
             </div> 
           </div>
           <div className={`w-1/2 flex justify-center relative
-            before:absolute before:-left-20 before:bottom-0 before:w-36 before:h-36 before:rounded-full before:bg-sky-200 before:-z-10 before:animate-up-down-bottom
+            before:absolute before:-left-20 before:bottom-0 before:w-36 before:h-36 before:rounded-full before:bg-sky-200 before:-z-10 before:shadow-xl before:animate-up-down-bottom
             md:before:left-0
-            after:absolute after:-right-12 after:top-3 after:w-72 after:h-72 after:rounded-full after:bg-sky-200 after:animate-up-down-top
+            after:absolute after:-right-12 after:top-3 after:w-72 after:h-72 after:rounded-full after:bg-sky-200 after:shadow-xl after:animate-up-down-top
             lg:w-full
           `}>
             <HomeImage width={isMobile ? '200' : '400'} height={isMobile ? '200' : '400'} className="z-10"/>
           </div>
         </div>
-        <div className={`flex w-full z-10 mt-16 justify-between lg:justify-center lg:items-center lg:flex-col lg:mt-0 mt-
+        <div className={`flex w-full z-10 mt-16 justify-between lg:justify-center lg:items-center lg:flex-col lg:mt-0
         `}>
           <Bullet header='Calculate Salary' text="Whether you're paid hourly or globally, you can add it all up." />
           <Bullet header='Handle Multiple Work Places' text="If you work as a freelancer or have more than 1 work place - it's not a problem." />
