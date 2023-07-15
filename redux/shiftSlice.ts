@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Shift } from '@/types/types'
 
 interface PlacesState {
-    removeButtons: boolean
+    shiftRemoveButtons: boolean
     checkboxAll: boolean
     removeShiftsIdArray: string[]
     checkedArray: string[]
 }
 
 const initialState: PlacesState = {
-    removeButtons: false,
+    shiftRemoveButtons: false,
     checkboxAll: false,
     removeShiftsIdArray: [],
     checkedArray: [],
@@ -22,8 +22,8 @@ const shiftSlice = createSlice({
         setCheckboxAll(state) {
            state.checkboxAll = !state.checkboxAll
         },
-        setRemoveButtons(state) {
-           state.removeButtons = !state.removeButtons
+        setShiftRemoveButtons(state) {
+           state.shiftRemoveButtons = !state.shiftRemoveButtons
         },
         addIdToRemoveArray: {
             reducer: (state, action: PayloadAction<string>) => {
@@ -58,7 +58,7 @@ const shiftSlice = createSlice({
 
 export const { 
     setCheckboxAll,
-    setRemoveButtons,
+    setShiftRemoveButtons,
     addIdToRemoveArray,
     deleteIdFromRemoveArray,
     clearIdToRemoveArray,

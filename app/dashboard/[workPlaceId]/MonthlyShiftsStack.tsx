@@ -10,7 +10,7 @@ import { dashBoardWorkPlaceHeader } from '@/app/(hooks)/mixin'
 import { TimeHelper } from '@/services/TimeHelper'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { ShiftsManipulator } from '@/app/(hooks)/ShiftsManipulator'
-import { addAllShiftsIdsToRemoveArray } from '@/redux/shiftSlice'
+import { addAllShiftsIdsToRemoveArray, setShiftRemoveButtons } from '@/redux/shiftSlice'
 import { fetchRemoveShifts } from '@/util/shiftFetchers'
 import { setIsFetching } from '@/redux/windowSlice'
 import { useToast } from '@/components/ui/use-toast'
@@ -19,7 +19,8 @@ interface Props {
     shifts: Shift[]
 }
 const MonthlyShiftsStack = ({shifts}: Props) => {
-    const [removeButtons, setRemoveButtons] = useState<boolean>(false)
+
+    const removeButtons = useAppSelector(state => state.shiftSlice.shiftRemoveButtons)
     const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
     const currentDate = useAppSelector(state => state.workPlaceSlice.currentDate)
     const idsToRemove = useAppSelector(state => state.shiftSlice.removeShiftsIdArray)
@@ -62,9 +63,10 @@ const MonthlyShiftsStack = ({shifts}: Props) => {
     
     <div className={`flex justify-between w-full`}>
         <h1 className={`${dashBoardWorkPlaceHeader}`}>Shifts</h1>
-            <AddRemoveButtons 
+            <AddRemoveButtons
+              removeButtons={removeButtons}
+              setRemoveButtons={() => dispatch(setShiftRemoveButtons())}
               handleAddClick={() => setAddEditShiftForm(true)} 
-              handleRemoveClick={() => setRemoveButtons((prev) => !prev)} 
               handleSelectAll={handleSelectAllClick} 
               handleRemovePermanentlyClick={handleRemovePermanentlyClick}
               addHoverText='Add a Shift'
@@ -90,7 +92,7 @@ const MonthlyShiftsStack = ({shifts}: Props) => {
             <span className={`col-start-6 col-end-7 w-full lg:hidden`}>I Worked On</span>
             <span className={`col-start-7 col-end-8 w-full lg:hidden`}>Notes</span>
           </div>
-          <div className='w-full gap-2 flex-col'>
+          <div className='w-full gap-2 flex-col mb-36'>
             {currentMonthShifts.length > 0 ? 
             currentMonthShifts.map((shift) => {
               return (

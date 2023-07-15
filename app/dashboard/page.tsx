@@ -40,7 +40,7 @@ const Dashboard = async () => {
             <div className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}>
                 <h1 className={`${pageHeader}`}>Dashboard</h1>
                 <DashBoardOptions />
-                <div className='w-full grid grid-cols-4 gap-10'>
+                <div className='w-full grid grid-cols-4 gap-10 mb-28'>
                     {workPlaces && workPlaces.length > 0 ? 
                         workPlaces.map((workPlace, idx) => {
                             return <article key={workPlace.id}

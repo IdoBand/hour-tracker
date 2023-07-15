@@ -2,24 +2,21 @@
 import AddRemoveButtons from "../../components/AddRemoveButtons"
 import AddNewWorkPlaceForm from "./AddWorkPlaceForm"
 import { useState } from 'react'
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useAppSelector, useAppDispatch } from "@/redux/hooks"
 import FramerSpringRotate from "../../components/FramerSpringRotate"
-import { setCheckboxAll, setRemoveButtons, clearIdToRemoveArray } from "@/redux/workPlaceSlice"
+import { setCheckboxAll, setWorkPlaceRemoveButtons, clearIdToRemoveArray } from "@/redux/workPlaceSlice"
 import { fetchRemoveWorkPlaces } from "@/util/workPlaceFetchers"
 import { setIsFetching } from "@/redux/windowSlice"
-import FullScreenSpinner from "../../components/FullScreenSpinner"
 import { useToast } from "@/components/ui/use-toast"
 const DashBoardOptions = () => {
     const router = useRouter() 
     const user = useAppSelector(state => state.userSlice.user)
     const idsToRemove = useAppSelector(state => state.workPlaceSlice.removePlacesIdArray)
-
+    const removeButtons = useAppSelector(state => state.workPlaceSlice.workPlaceRemoveButtons)
     const dispatch = useAppDispatch()
     const { toast } = useToast()
     const [addWorkPlaceForm, setAddWorkPlaceForm] = useState<boolean>(false)
-    const [addShiftForm, setAddEditShiftForm] = useState<boolean>(false)
-    const isFetching = useAppSelector(state => state.windowSlice.isFetching)
     async function removeWorkPlacesPermanently() {
       if (idsToRemove.length > 0) {
         try {
@@ -53,11 +50,13 @@ const DashBoardOptions = () => {
                         <h1 className={`text-xl w-full md:text-base`}>Hello, {user ? user.name : ''}</h1>
                         <AddRemoveButtons 
                             handleAddClick={() => setAddWorkPlaceForm(true)} 
-                            handleRemoveClick={() => dispatch(setRemoveButtons())} 
+                            removeButtons={removeButtons}
+                            setRemoveButtons={() => dispatch(setWorkPlaceRemoveButtons())}
                             handleSelectAll={() => dispatch(setCheckboxAll())} 
                             handleRemovePermanentlyClick={removeWorkPlacesPermanently}
                             addHoverText='Add a Work Place'
                             removeHoverText='Remove Work Places'
+                            className="z-10"
                             />
         </div>
         {addWorkPlaceForm && 

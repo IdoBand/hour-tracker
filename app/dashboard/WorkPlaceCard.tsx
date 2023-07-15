@@ -29,7 +29,7 @@ interface WorkPlaceCardProps {
 }
 export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, hoursPastMonth, employmentDuration}: WorkPlaceCardProps) {
 
-    const removeButtons: boolean = useAppSelector(state => state.workPlaceSlice.removeButtons)
+    const removeButtons: boolean = useAppSelector(state => state.workPlaceSlice.workPlaceRemoveButtons)
     const idsRemoveArray: string[] = useAppSelector(state => state.workPlaceSlice.removePlacesIdArray)
     const [quickAdd, setQuickAdd] = useState<boolean>(false)
     const dispatch = useAppDispatch()
@@ -58,7 +58,7 @@ export default function WorkPlaceCard ({workPlace, totalHours, hoursPastWeek, ho
     }
     
     return (
-            <div>
+            <div className='relative'>
                 {removeButtons && <input 
                                     data-key={workPlace.id}
                                     type='checkbox' 

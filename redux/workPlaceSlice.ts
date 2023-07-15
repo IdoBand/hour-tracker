@@ -4,7 +4,7 @@ import { formatISO, startOfToday } from 'date-fns'
 
 interface PlacesState {
     currentWorkPlace: null | WorkPlace
-    removeButtons: boolean
+    workPlaceRemoveButtons: boolean
     checkboxAll: boolean
     removePlacesIdArray: string[]
     checkedArray: string[]
@@ -13,7 +13,7 @@ interface PlacesState {
 
 const initialState: PlacesState = {
     currentWorkPlace: null,
-    removeButtons: false,
+    workPlaceRemoveButtons: false,
     checkboxAll: false,
     removePlacesIdArray: [],
     checkedArray: [],
@@ -35,8 +35,8 @@ const workPlaceSlice = createSlice({
         setCheckboxAll(state) {
            state.checkboxAll = !state.checkboxAll
         },
-        setRemoveButtons(state) {
-           state.removeButtons = !state.removeButtons
+        setWorkPlaceRemoveButtons(state) {
+           state.workPlaceRemoveButtons = !state.workPlaceRemoveButtons
         },
         addIdToRemoveArray: {
             reducer: (state, action: PayloadAction<string>) => {
@@ -72,7 +72,7 @@ const workPlaceSlice = createSlice({
 export const { 
     setCurrentWorkPlace,
     setCheckboxAll,
-    setRemoveButtons,
+    setWorkPlaceRemoveButtons,
     addIdToRemoveArray,
     deleteIdFromRemoveArray,
     clearIdToRemoveArray,

@@ -4,8 +4,7 @@ import { useForm } from 'react-hook-form'
 import Button from '../../components/Button';
 import { flexCenter } from '@/app/(hooks)/mixin';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
-import { signInUser } from '@/redux/userSlice';
-import { dummyUser, User, PLACES_OF_WORK } from '@/redux/dummyUser';
+import { dummyUser } from '@/redux/dummyUser';
 import {signIn} from 'next-auth/react'
 import { GoogleIcon } from '@/util/icons';
 interface TextLineInputProps {
@@ -23,8 +22,6 @@ interface SignInProps {
 const SignIn = ({onClose}: SignInProps) => {
     const [signUp, setSignUp] = useState<boolean>(false)
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
-    const user = useAppSelector(state => state.userSlice)
-    const dispatch = useAppDispatch()
 
     function validateEmailRegex(email: string): boolean {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -67,15 +64,13 @@ const SignIn = ({onClose}: SignInProps) => {
         if (0) {
             onClose()
         }
-        
         alert('Please sign in as a Dummy user or continue with Google :)')
-        
     }
     async function handleGoogle() {
         await signIn('google')
     }
     async function handleDummyUser() {
-        const res = await signIn('credentials', {...dummyUser, redirect: false})
+        const res = await signIn('credentials', dummyUser)
         return
     }
   return (

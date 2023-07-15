@@ -31,7 +31,7 @@ export default async function RootLayout({
             </div>
             <Footer />
             <div id="modal-portal" className='z-50'/>
-            <div id="spinner-portal" className='relative z-20'/>
+            <div id="spinner-portal" className='relative z-[100]'/>
             <Toaster />
           </body>
         </SessionProvider>
