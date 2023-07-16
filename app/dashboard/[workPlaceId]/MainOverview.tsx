@@ -107,7 +107,7 @@ const MainOverview = ({shifts}: MainOverviewProps) => {
       <div className="w-full flex justify-center">
         <div className="p-10 max-w-lg">
           <div className={`${pageHeader} pb-6`}>How To Use Calendar</div>
-        Use the arrow buttons or the month's name that are located at the top to select a month and then click any day in order to get a full list of the month's shifts.
+        {`Use the arrow buttons or the month's name that are located at the top to select a month and then click any day in order to get a full list of the month's shifts.`}
         </div>
       </div>  
     </Modal>}

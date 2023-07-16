@@ -5,6 +5,7 @@ import {
   eachDayOfInterval,
   endOfMonth,
   format,
+  formatISO,
   getDay,
   getYear,
   isEqual,
@@ -20,7 +21,7 @@ import { flexCenter } from '@/app/(hooks)/mixin'
 import CustomButton from '@/components/CustomButton'
 const chosenYearDateValue = 'rounded-md border border-solid border-black text-sky-500'
 const yearsAndMonthsMenuContainer = 'flex flex-col rounded-md overflow-auto scrollbar-thin scrollbar-thumb-gray-200'
-
+import { TimeHelper } from '@/services/TimeHelper'
 const COL_START_CLASSES = [
   '',
   'col-start-2',
@@ -60,7 +61,7 @@ function handleDateButtonClick(day: Date, onDateClick: any) {
   }
 }
 export function useCalendar(isSideBar: boolean, events: any[], onDateClick?: any, preChosenDay?: Date | undefined) {
-
+  
   const today = startOfToday()
   const [selectedDay, setSelectedDay] = useState<Date>(preChosenDay? preChosenDay : today)
   // ***current*** Month / Year is what displayed in calender itself after approving. default value is today for first render.
@@ -92,7 +93,7 @@ export function useCalendar(isSideBar: boolean, events: any[], onDateClick?: any
   }
 
   const selectedDayEvents = events.filter((event: any) =>
-      isSameDay(parseISO(event.shiftStart), selectedDay)
+      isSameDay(event.shiftStart, selectedDay)
   )
     
   const years = useMemo(() => {
@@ -246,6 +247,7 @@ export function useCalendar(isSideBar: boolean, events: any[], onDateClick?: any
               <h2 className="font-semibold text-gray-900 w-full pt-2">
                 Details for{' '}
                 <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
+
                   {format(selectedDay, 'MMM dd, yyy')}
                 </time>
               </h2>
@@ -271,8 +273,8 @@ export function useCalendar(isSideBar: boolean, events: any[], onDateClick?: any
 
 function EventTag(event: any, key: number) {
 
-  const startDateTime = parseISO(event.event.shiftStart)
-  const endDateTime = parseISO(event.event.shiftEnd)
+  const startDateTime = event.event.shiftStart
+  const endDateTime = event.event.shiftEnd
 
   return (
     <li key={key} className="flex items-start px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
@@ -285,11 +287,11 @@ function EventTag(event: any, key: number) {
         <p className="text-gray-900">{event.event.name}</p>
         <p className="mt-0.5">
           <time dateTime={event.event.shiftStart}>
-            {format(startDateTime, 'h:mm a')}
+            {TimeHelper.extractHourFromDate(startDateTime)}
           </time>{' '}
           -{' '}
           <time dateTime={event.event.shiftEnd}>
-            {format(endDateTime, 'h:mm a')}
+            {TimeHelper.extractHourFromDate(endDateTime)}
           </time>
         </p>
       </div>
