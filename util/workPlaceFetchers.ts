@@ -1,6 +1,5 @@
 import { WorkPlace } from "@/types/types";
 
-const BASE_URL = process.env.BASE_URL
 export async function fetchWorkPlaces() {
     const response = await fetch(
         `/api/workPlace`,

@@ -1,10 +1,10 @@
 import { Shift } from "@/types/types"
 const errorObject = {success: false}
-const BASE_URL = 'http://localhost:3000'
+
 export async function fetchShifts(month: string) {
     try {
         const response = await fetch(
-            `${BASE_URL}/api/shift`,
+            `/api/shift`,
             {
                 method: 'GET'
             }
@@ -19,7 +19,7 @@ export async function fetchShifts(month: string) {
 export async function fetchAddShift(shift: Shift) {
     try {
         const response = await fetch(
-            `${BASE_URL}/api/shift`,
+            `/api/shift`,
             {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -36,7 +36,7 @@ export async function fetchAddShift(shift: Shift) {
 export async function fetchRemoveShifts(ids: string[], workPlaceId: string) {
     try {
         const response = await fetch(
-            `${BASE_URL}/api/shift/delete?workPlaceId=${workPlaceId}`,
+            `/api/shift/delete?workPlaceId=${workPlaceId}`,
             {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -54,7 +54,7 @@ export async function fetchRemoveShifts(ids: string[], workPlaceId: string) {
 export async function fetchEditShift(shift: Shift) {
     try {
         const response = await fetch(
-            `${BASE_URL}/api/shift`,
+            `/api/shift`,
             {
                 method: 'PATCH',
                 headers: {'Content-Type': 'application/json'},

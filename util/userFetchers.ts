@@ -1,4 +1,3 @@
-const BASE_URL = process.env.BASE_URL
 export async function fetchSignIn(userInfo: any) {
     const response = await fetch(
         '/api/user/google',
