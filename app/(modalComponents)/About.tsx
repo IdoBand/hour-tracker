@@ -1,4 +1,4 @@
-import { NextSVG, TypeScriptIcon, ReactIcon, TailwindSVG, LinkedInIcon, GithubIcon, GmailIcon } from "@/util/icons"
+import { NextSVG, TypeScriptIcon, ReactIcon, TailwindSVG, LinkedInIcon, GithubIcon, GmailIcon, PostreSQLIcon } from "@/util/icons"
 import Link from "next/link"
 import { flexCenter } from "../(hooks)/mixin"
 const tools = [
@@ -17,6 +17,10 @@ const tools = [
     {
         name: 'Tailwind CSS',
         icon: <TailwindSVG className="w-7"/>
+    },
+    {
+        name: 'PostreSQL',
+        icon: <PostreSQLIcon className="w-7"/>
     },
 ]
 
