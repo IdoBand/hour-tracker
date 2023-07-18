@@ -1,14 +1,12 @@
+'use client'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Button from '../(components)/Button';
+import Button from '../../components/Button';
 import { flexCenter } from '@/app/(hooks)/mixin';
-import { NextSVG } from '@/util/icons'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
-import { signInUser } from '@/redux/userSlice';
-import { dummyUser, User, PLACES_OF_WORK } from '@/redux/dummyUser';
-import { setWorkPlaces } from '@/redux/placesSlice';
-import { WorkPlace } from '../dashboard/WorkPlace';
-
+import { dummyUser } from '@/redux/dummyUser';
+import {signIn} from 'next-auth/react'
+import { GoogleIcon } from '@/util/icons';
 interface TextLineInputProps {
     name: string
     label: string
@@ -24,13 +22,7 @@ interface SignInProps {
 const SignIn = ({onClose}: SignInProps) => {
     const [signUp, setSignUp] = useState<boolean>(false)
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
-    const user = useAppSelector(state => state.userSlice)
-    const dispatch = useAppDispatch()
-    function signInDummy(dummyUser: User, PLACES_OF_WORK: WorkPlace[]){
-        dispatch(signInUser(dummyUser))
-        dispatch(setWorkPlaces(PLACES_OF_WORK))
-        onClose()
-    }
+
     function validateEmailRegex(email: string): boolean {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(email)) {
@@ -70,19 +62,17 @@ const SignIn = ({onClose}: SignInProps) => {
         } 
     function extractFormData (data: any) {
         if (0) {
-            dispatch(signInUser({
-                userId: data.email,
-                email: data.email,
-                firstName: 'Ido',
-                lastName: 'something',
-            }))
             onClose()
         }
-        
-        alert('Please sign in as a Dummy user :)')
-        
+        alert('Please sign in as a Dummy user or continue with Google :)')
     }
-
+    async function handleGoogle() {
+        await signIn('google')
+    }
+    async function handleDummyUser() {
+        const res = await signIn('credentials', dummyUser)
+        return
+    }
   return (
     <main className='px-8 pb-8 pt-2 md:px-2'>
     <div className={`w-full ${flexCenter} gap-6 mb-10`}>
@@ -99,7 +89,7 @@ const SignIn = ({onClose}: SignInProps) => {
         </div>
         <button type="button" className='underline text-blue-500 mt-2 mb-8'>I forgot my password</button>
         <div className={`${flexCenter} flex-col w-full gap-3 `}>
-                <Button onClick={(e: React.MouseEvent) => {e.preventDefault() ;signInDummy(dummyUser, PLACES_OF_WORK)}} type='button' theme='full' className='' text='Sign In as Dummy User' />
+                <Button onClick={(e: React.MouseEvent) => {e.preventDefault(); handleDummyUser() }} type='button' theme='full' className='' text='Sign In as Dummy User' />
             <div className={`${flexCenter} w-full gap-4 md:gap-2`}>
                 <Button onClick={reset} type='button' theme='blank' className='px-6' text='Clear' />
                 <Button onClick={handleSubmit} type='submit' theme='full' className='px-6' text='Sign In' />
@@ -112,7 +102,7 @@ const SignIn = ({onClose}: SignInProps) => {
             `}
             >Or Continue With</div>
             <div className={`${flexCenter}`}>
-                <NextSVG className='w-24'/>
+                <button type='button' onClick={handleGoogle} className='flex items-center gap-2 hover:text-secondary'><GoogleIcon width='24' height='24' className='' /> Google</button>
             </div>
         </div>
         </>
@@ -127,13 +117,10 @@ const SignIn = ({onClose}: SignInProps) => {
                 <span className='px-0 py-2 lg:px-0'>Your password is personal and should not be shared</span>
                 <TextLineInput name='password' label='Password' type='password' isRequired={true} autoComplete='password' />
                 <TextLineInput name='repeatPassword' label='Repeat Password' type='password' isRequired={true} autoComplete='repeat-password' />
-                <span className='px-8 lg:px-0'>In case of loosing your password</span>
-                <TextLineInput name='secondEmail' label='2nd Email' isRequired={false} autoComplete='second-email' />
-                <TextLineInput name='secondEmail' label='Repeat 2nd Email' isRequired={false} autoComplete='repeat-second-email' />
             </div>
             <div className={`${flexCenter} w-full gap-4 mt-4`}>
-                <Button onClick={handleSubmit} type='submit' theme='full' className='' text='Create Account' />
                 <Button onClick={reset} type='button' theme='blank' className='' text='Clear' />
+                <Button onClick={handleSubmit} type='submit' theme='full' className='' text='Create Account' />
             </div>
         </>
         }

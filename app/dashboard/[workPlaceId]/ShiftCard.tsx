@@ -1,34 +1,19 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpCircleIcon, EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
+import { EllipsisHorizontalCircleIcon} from '@heroicons/react/24/solid'
 import { checkboxRemoveStyle } from '@/app/(hooks)/mixin';
-import { TimeHelper } from '@/app/(hooks)/TimeHelper'
-import { format, parseISO } from 'date-fns'
+import { TimeHelper } from '@/services/TimeHelper'
 import { flexCenter } from '@/app/(hooks)/mixin'
-import Button from '@/app/(components)/Button'
-import Modal from '@/app/(components)/Modal'
-import { useAppDispatch } from '@/redux/hooks'
-import { removeShifts } from '@/redux/placesSlice'
+import Button from '@/components/Button'
+import Modal from '@/components/Modal'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { deleteIdFromRemoveArray, addIdToRemoveArray } from '@/redux/shiftSlice';
 import AddEditShift from './AddEditShiftForm'
-import CheckOrX from '@/app/(components)/CheckOrX';
-export interface Shift {
-    shiftId: string
-    placeId: string,
-    shiftStart: string
-    shiftEnd: string
-    breakStart: string
-    breakEnd: string
-    iWorkedOn: string
-    notes: string
-    checked: boolean
-    wagePerHour: number,
-    tipBonus: number
-}
+import CheckOrX from '@/components/CheckOrX';
+import { Shift } from '@/types/types';
+import MotionArrow from '@/components/MotionArrow';
 
-function parseISOString(string: string): string {
-    const ISODate = parseISO(string)
-    return format(ISODate, 'dd-MM-yyyy')
-}
+
 const shiftPropertyContainer = 'w-full'
 const slideDownDiv = {
     // when using this -> add to motion.div className 'overflow-hidden'
@@ -42,49 +27,48 @@ const slideDownDiv = {
         transition: {
             duration: 1
         },
+    },
+    exit: {
+        opacity: 0,
+        height: 0
     }
 }
 
-interface ShiftComponentProps {
+interface ShiftCardProps {
     shift: Shift
     removeButtons: boolean
-    handleCheckBoxClick: (shiftId: string) => void
 }
-export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shift}: ShiftComponentProps) {
+export default function ShiftCard ({removeButtons, shift}: ShiftCardProps) {
     const dispatch = useAppDispatch()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [removalModal, setRemovalModal] = useState<boolean>(false)
     const [shiftOptionsMenu, setShiftOptionsMenu] = useState<boolean>(false)
     const [editMode, setEditMode] = useState<boolean>(false)
+    const removeShiftsIdArray = useAppSelector(state => state.shiftSlice.removeShiftsIdArray)
+    // shiftData is holds the shift info after manipulation in order to show to the user
     const shiftData = {
-        shiftDate: parseISOString(shift.shiftStart),
-        shiftStart: shift.shiftStart.slice(11, 16),
-        shiftEnd: shift.shiftEnd.slice(11, 16),
-        shiftDuration: TimeHelper.calculateTimeTwoDatesString(shift.shiftStart, shift.shiftEnd),
-        breakStart: shift.breakStart.slice(11, 16),
-        breakEnd: shift.breakEnd.slice(11, 16),
-        breakDuration: TimeHelper.calculateTimeTwoDatesString(shift.breakStart, shift.breakEnd),
+        shiftDate: TimeHelper.ddmmyyyyDate(shift.shiftStart as Date),
+        shiftStart: TimeHelper.extractHourFromDate(shift.shiftStart as Date),
+        shiftEnd: TimeHelper.extractHourFromDate(shift.shiftEnd as Date),
+        shiftDuration: TimeHelper.calculateTimeTwoDates(shift.shiftStart as Date, shift.shiftEnd  as Date),
+        breakStart: TimeHelper.extractHourFromDate(shift.breakStart as Date),
+        breakEnd: TimeHelper.extractHourFromDate(shift.breakEnd as Date),
+        breakDuration: TimeHelper.calculateTimeTwoDates(shift.breakStart  as Date, shift.breakEnd  as Date),
     }
-
-    const MotionArrow = () => {
-        return (
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={{ rotate: isOpen ? -180 : 0 }}
-            transition={{ duration: 1}}
-            className={`${flexCenter}`}
-          >
-            <ArrowUpCircleIcon className='w-5' />
-          </motion.div>
-        );
-    };
+    function handleCheckBoxClick(shiftId: string) {
+        if (removeShiftsIdArray.includes(shiftId)) {
+            dispatch(deleteIdFromRemoveArray(shiftId))
+        } else {
+            dispatch(addIdToRemoveArray(shiftId))
+        }
+    }
 
   return (
     <div className={`w-full flex justify-between flex-col rounded-lg py-1 cursor-pointer relative`}>
         {removeButtons && <input 
-                data-key={shift.shiftId}
+                data-key={shift.id}
                 type='checkbox' 
-                checked={shift.checked} 
+                checked={removeShiftsIdArray.includes(shift.id!)} 
                 onClick={(e) => e.stopPropagation()} 
                 onChange={(e) => {handleCheckBoxClick(e.target.dataset.key as string)}}
                 className={checkboxRemoveStyle} />}
@@ -95,7 +79,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                 `}
                 onClick={() => setIsOpen(prev => !prev)}
             >
-                <span className={`w-full order-8`}>{MotionArrow()}</span>
+                <span className={`w-full order-8`}><MotionArrow isOpen={isOpen} /></span>
                 <span className={`col-start-1 col-end-2 w-full`}>{shiftData.shiftDate}</span>
                 <span className={`col-start-2 col-end-3 w-full lg:flex lg:justify-center`}>{shiftData.shiftStart}</span>
                 <span className={`col-start-3 col-end-4 w-full lg:flex lg:justify-center`}>{shiftData.shiftEnd}</span>
@@ -110,20 +94,13 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                 variants={slideDownDiv}
                 initial="initial"
                 animate="animate"
+                exit="exit"
             className={`w-full min-h-max shadow-md rounded-lg px-2 py-1 overflow-hidden cursor-default`}>
                 {editMode ?
                     <AddEditShift 
                         addOrEdit='edit'
                         onClose={() => setEditMode(false)}
-                        iWorkedOn={shift.iWorkedOn}
-                        notes={shift.notes}
-                        startDate={shift.shiftStart}
-                        endDate={shift.shiftEnd}
-                        breakStart={shift.breakStart}
-                        breakEnd={shift.breakEnd}
-                        shiftId={shift.shiftId}
-                        wagePerHour={shift.wagePerHour}
-                        tipBonus={shift.tipBonus}
+                        shift={shift}
                     />
                 :
                     <div className='p-8 flex gap-4 relative md:flex-col md:p-2'>
@@ -164,6 +141,10 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                                     </div>
                                 </>
                             }
+                            <div className={`${shiftPropertyContainer}`}>
+                                <span className='font-semibold'>Paid On Break: </span> 
+                                <span>{shift.isBreakPaid ? 'Yes' : 'No'}</span>
+                            </div>
                         </div>
                         <div className={'w-4/6 flex flex-col gap-2 lg:w-full'}>
                             <div className='flex flex-col'>
@@ -199,7 +180,7 @@ export default function ShiftComponent ({removeButtons, handleCheckBoxClick, shi
                 Are you sure you want to remove this shift?
                 <div className={`${flexCenter} gap-4 `}>
                     <Button theme='blank' onClick={() => setRemovalModal(false)} className='' text='No' type='button'/>
-                    <Button theme='full' onClick={() => {dispatch(removeShifts([shift.shiftId])); setIsOpen(false); setRemovalModal(false)}} className='' text='Yes' type='button'/>
+                    <Button theme='full' onClick={() => { setIsOpen(false); setRemovalModal(false)}} className='' text='Yes' type='button'/>
                 </div>
             </div>
             </Modal>}

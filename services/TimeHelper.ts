@@ -1,43 +1,26 @@
 import {
-    add,
-    eachDayOfInterval,
-    endOfMonth,
-    format,
-    getDay,
-    getYear,
-    isEqual,
-    isSameDay,
-    isSameMonth,
-    isToday,
-    parse,
     parseISO,
     formatISO,
-    startOfToday,
     differenceInDays,
     differenceInYears,
     differenceInMinutes,
-    differenceInHours
   } from 'date-fns'
 class TimeHelperClass {
-    calculateHoursTwoDates(start: string, end: string) {
+    calculateHoursTwoDates(start: Date, end: Date) {
         /**
-         * This function receives 2 ISO 8601 string and calculates the hours difference between them.
+         * This function receives 2 Date instances and calculates the hours difference between them.
          * @returns {number} - time unit in hours.
          */
-        const startDate = new Date(start)
-        const endDate = new Date(end)
-        const totalHours = differenceInMinutes(endDate, startDate) / 60
+        const totalHours = differenceInMinutes(end, start) / 60
         return totalHours
     }
-    calculateTimeTwoDatesString(start: string, end: string) {
+    calculateTimeTwoDates(start: Date, end: Date) {
         /**
-         * This function receives 2 ISO 8601 string and calculates the difference in time between them.
+         * This function receives 2 Date instances and calculates the difference in time between them.
          * @returns {sting} - time in hours/hours+minutes.
          */
-        const startDate = new Date(start)
-        const endDate = new Date(end)
-        const minutesDifference = differenceInMinutes(endDate, startDate)
-        return this.generateTimeDescriptionString(minutesDifference)
+        const minutesDifference = differenceInMinutes(end, start)
+        return this.generateHourlyDurationString(minutesDifference)
     }
     calculateTimeMultipleDates(events: any[]) {
         /**
@@ -51,9 +34,9 @@ class TimeHelperClass {
             const end = new Date(event.end)
             total += differenceInMinutes(end ,start)
         }
-        return this.generateTimeDescriptionString(total)
+        return this.generateHourlyDurationString(total)
     }
-    generateTimeDescriptionString(minutes: number): string {
+    generateHourlyDurationString(minutes: number): string {
         /**
          * This function receives a number that represents minutes and returns time in hours/hours+minutes.
          * for example: '1 Hr 30 mins', '7Hr' .
@@ -63,39 +46,34 @@ class TimeHelperClass {
             return '0'
         } else if (minutes % 60 === 0) {
             return `${minutes / 60} Hr`
-        } else if(minutes / 60 < 1) {
+        } else if (minutes / 60 < 1) {
             return `${minutes} mins`
         } else {
             return `${Math.floor(minutes / 60)} Hr ${minutes % 60} mins`
         }
     }
-    calculateYearlyDuration(start: string, end?: string) {
+    generateYearlyDurationString(start: Date, end: Date) {
         /**
-         * This function receives 2 ISO 8601 string and calculates the time difference between them in days,
-         * and returns a string description in years / days.
+         * This function receives 2 Date instances and calculates the time difference between them in days,
+         * then returns a string description in years / days.
          * @returns {string} - time unit in years / days.
          */
-        if (!end) {
-            end = formatISO(new Date())
-        } 
-        const startDate = new Date(start)
-        const endDate = new Date(end)
-        const daysDifference = differenceInDays(endDate, startDate)
+        const daysDifference = differenceInDays(end, start)
         if (daysDifference < 365){
-            return daysDifference.toString()
+            return `${daysDifference.toString()} days`
         } else if (daysDifference > 365 && daysDifference % 365 !== 0) {
-            const yearsDifference = differenceInYears(endDate, startDate)
+            const yearsDifference = differenceInYears(end, start)
             const remainingDays = daysDifference - yearsDifference * 365
             return `${yearsDifference} Year${yearsDifference > 1 ? 's' : ''} and ${remainingDays} Days`
         } else {
-            const yearsDifference = differenceInYears(endDate, startDate)
+            const yearsDifference = differenceInYears(end, start)
             return `${yearsDifference} Year${yearsDifference > 1 ? 's' : ''}`
         }
     }
-    validateShiftTimes(shiftStartDate: string, shiftEndDate: string, breakStartDate: string, breakEndDate: string) {
+    validateShiftTimes(shiftStartDate: Date, shiftEndDate: Date, breakStartDate: Date, breakEndDate: Date) {
         /**
          * This function receives 4 date strings and compares them.
-         * constrains:
+         * constrains covered:
          * 1. Shift duration cannot be <= 0.
          * 2. Shift start date cannot occur after shift end.
          * 3. Break start date cannot occur before shift start or after.
@@ -145,6 +123,50 @@ class TimeHelperClass {
             }
         }
         return validationResultObject
+    }
+    serializeDate(date: Date): string {
+        return formatISO(date)
+    }
+    deserializeDate(date: string): Date {
+        return parseISO(date)
+    }
+    serializeWorkPlaceDates(employStartDate: Date | null, employEndDate: Date | null, lShift: Date | null) {
+        /**
+         * This function is responsible to serialize all the dates in a WorkPlace instance AT ONCE.
+         * 'employmentStartDate' is required to create a WorkPlace instance so it can't be null.
+         * @returns {string}        employmentStartDate
+         * @returns {string | null} employmentEndDate
+         * @returns {string | null} lastShift
+         */
+        let employmentStartDate = null
+        let employmentEndDate = null
+        let lastShift = null
+        if (typeof(employStartDate) !== 'string') {
+            employmentStartDate = this.serializeDate(employStartDate as Date)
+        }
+        if (employEndDate && typeof(employmentEndDate) !== 'string') {
+            employmentEndDate = this.serializeDate(employEndDate as Date)
+        }  
+        if (lShift && typeof(lShift) !== 'string') {
+            lastShift = this.serializeDate(lShift as Date)
+        }
+        return { employmentStartDate, employmentEndDate, lastShift }
+    }
+    ddmmyyyyDate(date: Date): string {
+        /**
+         * This function receives a Date instance and converts it to dd-mm-yyy string.
+         * @returns {sting} - dd-mm-yyy string.
+         */
+        const ISO8601String = formatISO(date)
+        return ISO8601String.slice(8,10) + ISO8601String.slice(4,8) + ISO8601String.slice(0,4)
+    }
+    extractHourFromDate(date: Date): string {
+        /**
+         * This function receives a Date instance and extracts the hour.
+         * @returns {sting} - hh:mm.
+         */
+        const ISO8601String = formatISO(date)
+        return ISO8601String.slice(11, 16)
     }
 }
 

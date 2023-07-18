@@ -1,13 +1,14 @@
 "use client";
 import { useForm } from 'react-hook-form'
 import { formHeader } from '@/app/(hooks)/mixin';
-import Button from '../(components)/Button';
-import { useCalendar } from '../(hooks)/useCalender';
-import { format } from 'date-fns'
+import Button from '../../components/Button';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { WorkPlace } from './WorkPlace';
-import { addWorkPlace } from '@/redux/placesSlice';
-
+import { WorkPlace } from '@/types/types';
+import { fetchAddWorkPlace } from '@/util/workPlaceFetchers';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
+import { setIsFetching } from '@/redux/windowSlice';
+import { useCalendarRow } from '../(hooks)/useCalendarRow';
 export interface FormProps {
     onClose: () => void
 }
@@ -23,14 +24,15 @@ export interface TextLineInputProps {
 }
 
 const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
+    const router = useRouter()
     const user = useAppSelector(state => state.userSlice.user)
     const dispatch = useAppDispatch()
     const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors, setValue, reset } = useForm();
-    const { visualCalendar, selectedDay } = useCalendar(false, [])
-  
+    const { calendarRow, selectedDate } = useCalendarRow()
+    const { toast } = useToast()
     const TextLineInput = ({name, label, type='text', isRequired, autoComplete, value}: TextLineInputProps) => {
         return (
-        <div className={`flex flex-col mb-6`}>
+        <div className={`flex flex-col mb-6 w-full`}>
             <div className={`flex justify-between w-full md:flex-col`}>
                 <label>{label}</label>
                 <input
@@ -68,43 +70,60 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
             </>
         )
     }
-    function extractData(data: any) {
-        data.selectedDay = format(selectedDay, 'yyyy-MM-dd')
-
-        const newWorkPlace: WorkPlace = {
-            placeId: Date.now().toString(),
-            name: data.workPlaceName,
-            employmentStartDate: data.selectedDay,
-            employmentEndDate: '',
-            isCurrent: data.isCurrent,
-            wagePerHour: data.wagePerHour,
-            isBreakPaid: data.isCurrent,
-            link: '',
-            checked: false,
-            shifts: [],
+    async function extractData(data: any) {
+        dispatch(setIsFetching())
+        const response = await fetchAddWorkPlace(
+            {
+                userId: user!.email,
+                name: data.workPlaceName,
+                employmentStartDate: selectedDate,
+                employmentEndDate: null,
+                isCurrent: data.isCurrent,
+                wagePerHour: data.wagePerHour,
+                isBreakPaid: data.isBreakPaid,
+                lastShift: null
+            }
+        )
+        
+        if (response.success) {
+            router.refresh()
+            toast({
+                title: "Success",
+                description: "Work Place added successfully",
+                variant: 'info'
+              })
+            onClose()
+            dispatch(setIsFetching())
+        } else {
+            toast({
+                title: "Error",
+                description: "Failed to add Work Place",
+                variant: 'destructive'
+              })
         }
-        dispatch(addWorkPlace(newWorkPlace))
-        onClose()
+        
     }
   return (
+    <>
     <form onSubmit={handleSubmit(data => {
         extractData(data);
       })}
-        className={`w-full flex flex-col relative rounded-br-2xl rounded-3xl p-8
-        border border-solid border-dark dark:border-light
+        className={`w-full flex-col rounded-br-2xl rounded-3xl p-8
         bg-light shadow-2xl
         lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
         >
         <h1  className={`${formHeader}`}>Add a New Work Place</h1>
-        <div className={`w-full flex justify-center items-start mt-4 md:flex-col`}>
-            <div className={`w-1/2 flex flex-col md:w-full`}>
+        <div className='w-full flex md:flex-col'>
+            <div className={`w-1/2 flex mt-4 flex-col md:w-full mr-16`}>
                 <TextLineInput label='Work Place Name' name='workPlaceName' type='text' isRequired={true} />
                 <NumberLineInput label='Wage Per Hour' name='wagePerHour' type='number' isRequired={true} />
                 <div className={`${addNewWorkPlaceFormSection}`}>
                     <label>Starting Date</label>
-                    <label className='w-2/5 md:w-full rounded-md bg-white'>{format(selectedDay, 'dd-MM-yyyy')}</label>
+                    {calendarRow}
                 </div>
-                <div className={`w-full text-center mb-6 `}>
+            </div>
+            <div className='w-1/2  md:w-full'>
+                <div className={`w-full text-center mb-6 font-semibold`}>
                     Check V if the answer is yes for the following questions
                 </div>
                 <div className={`${addNewWorkPlaceFormSection}`}>
@@ -113,22 +132,15 @@ const AddNewWorkPlaceForm = ({onClose,}: FormProps) => {
                 <div className={`${addNewWorkPlaceFormSection}`}>
                     {CheckBoxInput('isBreakPaid', 'Are you payed on break time?')}
                 </div>
-                <div className={`${addNewWorkPlaceFormSection}`}>
-                    <label>Notes</label>
-                    <textarea
-                        {...register('notes', {required: false})}
-                        className='w-2/5 md:w-full' />
-                </div>
-            </div>
-            <div className={`w-1/2 flex justify-center items-start flex-col md:w-full`}>
-                {visualCalendar}
             </div>
         </div>
-        <div className={`w-full flex justify-end gap-4`}>
-            <Button type='button' theme='blank' text='Discard' onClick={() => {onClose(); reset()}} className='' />
-            <Button type='submit' theme='full' text='Add' className='' />
-        </div>
+            <div className={`w-full flex justify-end gap-4`}>
+                <Button type='button' theme='blank' text='Discard' onClick={() => {onClose(); reset()}} className='' />
+                <Button type='submit' theme='full' text='Add' className='' />
+            </div>
     </form>
+
+    </>
   )
 }
 

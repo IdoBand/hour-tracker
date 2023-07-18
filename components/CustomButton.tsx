@@ -4,17 +4,19 @@ interface CustomButtonProps {
   children: React.ReactNode;
   className: string;
   hoverText: string;
-  onClick: any;
-  where: 'left' | 'right' | 'down'
+  onClick?: any;
+  type?: 'button' | 'submit'
+  where: 'left' | 'right' | 'down' | 'rightUp'
 }
 
 const position = {
-    left: '',
-    right: '',
-    down: '-bottom-6 left-1/2 transform -translate-x-1/2'
+    left: 'right-0',
+    right: 'left-0',
+    down: '-bottom-6 left-1/2 transform -translate-x-1/2',
+    rightUp: ''
 }
 
-const CustomButton = ({children, className, hoverText, onClick, where,}: CustomButtonProps) => {
+const CustomButton = ({children, className, hoverText, onClick, where, type}: CustomButtonProps) => {
     const validClassName = (className: string) => {
         const arr = className.split(' ')
         const idx = arr.indexOf('absolute')
@@ -27,6 +29,7 @@ const CustomButton = ({children, className, hoverText, onClick, where,}: CustomB
     <button
       onClick={onClick}
       className={`group ${validClassName(className)}`}
+      type={type}
     >
       {children}
       <span onClick={(e) => e.stopPropagation()}
@@ -34,7 +37,7 @@ const CustomButton = ({children, className, hoverText, onClick, where,}: CustomB
       rounded-lg transition-opacity duration-400
       ${position[where]}
       `}>
-            {hoverText}
+        {hoverText}
         </span>
     </button>
   );

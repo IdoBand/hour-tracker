@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { dummyUser, User } from './dummyUser'
+import { User } from './dummyUser'
 
     
 interface UserState {
@@ -7,7 +7,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    user: dummyUser
+    user: null
 }
 const userSlice = createSlice({
     name: 'user',

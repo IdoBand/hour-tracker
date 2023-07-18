@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const Footer = () => {
   return (
-    <footer className={`w-full h-12 flex justify-around items-center 
+    <footer className={`w-full h-[45px] flex justify-around items-center
       border-t border-solid border-grayBorder`}>
       <div>
         <Link href={'mailto:ido.bandd@gmail.com'}>Contact</Link>

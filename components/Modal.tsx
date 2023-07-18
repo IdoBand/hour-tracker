@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { scrollBar } from '@/app/(hooks)/mixin'
 interface ModalProps {
     children?: React.ReactNode
-    onClose: () => void
+    onClose?: () => void
     className?: string
 }
 const modalMotion = {
@@ -16,7 +16,7 @@ const modalMotion = {
 export default function Modal({onClose, children, className}: ModalProps) {
     return ReactDom.createPortal(
         <>
-                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} z-10`} onClick={onClose}>
+                    <div className={`fixed bottom-0 top-0 left-0 right-0 bg-dark/75 ${flexCenter} z-50`} onClick={onClose}>
                         <motion.div 
                         variants={modalMotion}
                         initial="initial"
@@ -33,7 +33,7 @@ export default function Modal({onClose, children, className}: ModalProps) {
                         </motion.div>
                     </div>  
                 </>,
-        document.getElementById('portal') as HTMLBodyElement
+        document.getElementById('modal-portal') as HTMLBodyElement
     )
 }
 
