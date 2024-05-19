@@ -1,0 +1,41 @@
+{
+  "navigation": {
+    "about": "About",
+    "dashboard": "Dashboard",
+    "userNavigation": {
+      "signIn": "Sign In",
+      "signOut": "Sign Out",
+      "signedInAs": "You are signed in as",
+      "goBack": "Go Back",
+      "register": "Register",
+      "email": "Email",
+      "password": "Password",
+      "iForgotMyPassword": "I forgot my password",
+      "signInDummy": "Sign in as Dummy User",
+      "clear": "Clear",
+      "orContinueWith": "Or continue with"
+    }
+  },
+  "page": {
+    "home": {
+      "title": "Track Your Work.",
+      "sen1": "Tired of endless Excel sheets?",
+      "sen2": "Don't trust your boss with keeping track of your work hours?",
+      "sen3": "Trying to remember what you worked on last week?",
+      "sen4": "You are in the right place.",
+      "startTracking": "Start Tracking",
+      "card1header": "Calculate Salary",
+      "card1text": "Whether you're paid hourly or globally, you can add it all up.",
+      "card2header": "Handle Multiple Work Places",
+      "card2text": "If you work as a freelancer or have more than 1 work place - it's not a problem.",
+      "card3header": "Organize Tasks",
+      "card3text": "staying on top of your tasks made easy."
+    },
+    "dashboard": {
+      "dashboard": "Dashboard",
+      "add": "Add a Work Place In Order To Start Tracking :)",
+      "hello": "Hello, ",
+      "current": "current"
+    }
+  }
+}

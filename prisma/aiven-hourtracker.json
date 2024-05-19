@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "aiven-hourtracker",
+      "Group": "GROUP_aiven-hourtracker",
+      "Host": "ido-hourtracker-ido-hourtracker.c.aivencloud.com",
+      "Port": 22245,
+      "MaintenanceDB": "defaultdb",
+      "Username": "avnadmin",
+      "SSLMode": "require"
+    }
+  }
+}

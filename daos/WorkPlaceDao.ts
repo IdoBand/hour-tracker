@@ -2,63 +2,60 @@ import { WorkPlace } from "@/types/types";
 import prisma from "@/prisma/client";
 import { PrismaClient } from "@prisma/client";
 export class WorkPlaceDao {
-  private client: PrismaClient
+  private client: PrismaClient;
   constructor() {
-    this.client = prisma
+    this.client = prisma;
   }
   async getAllWorkPlacesById(userId: string) {
-  /**
-  * Gets all workPlaces that belongs to the 'userId' ordered by 'employmentStartDate' descending order.
-  * @param {string} workPlaceId string in uuid format.
-  */
+    /**
+     * Gets all workPlaces that belongs to the 'userId' ordered by 'employmentStartDate' descending order.
+     * @param {string} workPlaceId string in uuid format.
+     */
     const workPlaces = await this.client.workplace.findMany({
       where: {
-        userId: userId
+        userId: userId,
       },
       orderBy: {
-        employmentStartDate: 'desc'
-      }
-    },
-    )
-    return workPlaces
+        employmentStartDate: "desc",
+      },
+    });
+    return workPlaces;
   }
-  
-  async addWorkPlace(newData: any)  {
+
+  async addWorkPlace(newData: any) {
     try {
       const response = await this.client.workplace.create({
         data: {
-            // id: "uuid_generate_v4()" is automatically invoked by Prisma!,
-            userId: newData.userId,
-            name: newData.name,
-            employmentStartDate: newData.employmentStartDate,
-            employmentEndDate: newData.employmentEndDate,
-            isCurrent: newData.isCurrent,
-            wagePerHour: +newData.wagePerHour,
-            isBreakPaid: newData.isBreakPaid,
-            lastShift: null
+          // id: "uuid_generate_v4()" is automatically invoked by Prisma!,
+          userId: newData.userId,
+          name: newData.name,
+          employmentStartDate: newData.employmentStartDate,
+          employmentEndDate: newData.employmentEndDate,
+          isCurrent: newData.isCurrent,
+          wagePerHour: +newData.wagePerHour,
+          isBreakPaid: newData.isBreakPaid,
+          lastShift: null,
         },
         include: {
-            users: true,
+          users: true,
         },
-      })
-      return response
-    } catch(err) {
-      console.log('-----------> Failed to create a new workplace');
+      });
+      return response;
+    } catch (err) {
+      console.log("-----------> Failed to create a new workplace");
       console.log(err);
     }
   }
   async deleteWorkPlace(workPlaceId: string) {
-
     try {
-  
       const response = await this.client.workplace.delete({
         where: {
-          id: workPlaceId
-        }
-      })
-      return response
-    } catch(err) {
-      console.log('-----------> Failed to delete workplaces');
+          id: workPlaceId,
+        },
+      });
+      return response;
+    } catch (err) {
+      console.log("-----------> Failed to delete workplaces");
       console.log(err);
     }
   }
@@ -67,13 +64,15 @@ export class WorkPlaceDao {
     try {
       const response = await prisma.workplace.update({
         where: { id: workPlaceId },
-        data: { 
-          lastShift: date 
+        data: {
+          lastShift: date,
         },
       });
-      return
+      return;
     } catch (err) {
-      console.log(`-----------> Failed to update last shift for ${workPlaceId}`);
+      console.log(
+        `-----------> Failed to update last shift for ${workPlaceId}`,
+      );
       console.log(err);
     }
   }
@@ -81,15 +80,15 @@ export class WorkPlaceDao {
     try {
       const response = await this.client.workplace.findUnique({
         where: {
-          id: workPlaceId
+          id: workPlaceId,
         },
         select: {
-          lastShift: true
-        }
-      })
-      return response
+          lastShift: true,
+        },
+      });
+      return response;
     } catch (err) {
-      console.log('-----------> Failed to get lastShift');
+      console.log("-----------> Failed to get lastShift");
       console.log(err);
     }
   }
@@ -97,7 +96,7 @@ export class WorkPlaceDao {
     try {
       const response = await this.client.workplace.update({
         where: {
-          id: workPlace.id
+          id: workPlace.id,
         },
         data: {
           name: workPlace.name,
@@ -106,17 +105,17 @@ export class WorkPlaceDao {
           isCurrent: workPlace.isCurrent,
           wagePerHour: +workPlace.wagePerHour,
           isBreakPaid: workPlace.isBreakPaid,
-          lastShift: null
-        }
-      })
+          lastShift: null,
+        },
+      });
       if (response) {
-        return { success: true }
+        return { success: true };
       }
     } catch (err) {
-      console.log('-----------> Failed to update Work Place');
+      console.log("-----------> Failed to update Work Place");
       console.log(err);
-      return { success: false }
+      return { success: false };
     }
   }
 }
-export const workPlaceDao = new WorkPlaceDao()
+export const workPlaceDao = new WorkPlaceDao();

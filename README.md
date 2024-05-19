@@ -8,7 +8,7 @@ The user can maintain tracking of multiple work places.
 
 created using:
 
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
