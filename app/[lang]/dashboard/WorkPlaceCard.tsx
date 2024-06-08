@@ -20,6 +20,7 @@ import AddEditShift from "./[workPlaceId]/AddEditShiftForm";
 import Modal from "../../../components/Modal";
 import { useState } from "react";
 import { startOfToday } from "date-fns";
+import useCurrentLocale from "../(hooks)/useCurrentLocale";
 export function prepareShiftsForTotalTimeCalculation(shifts: Shift[]) {
   if (shifts.length) {
     const dates =
@@ -35,6 +36,7 @@ interface WorkPlaceCardProps {
   hoursPastWeek: string | number;
   hoursPastMonth: string | number;
   employmentDuration: string;
+  dashboardDict: any
 }
 export default function WorkPlaceCard({
   workPlace,
@@ -42,7 +44,9 @@ export default function WorkPlaceCard({
   hoursPastWeek,
   hoursPastMonth,
   employmentDuration,
+  dashboardDict
 }: WorkPlaceCardProps) {
+  const { locale } = useCurrentLocale()
   const removeButtons: boolean = useAppSelector(
     (state) => state.workPlaceSlice.workPlaceRemoveButtons,
   );
@@ -105,31 +109,31 @@ export default function WorkPlaceCard({
             {workPlace.isCurrent && (
               <pre className="text-xs text-dark font-light h-full flex items-end">
                 {" "}
-                Current
+                {dashboardDict.current}
               </pre>
             )}
           </div>
           <div className="sm:flex xs:flex-col">
             <span className="font-semibold md:text-sm sm:text:xs">
-              Total Hours:{" "}
+            {dashboardDict.totalH}:{" "}
             </span>
             <span className="md:text-sm sm:text-xs">{totalHours}</span>
           </div>
           <div className="sm:flex xs:flex-col">
             <span className="font-semibold md:text-sm sm:text:xs">
-              Hours Past Week:{" "}
+            {dashboardDict.HoursPW}:{" "}
             </span>
             <span className="md:text-sm sm:text-xs">{hoursPastWeek}</span>
           </div>
           <div className="sm:flex xs:flex-col">
             <span className="font-semibold md:text-sm sm:text:xs">
-              Hours Past Month:{" "}
+            {dashboardDict.HoursPM}:{" "}
             </span>
             <span className="md:text-sm sm:text-xs">{hoursPastMonth}</span>
           </div>
           <div className="sm:flex xs:flex-col">
             <span className="font-semibold md:text-sm sm:text:xs">
-              Employment Duration:{" "}
+            {dashboardDict.employmentDuration}:{" "}
             </span>
             <span className="md:text-sm sm:text-xs">{employmentDuration}</span>
           </div>
@@ -144,7 +148,7 @@ export default function WorkPlaceCard({
             }}
             type="button"
           >
-            <Link href={`/dashboard/${workPlace.id}`} className="w-full h-full">
+            <Link href={`/${locale}/dashboard/${workPlace.id}`} className="w-full h-full">
               <ChartBarIcon className="w-6 h-6 group-hover:fill-secondary" />
             </Link>
           </CustomButton>

@@ -218,7 +218,7 @@ export function useCalendar(
                 {format(firstDayCurrentMonth, "MMMM yyyy")}
               </CustomButton>
               {yearsAndMonthsOptions && <SelectMonthAndYearMenu />}
-              <div className="flex gap-2 justify-between">
+              <div className="flex gap-2 justify-between rtl:flex-row-reverse">
                 <CustomButton
                   hoverText="Previous Month"
                   where="down"

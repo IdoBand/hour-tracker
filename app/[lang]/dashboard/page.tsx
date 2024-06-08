@@ -1,5 +1,5 @@
 import WorkPlaceCard from "./WorkPlaceCard";
-import { pageHeader } from "../../[lang]/(hooks)/mixin";
+import { pageHeader } from "../(hooks)/mixin";
 import { redirect } from "next/navigation";
 import DashBoardOptions from "./DashboardOptions";
 import { WorkPlace } from "@/types/types";
@@ -10,6 +10,7 @@ import { WorkPlaceService } from "@/services/WorkPlaceService";
 import { TimeHelper } from "../../../services/TimeHelper";
 import startOfTomorrow from "date-fns/startOfToday";
 import { getDictionary } from "@/lib/dictionary";
+import { Locale } from "@/i18n.config";
 const workPlaceService = new WorkPlaceService();
 
 function generateEmploymentDurationString(workPlace: WorkPlace): string {
@@ -20,17 +21,13 @@ function generateEmploymentDurationString(workPlace: WorkPlace): string {
   return TimeHelper.generateYearlyDurationString(start as Date, end as Date);
 }
 
-export default async function Dashboard({
-  params: { lang },
-}: {
-  params: { lang: Locale };
-}) {
+export default async function Dashboard({ params: { lang }}: {params: { lang: Locale };}) {
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect(`/${lang}`);
   }
   const { page } = await getDictionary(lang);
-  const { dashboard } = page;
+  const { dashboard: dashboardDict } = page;
   const workPlaces = await workPlaceService.getAllWorkPlacesById(
     session.user?.email as string,
   );
@@ -52,13 +49,13 @@ export default async function Dashboard({
       <div
         className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}
       >
-        <h1 className={`${pageHeader}`}>{dashboard.dashboard}</h1>
+        <h1 className={`${pageHeader}`}>{dashboardDict.dashboard}</h1>
         <div>
         <h1 className={`text-xl w-full md:text-base`}>
-          {dashboard.hello}{session.user ? session.user.name : ""}
+          {dashboardDict.hello}{session.user ? session.user.name : ""}
         </h1>
         </div>
-        <DashBoardOptions />
+        <DashBoardOptions dashboardDict={dashboardDict} />
         <div className="w-full grid grid-cols-4 gap-10 mb-28">
           {workPlaces && workPlaces.length > 0 ? (
             workPlaces.map((workPlace, idx) => {
@@ -77,6 +74,7 @@ export default async function Dashboard({
                     hoursPastWeek={totals[idx].totalPastWeek}
                     hoursPastMonth={totals[idx].totalPastMonth}
                     employmentDuration={employmentDurations[idx]}
+                    dashboardDict={dashboardDict}
                   />
                 </article>
               );
@@ -89,7 +87,7 @@ export default async function Dashboard({
                         animate-fade-in
                     `}
             >
-          {dashboard.add}
+          {dashboardDict.add}
             </article>
           )}
         </div>

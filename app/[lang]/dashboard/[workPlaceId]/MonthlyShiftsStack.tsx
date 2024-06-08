@@ -24,8 +24,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 interface Props {
   shifts: Shift[];
+  overviewDict: any
 }
-const MonthlyShiftsStack = ({ shifts }: Props) => {
+const MonthlyShiftsStack = ({ shifts, overviewDict }: Props) => {
   const removeButtons = useAppSelector(
     (state) => state.shiftSlice.shiftRemoveButtons,
   );
@@ -80,7 +81,7 @@ const MonthlyShiftsStack = ({ shifts }: Props) => {
   return (
     <>
       <div className={`flex justify-between w-full`}>
-        <h1 className={`${dashBoardWorkPlaceHeader}`}>Shifts</h1>
+        <h1 className={`${dashBoardWorkPlaceHeader}`}>{overviewDict.shifts}</h1>
         <AddRemoveButtons
           removeButtons={removeButtons}
           setRemoveButtons={() => dispatch(setShiftRemoveButtons())}
@@ -111,29 +112,29 @@ const MonthlyShiftsStack = ({ shifts }: Props) => {
           <span
             className={`col-start-1 col-end-2 w-full lg:flex lg:justify-center`}
           >
-            Date
+            {overviewDict.date}
           </span>
           <span
             className={`col-start-2 col-end-3 w-full lg:flex lg:justify-center`}
           >
-            Start
+            {overviewDict.start}
           </span>
           <span
             className={`col-start-3 col-end-4 w-full lg:flex lg:justify-center`}
           >
-            End
+            {overviewDict.end}
           </span>
           <span className={`col-start-4 col-end-5 w-full lg:hidden`}>
-            Duration
+            {overviewDict.duration}
           </span>
           <span className={`col-start-5 col-end-6 w-full lg:hidden`}>
-            Break
+            {overviewDict.break}
           </span>
           <span className={`col-start-6 col-end-7 w-full lg:hidden`}>
-            I Worked On
+            {overviewDict.iWorkedOn}
           </span>
           <span className={`col-start-7 col-end-8 w-full lg:hidden`}>
-            Notes
+            {overviewDict.notes}
           </span>
         </div>
         <div className="w-full gap-2 flex-col mb-36">
@@ -141,12 +142,12 @@ const MonthlyShiftsStack = ({ shifts }: Props) => {
             currentMonthShifts.map((shift) => {
               return (
                 <div key={shift.id} className="w-full">
-                  <ShiftCard shift={shift} removeButtons={removeButtons} />
+                  <ShiftCard shift={shift} removeButtons={removeButtons} shiftStackDict={overviewDict} />
                 </div>
               );
             })
           ) : (
-            <h2 className="w-full text-center my-4">No shifts this month :(</h2>
+            <h2 className="w-full text-center my-4">{overviewDict.noShifts}</h2>
           )}
         </div>
       </div>

@@ -14,6 +14,12 @@
       "signInDummy": "התחבר כמשתמש דמה",
       "clear": "נקה",
       "orContinueWith": "או המשך עם"
+    },
+    "localeDict": {
+      "areUsure": "בטוח?",
+      "unsavedData": "מידע שלא נשמר יאבד",
+      "continue": "המשך",
+      "goBack": "חזור"
     }
   },
   "page": {
@@ -24,7 +30,7 @@
       "sen3": "מנסה להיזכר על מה עבדת שבוע שעבר?",
       "sen4": "אתם במקום הנכון.",
       "startTracking": "התחילו לעקוב",
-      "card1header": "חשב שכר",
+      "card1header": "חישוב שכר",
       "card1text": "בין אם המשכורת שעתית או גלובלית אפשר לחבר הכל",
       "card2header": "מספר מקומות עבודה",
       "card2text": "אם אתה עובד כפרילנס או בעל יותר ממקום עבודה אחד - זו לא בעיה",
@@ -35,7 +41,57 @@
       "dashboard": "אזור אישי",
       "add": "הוסף מקום עבודה על מנת להתחיל לעקוב :)",
       "hello": "שלום, ",
-      "current": "נוכחי"
+      "current": "נוכחי",
+      "totalH": "סה'כ שעות",
+      "HoursPW": "שעות בשבוע האחרון",
+      "HoursPM": "שעות בחודש האחרון",
+      "employmentDuration": "תקופת העסקה",
+      "addWP": "הוספת מקום עבודה",
+      "removeWP": "מחק מקומות עבודה",
+      "addNewWP": "Add a New Work Place",
+      "wPName": "שם מקום העבודה",
+      "wph": "שכר שעתי",
+      "startDate": "תאריך תחילת עבודה",
+      "checkV": "סמן ב-V אם התשובה היא כן",
+      "currentlyEmployed": "מועסק שם כיום?",
+      "paidOnBreak": "משלמים לך על זמן ההפסקה?",
+      "addButton": "הוסף",
+      "discard": "חזור"
+    },
+    "overview": {
+      "overview": "סקירה כללית",
+      "monthly": "מבט חודשי",
+      "expectedSalary": "שכר משוער",
+      "totalTime": "סה'כ שעות עבודה",
+      "totalBreakTime": "סה'כ שעות הפסקה",
+      "workPlaceO": "מקום עבודה",
+      "currentlyEmployed": "מועסק כיום",
+      "wph": "שכר שעתי",
+      "startedWorkingAt": "תחילת עבודה",
+      "employmentDuration": "תקופת העסקה",
+      "breaksDuration": "סה'כ הפסקות",
+      "shiftStackDict": {
+        "shifts": "משמרות",
+        "noShifts": "אין משמרות החודש :(",
+        "date": "תאריך",
+        "start": "התחלה",
+        "end": "סיום",
+        "duration": "אורך",
+        "break": "הפסקה",
+        "iWorkedOn": "עבדתי על",
+        "notes": "הערות",
+        "shiftS": "תחילת משמרת",
+        "shiftE": "סיום משמרת",
+        "shiftD": "אורך משמרת",
+        "wph": "שכר שעתי",
+        "tipBonus": "טיפ בונוס",
+        "BreakD": "אורך הפסקה",
+        "BreakS": "תחילת הפסקה",
+        "BreakE": "סיום הפסקה",
+        "paidOnBreak": "תשלום על הפסקה",
+        "iWorkedOn": "עבדתי על",
+        "notes": "הערות"
+      }
     }
   }
 }

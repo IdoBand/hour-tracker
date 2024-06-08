@@ -1,4 +1,4 @@
-import { pageHeader } from "../../[lang]/(hooks)/mixin";
+import { pageHeader } from "../(hooks)/mixin";
 import DashBoardOptions from "./DashboardOptions";
 import { Skeleton } from "@/components/ui/Skeleton";
 const loading = () => {
@@ -8,7 +8,6 @@ const loading = () => {
         className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4`}
       >
         <h1 className={`${pageHeader}`}>Dashboard</h1>
-        <DashBoardOptions />
         <div className="w-full grid grid-cols-4 gap-10">
           {Array.from({ length: 4 }, (_, i) => i + 1).map((i) => {
             return (

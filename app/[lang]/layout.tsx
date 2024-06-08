@@ -9,6 +9,7 @@ import SessionProvider from "../[lang]/(providers)/SessionProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { Toaster } from "@/components/ui/toaster";
+import { Locale } from "@/i18n.config";
 export const metadata = {
   title: "Hour Tracker",
   description: "Track Your Work",
@@ -32,6 +33,7 @@ export default async function RootLayout({
           <body
             className={`${inter.className} bg-light text-dark ${scrollBar}`}
           >
+          {/* @ts-expect-error Server Component */}
             <Navbar lang={params.lang} />
             <div className="min-h-[calc(99vh-90px)] ">{children}</div>
             <Footer />

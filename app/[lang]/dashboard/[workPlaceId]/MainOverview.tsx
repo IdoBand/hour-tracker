@@ -17,8 +17,10 @@ import { redirect } from "next/navigation";
 import { setCurrentDate } from "@/redux/workPlaceSlice";
 import { pageHeader } from "@/app/[lang]/(hooks)/mixin";
 import Modal from "@/components/Modal";
+import useCurrentLocale from "../../(hooks)/useCurrentLocale";
 interface MainOverviewProps {
   shifts: Shift[];
+  overviewDict: any
 }
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
@@ -36,12 +38,13 @@ function totalBreakTime(shifts: Shift[]) {
   }
   return "0";
 }
-const MainOverview = ({ shifts }: MainOverviewProps) => {
+const MainOverview = ({ shifts, overviewDict }: MainOverviewProps) => {
+  const { locale } = useCurrentLocale();
   const currentWorkPlace = useAppSelector(
     (state) => state.workPlaceSlice.currentWorkPlace,
   );
   if (!currentWorkPlace) {
-    redirect("/dashboard");
+    redirect(`/${locale}/dashboard`);
   }
   const dispatch = useAppDispatch();
   const currentDate = useAppSelector(
@@ -85,25 +88,25 @@ const MainOverview = ({ shifts }: MainOverviewProps) => {
         >
           <div className={`p-1 flex w-full flex-col rounded-lg gap-1`}>
             <span className="w-full font-semibold text-lg underline md: text-center">
-              Monthly Overview
+              {overviewDict.monthly}
             </span>
             <span className="font-semibold">
-              {`Expected Salary: `}{" "}
+              {overviewDict.expectedSalary}{": "}
               <span className="font-normal">{`${ShiftsManipulator.calculateSalary(currentMonthShifts)} ₪`}</span>
             </span>
             <span className="font-semibold">
-              {`Total Time: `}
+            {overviewDict.totalTime}{": "}
               <span className="font-normal">{`${totalHoursForPeriod(currentMonthShifts)}`}</span>
             </span>
             <span className="font-semibold">
-              {`Total Break Time: `}
+            {overviewDict.totalBreakTime}{": "}
               <span className="font-normal">{`${totalBreakTime(currentMonthShifts)}`}</span>
             </span>
           </div>
 
           <div className={`p-1 flex w-full flex-col rounded-lg gap-1 relative`}>
             <span className="w-full font-semibold text-lg underline md: text-center">
-              Work Place Overview
+            {overviewDict.workPlaceO}
             </span>
             {isEditingWorkPlace ? (
               <>
@@ -115,15 +118,15 @@ const MainOverview = ({ shifts }: MainOverviewProps) => {
             ) : (
               <>
                 <span className="font-semibold flex">
-                  {`Currently Employed: `}
+                {overviewDict.currentlyEmployed}
                   <CheckOrX itemToCheck={currentWorkPlace!.isCurrent} />
                 </span>
                 <span className="font-semibold">
-                  {`Wage Per Hour: `}{" "}
+                {overviewDict.wph}{": "}
                   <span className="font-normal">{`${currentWorkPlace?.wagePerHour} ₪`}</span>
                 </span>
                 <span className="font-semibold">
-                  {`Started Working at: `}
+                {overviewDict.startedWorkingAt}{": "}
                   <span className="font-normal">
                     {TimeHelper.ddmmyyyyDate(
                       TimeHelper.deserializeDate(
@@ -133,19 +136,19 @@ const MainOverview = ({ shifts }: MainOverviewProps) => {
                   </span>
                 </span>
                 <span className="font-semibold">
-                  {`Employment Duration: `}
+                {overviewDict.employmentDuration}{": "}
                   <span className="font-normal">
                     {currentWorkPlace.employmentDuration}
                   </span>
                 </span>
                 <span className="font-semibold">
-                  {`Breaks Duration: `}
+                {overviewDict.breaksDuration}{": "}
                   <span className="font-normal">{`${totalBreakTime(shifts)}`}</span>
                 </span>
               </>
             )}
             <CustomButton
-              className="absolute top-10 right-1 w-5"
+              className="absolute top-10 ltr:right-1 w-5 rtl:left-1"
               onClick={() => setIsEditingWorkPlace((prev) => !prev)}
               hoverText={isEditingWorkPlace ? "Discard" : "Edit"}
               where={"down"}
@@ -163,7 +166,7 @@ const MainOverview = ({ shifts }: MainOverviewProps) => {
         <Modal onClose={() => setIsCalendarHelp(false)}>
           <div className="w-full flex justify-center">
             <div className="p-10 max-w-lg">
-              <div className={`${pageHeader} pb-6`}>How To Use Calendar</div>
+              <div className={`${pageHeader} pb-6`}>How To Use the Calendar</div>
               {`Use the arrow buttons or the month's name that are located at the top to select a month and then click any day in order to get a full list of the month's shifts.`}
             </div>
           </div>

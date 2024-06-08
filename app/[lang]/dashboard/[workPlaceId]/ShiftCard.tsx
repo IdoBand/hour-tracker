@@ -39,8 +39,9 @@ const slideDownDiv = {
 interface ShiftCardProps {
   shift: Shift;
   removeButtons: boolean;
+  shiftStackDict: any
 }
-export default function ShiftCard({ removeButtons, shift }: ShiftCardProps) {
+export default function ShiftCard({ removeButtons, shift, shiftStackDict }: ShiftCardProps) {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [removalModal, setRemovalModal] = useState<boolean>(false);
@@ -144,53 +145,53 @@ export default function ShiftCard({ removeButtons, shift }: ShiftCardProps) {
             <div className="p-8 flex gap-4 relative md:flex-col md:p-2">
               <div className="w-2/6 flex flex-col gap-2 lg:w-full">
                 <div className={`${shiftPropertyContainer}`}>
-                  <span className="font-semibold">Shift Start: </span>
+                  <span className="font-semibold">{shiftStackDict.shiftS}: </span>
                   <span>{shiftData.shiftStart}</span>
                 </div>
                 <div className={`${shiftPropertyContainer}`}>
-                  <span className="font-semibold">Shift End: </span>
+                  <span className="font-semibold">{shiftStackDict.shiftE}: </span>
                   <span>{shiftData.shiftEnd}</span>
                 </div>
                 <div className={`${shiftPropertyContainer}`}>
-                  <span className="font-semibold">Shift Duration: </span>
+                  <span className="font-semibold">{shiftStackDict.shiftD}: </span>
                   <span>{shiftData.shiftDuration}</span>
                 </div>
                 <div className={`${shiftPropertyContainer}`}>
-                  <span className="font-semibold">Wage Per Hour: </span>
+                  <span className="font-semibold">{shiftStackDict.wph}: </span>
                   <span>{`${shift.wagePerHour} ₪`}</span>
                 </div>
                 <div className={`${shiftPropertyContainer}`}>
-                  <span className="font-semibold">Tip / Bonus: </span>
+                  <span className="font-semibold">{shiftStackDict.tipBonus}: </span>
                   <span>{`${shift.tipBonus} ₪`}</span>
                 </div>
                 <div className={`${shiftPropertyContainer}`}>
-                  <span className="font-semibold">Break Duration: </span>
+                  <span className="font-semibold">{shiftStackDict.BreakD}: </span>
                   <span>{shiftData.breakDuration}</span>
                 </div>
                 {shiftData.breakDuration !== "0" && (
                   <>
                     <div className={`${shiftPropertyContainer}`}>
-                      <span className="font-semibold">Break Start: </span>
+                      <span className="font-semibold">{shiftStackDict.BreakS}: </span>
                       <span>{shiftData.breakStart}</span>
                     </div>
                     <div className={`${shiftPropertyContainer}`}>
-                      <span className="font-semibold">Break End: </span>
+                      <span className="font-semibold">{shiftStackDict.BreakE}: </span>
                       <span>{shiftData.breakEnd}</span>
                     </div>
                   </>
                 )}
                 <div className={`${shiftPropertyContainer}`}>
-                  <span className="font-semibold">Paid On Break: </span>
+                  <span className="font-semibold">{shiftStackDict.paidOnBreak}: </span>
                   <span>{shift.isBreakPaid ? "Yes" : "No"}</span>
                 </div>
               </div>
               <div className={"w-4/6 flex flex-col gap-2 lg:w-full"}>
                 <div className="flex flex-col">
-                  <div className="font-semibold">I Worked On:</div>
+                  <div className="font-semibold">{shiftStackDict.iWorkedOn}:</div>
                   {shift.iWorkedOn}
                 </div>
                 <div className="flex flex-col">
-                  <div className="font-semibold">Notes:</div>
+                  <div className="font-semibold">{shiftStackDict.notes}:</div>
                   {shift.notes}
                 </div>
               </div>

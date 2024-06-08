@@ -4,7 +4,7 @@ import { CubeIcon } from "@heroicons/react/24/solid";
 import { MotionDiv } from "@/components/MotionDiv";
 import StartTracking from "./StartTracking";
 import { getDictionary } from "@/lib/dictionary";
-
+import { Locale } from "@/i18n.config";
 ////////////////////////////////////////////////////////////////////////////////////////
 interface BulletProps {
   header: string;
@@ -69,7 +69,6 @@ export default async function Home({
 }) {
   const { navigation , page } = await getDictionary(lang);
   const { home } = page;
-  console.log(navigation);
   
   // const [isMobile, setIsMobile] = useState<boolean>(false)
   // const user = useAppSelector(state => state.userSlice.user)
@@ -143,6 +142,7 @@ export default async function Home({
         >
           {Array.from({ length: 3 }, (_, idx) => (
             <Bullet
+              key={idx}
               header={home[`card${idx + 1}header` as "sen1"]}
               text={home[`card${idx + 1}text` as "sen1"]}
             />

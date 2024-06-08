@@ -14,6 +14,12 @@
       "signInDummy": "Sign in as Dummy User",
       "clear": "Clear",
       "orContinueWith": "Or continue with"
+    },
+    "localeDict": {
+      "areUsure": "Are you sure?",
+      "unsavedData": "Unsaved data will be lost",
+      "continue": "Continue",
+      "goBack": "Go Back"
     }
   },
   "page": {
@@ -35,7 +41,58 @@
       "dashboard": "Dashboard",
       "add": "Add a Work Place In Order To Start Tracking :)",
       "hello": "Hello, ",
-      "current": "current"
+      "current": "current",
+      "totalH": "Total Hours",
+      "HoursPW": "Hours Past Week",
+      "HoursPM": "Hours Past Month",
+      "employmentDuration": "Employment Duration",
+      "addWP": "Add a work place",
+      "removeWP": "Remove workplaces",
+      "addNewWP": "Add a New Work Place",
+      "wPName": "Work Place Name",
+      "wph": "Wage Per Hour",
+      "startDate": "Starting Date",
+      "checkV": "Check V if the answer is yes for the following questions",
+      "currentlyEmployed": "Currently Employed There?",
+      "paidOnBreak": "Are you payed on break time?",
+      "addButton": "Add",
+      "discard": "Discard"
+      
+    },
+    "overview": {
+      "overview": "Overview",
+      "monthly": "Monthly Overview",
+      "expectedSalary": "Expected Salary",
+      "totalTime": "Total Time",
+      "totalBreakTime": "Total Break Time",
+      "workPlaceO": "Work Place Overview",
+      "currentlyEmployed": "Currently Employed",
+      "wph": "Wage Per Hour",
+      "startedWorkingAt": "Started Working at",
+      "employmentDuration": "Employment Duration",
+      "breaksDuration": "Breaks Duration",
+      "shiftStackDict": {
+        "shifts": "Shifts",
+        "noShifts": "No shifts this month :(",
+        "date": "Date",
+        "start": "Start",
+        "end": "End",
+        "duration": "Duration",
+        "break": "Break",
+        "iWorkedOn": "I Worked On",
+        "notes": "Notes",
+        "shiftS": "Shift Start",
+        "shiftE": "Shift End",
+        "shiftD": "Shift Duration",
+        "wph": "Wage Per Hour",
+        "tipBonus": "Tip / Bonus",
+        "BreakD": "Break Duration",
+        "BreakS": "Break Start",
+        "BreakE": "Break End",
+        "paidOnBreak": "Paid On Break",
+        "iWorkedOn": "I Worked On",
+        "notes": "Notes"
+      }
     }
   }
 }

@@ -10,7 +10,10 @@ import il from "public/flags/IL.png";
 import us from "public/flags/US.png";
 import ae from "public/flags/AE.png";
 import Image from "next/image";
-export default function LocaleSwitcher() {
+type LocaleSwitcherProps = {
+  localeDict: any
+}
+export default function LocaleSwitcher({ localeDict }: LocaleSwitcherProps) {
   const pathName = usePathname();
   const [warningModal, setWarningModal] = useState<boolean>(false);
   const [redirectURL, setRedirectURL] = useState<string>("");
@@ -52,10 +55,14 @@ export default function LocaleSwitcher() {
       {warningModal && (
         <Modal onClose={() => setWarningModal(false)}>
           <div className="p-8 flex flex-col text-center gap-y-6">
-            Unsaved data will be lost
+          {localeDict.areUsure}
+          <div>
+
+            {localeDict.unsavedData}
+          </div>
             <div className="flex gap-5">
               <Button
-                text="Go Back"
+                text={localeDict.goBack}
                 theme="blank"
                 className=""
                 type="button"
@@ -63,7 +70,7 @@ export default function LocaleSwitcher() {
               />
               <Link href={redirectURL}>
                 <Button
-                  text="Continue"
+                  text={localeDict.continue}
                   theme="full"
                   className=""
                   type="button"

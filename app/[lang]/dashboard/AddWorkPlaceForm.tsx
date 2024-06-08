@@ -11,6 +11,7 @@ import { setIsFetching } from "@/redux/windowSlice";
 import { useCalendarRow } from "../../[lang]/(hooks)/useCalendarRow";
 export interface FormProps {
   onClose: () => void;
+  dict: any
 }
 const addNewWorkPlaceFormSection =
   "flex justify-between w-full mb-6 md:flex-col";
@@ -24,7 +25,7 @@ export interface TextLineInputProps {
   value?: string | number;
 }
 
-const AddNewWorkPlaceForm = ({ onClose }: FormProps) => {
+const AddNewWorkPlaceForm = ({ onClose, dict: dashboardDict}: FormProps) => {
   const router = useRouter();
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
@@ -145,35 +146,35 @@ const AddNewWorkPlaceForm = ({ onClose }: FormProps) => {
         bg-light shadow-2xl
         lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
       >
-        <h1 className={`${formHeader}`}>Add a New Work Place</h1>
+        <h1 className={`${formHeader}`}>{dashboardDict.addWP}</h1>
         <div className="w-full flex md:flex-col">
           <div className={`w-1/2 flex mt-4 flex-col md:w-full mr-16`}>
             <TextLineInput
-              label="Work Place Name"
+              label={dashboardDict.wPName}
               name="workPlaceName"
               type="text"
               isRequired={true}
             />
             <NumberLineInput
-              label="Wage Per Hour"
+              label={dashboardDict.wph}
               name="wagePerHour"
               type="number"
               isRequired={true}
             />
             <div className={`${addNewWorkPlaceFormSection}`}>
-              <label>Starting Date</label>
+              <label>{dashboardDict.startDate}</label>
               {calendarRow}
             </div>
           </div>
           <div className="w-1/2  md:w-full">
             <div className={`w-full text-center mb-6 font-semibold`}>
-              Check V if the answer is yes for the following questions
+            {dashboardDict.checkV}
             </div>
             <div className={`${addNewWorkPlaceFormSection}`}>
-              {CheckBoxInput("isCurrent", "Currently Employed There?")}
+              {CheckBoxInput("isCurrent", `${dashboardDict.currentlyEmployed}`)}
             </div>
             <div className={`${addNewWorkPlaceFormSection}`}>
-              {CheckBoxInput("isBreakPaid", "Are you payed on break time?")}
+              {CheckBoxInput("isBreakPaid", `${dashboardDict.paidOnBreak}`)}
             </div>
           </div>
         </div>
@@ -181,14 +182,14 @@ const AddNewWorkPlaceForm = ({ onClose }: FormProps) => {
           <Button
             type="button"
             theme="blank"
-            text="Discard"
+            text={dashboardDict.discard} 
             onClick={() => {
               onClose();
               reset();
             }}
             className=""
           />
-          <Button type="submit" theme="full" text="Add" className="" />
+          <Button type="submit" theme="full" text={dashboardDict.addButton} className="" />
         </div>
       </form>
     </>

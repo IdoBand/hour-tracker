@@ -38,7 +38,7 @@ export default async function Navbar({ lang }: { lang: Locale }) {
               </Link>}
               <UserNavigation dict={navigation.userNavigation} />
               <About dict={navigation} />
-              <LocaleSwitcher />
+              <LocaleSwitcher localeDict={navigation.localeDict} />
             </nav>
           </div>
           <div className="hidden md:block">

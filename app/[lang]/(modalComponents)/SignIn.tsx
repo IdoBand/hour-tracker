@@ -21,7 +21,6 @@ interface SignInProps {
 }
 
 const SignIn = ({ onClose, dict }: SignInProps) => {
-  console.log(dict);
   
   const [signUp, setSignUp] = useState<boolean>(false);
   const {

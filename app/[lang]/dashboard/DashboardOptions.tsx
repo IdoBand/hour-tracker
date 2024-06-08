@@ -13,9 +13,12 @@ import {
 import { fetchRemoveWorkPlaces } from "@/util/workPlaceFetchers";
 import { setIsFetching } from "@/redux/windowSlice";
 import { useToast } from "@/components/ui/use-toast";
-const DashBoardOptions = () => {
+type DashBoardOptionsProps = {
+  dashboardDict: any
+}
+export default function DashBoardOptions ({ dashboardDict }: DashBoardOptionsProps) {
+  
   const router = useRouter();
-  const user = useAppSelector((state) => state.userSlice.user);
   const idsToRemove = useAppSelector(
     (state) => state.workPlaceSlice.removePlacesIdArray,
   );
@@ -60,18 +63,16 @@ const DashBoardOptions = () => {
           setRemoveButtons={() => dispatch(setWorkPlaceRemoveButtons())}
           handleSelectAll={() => dispatch(setCheckboxAll())}
           handleRemovePermanentlyClick={removeWorkPlacesPermanently}
-          addHoverText="Add a Work Place"
-          removeHoverText="Remove Work Places"
+          addHoverText={dashboardDict.addWP}
+          removeHoverText={dashboardDict.removeWP}
           className="z-10"
         />
       </div>
       {addWorkPlaceForm && (
         <FramerSpringRotate>
-          <AddNewWorkPlaceForm onClose={() => setAddWorkPlaceForm(false)} />
+          <AddNewWorkPlaceForm onClose={() => setAddWorkPlaceForm(false)} dict={dashboardDict} />
         </FramerSpringRotate>
       )}
     </div>
   );
 };
-
-export default DashBoardOptions;

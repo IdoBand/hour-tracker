@@ -5,17 +5,22 @@ import MonthlyShiftsStack from "./MonthlyShiftsStack";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import { getDictionary } from "@/lib/dictionary";
+import { Locale } from "@/i18n.config";
 interface OverviewProps {
   params: {
+    lang: Locale
     workPlaceId: string;
   };
 }
 
-const Overview = async ({ params }: OverviewProps) => {
+export default async function Overview ({ params }: OverviewProps) {
   const session = await getServerSession(authOptions);
   if (!session) {
-    redirect("/");
+    redirect(`${params.lang}/`);
   }
+  const { page } = await getDictionary(params.lang);
+  const { overview: overviewDict } = page;
   const workPlaceId = params.workPlaceId;
   const shifts = await shiftService.getAllShifts(workPlaceId);
 
@@ -24,12 +29,11 @@ const Overview = async ({ params }: OverviewProps) => {
       <div
         className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4 md:w-[95%]`}
       >
-        <div className={`${pageHeader} my-3 flex flex-col`}>Overview</div>
-        <MainOverview shifts={shifts ? shifts : []} />
-        <MonthlyShiftsStack shifts={shifts ? shifts : []} />
+        <div className={`${pageHeader} my-3 flex flex-col`}>{overviewDict.overview}</div>
+        <MainOverview shifts={shifts ? shifts : []} overviewDict={overviewDict} />
+        <MonthlyShiftsStack shifts={shifts ? shifts : []} overviewDict={overviewDict.shiftStackDict} />
       </div>
     </main>
   );
 };
 
-export default Overview;
