@@ -15,10 +15,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { setIsFetching } from "@/redux/windowSlice";
-interface AddEditShiftProps {
+interface AddEditShiftFormProps {
   addOrEdit: "add" | "edit";
   onClose: () => void;
   shift?: Shift;
+  shiftStackDict: any
 }
 interface FullDateInputProps {
   label: string;
@@ -42,7 +43,7 @@ const FullDateInput = ({ label, fullDatePicker }: FullDateInputProps) => {
   );
 };
 
-const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
+const AddEditShiftForm = ({ addOrEdit, onClose, shift, shiftStackDict }: AddEditShiftFormProps) => {
   const session = useSession();
   const [formIssues, setFormIssues] = useState<string[]>([]);
   const currentWorkPlace: WorkPlace = useAppSelector(
@@ -191,10 +192,10 @@ const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
         className={`flex w-full lg:flex-col lg:justify-center lg:items-center`}
       >
         <div className={`w-1/3 pb-16 pt-8 lg:w-full lg:pb-0`}>
-          <FullDateInput label="Shift Start" fullDatePicker={shiftStartVD} />
-          <FullDateInput label="Shift End" fullDatePicker={shiftEndVD} />
-          <FullDateInput label="Break Start" fullDatePicker={breakStartVD} />
-          <FullDateInput label="Break End" fullDatePicker={breakEndVD} />
+          <FullDateInput label={shiftStackDict.shiftS} fullDatePicker={shiftStartVD} />
+          <FullDateInput label={shiftStackDict.shiftE} fullDatePicker={shiftEndVD} />
+          <FullDateInput label={shiftStackDict.BreakS} fullDatePicker={breakStartVD} />
+          <FullDateInput label={shiftStackDict.BreakE} fullDatePicker={breakEndVD} />
         </div>
         <div
           className={`w-2/3 flex justify-start items-center flex-col pt-8
@@ -202,7 +203,7 @@ const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
         `}
         >
           <div className={`w-full flex flex-col justify-center items-center`}>
-            <label className="w-[80%] mb-1">I Worked On:</label>
+            <label className="w-[80%] mb-1">{shiftStackDict.iWorkedOn}</label>
             <textarea
               defaultValue={addOrEdit === "edit" ? shift!.iWorkedOn : ""}
               className={`w-[80%] outline-none p-1 mb-10`}
@@ -210,7 +211,7 @@ const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
             />
           </div>
           <div className={`w-full flex flex-col justify-center items-center`}>
-            <label className="w-[80%] mb-1">Notes:</label>
+            <label className="w-[80%] mb-1">{shiftStackDict.notes}</label>
             <textarea
               defaultValue={addOrEdit === "edit" ? shift!.notes : ""}
               className={`w-[80%] outline-none p-1 mb-10`}
@@ -219,7 +220,7 @@ const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
           </div>
           <NumberLineInput
             name="wagePerHour"
-            label="Wage Per Hour"
+            label={shiftStackDict.wph}
             type="number"
             isRequired={true}
             value={
@@ -230,14 +231,14 @@ const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
           />
           <NumberLineInput
             name="tipBonus"
-            label="Tip / Bonus"
+            label={shiftStackDict.tipBonus}
             type="number"
             isRequired={true}
             value={addOrEdit === "add" ? 0 : shift!.tipBonus}
           />
           <div className={`flex flex-col mb-6 w-[80%]`}>
             <div className={`flex justify-between w-1/2`}>
-              <label htmlFor="isBreakPaid">Are You paid On Break?</label>
+              <label htmlFor="isBreakPaid">{shiftStackDict.paidOnBreak}</label>
               <input
                 {...register("isBreakPaid", { required: false })}
                 type="checkBox"
@@ -271,14 +272,14 @@ const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
         <Button
           type="button"
           theme="blank"
-          text="Discard"
+          text={shiftStackDict.discard}
           onClick={onClose}
           className=""
         />
         <Button
           type="submit"
           theme="full"
-          text={addOrEdit === "add" ? "Add" : "Save Changes"}
+          text={shiftStackDict.save}
           className=""
         />
       </div>
@@ -286,4 +287,4 @@ const AddEditShift = ({ addOrEdit, onClose, shift }: AddEditShiftProps) => {
   );
 };
 
-export default AddEditShift;
+export default AddEditShiftForm;

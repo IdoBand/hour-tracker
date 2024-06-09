@@ -21,6 +21,7 @@ import useCurrentLocale from "../../(hooks)/useCurrentLocale";
 interface MainOverviewProps {
   shifts: Shift[];
   overviewDict: any
+  workplaceDict: any
 }
 function totalHoursForPeriod(shifts: Shift[]) {
   if (shifts.length) {
@@ -38,7 +39,7 @@ function totalBreakTime(shifts: Shift[]) {
   }
   return "0";
 }
-const MainOverview = ({ shifts, overviewDict }: MainOverviewProps) => {
+const MainOverview = ({ shifts, overviewDict, workplaceDict }: MainOverviewProps) => {
   const { locale } = useCurrentLocale();
   const currentWorkPlace = useAppSelector(
     (state) => state.workPlaceSlice.currentWorkPlace,
@@ -113,6 +114,7 @@ const MainOverview = ({ shifts, overviewDict }: MainOverviewProps) => {
                 <EditWorkPlaceForm
                   workPlace={currentWorkPlace}
                   onClose={() => setIsEditingWorkPlace(false)}
+                  workPlaceDict={workplaceDict}
                 />
               </>
             ) : (
@@ -150,7 +152,7 @@ const MainOverview = ({ shifts, overviewDict }: MainOverviewProps) => {
             <CustomButton
               className="absolute top-10 ltr:right-1 w-5 rtl:left-1"
               onClick={() => setIsEditingWorkPlace((prev) => !prev)}
-              hoverText={isEditingWorkPlace ? "Discard" : "Edit"}
+              hoverText={isEditingWorkPlace ? workplaceDict.discard : workplaceDict.edit}
               where={"down"}
             >
               {isEditingWorkPlace ? (

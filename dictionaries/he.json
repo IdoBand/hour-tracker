@@ -24,9 +24,9 @@
   },
   "page": {
     "home": {
-      "title": "עקוב אחרי העבודה שלך.",
+      "title": "עקבו אחרי העבודה שלכם.",
       "sen1": "נמאס מגליונות Excel שלא נגמרים?",
-      "sen2": "לא סומך על הבוס שעוקב אחרי שעות העבודה שלך?",
+      "sen2": "לא סומכים על הבוס שעוקב אחרי שעות העבודה?",
       "sen3": "מנסה להיזכר על מה עבדת שבוע שעבר?",
       "sen4": "אתם במקום הנכון.",
       "startTracking": "התחילו לעקוב",
@@ -56,21 +56,30 @@
       "currentlyEmployed": "מועסק שם כיום?",
       "paidOnBreak": "משלמים לך על זמן ההפסקה?",
       "addButton": "הוסף",
-      "discard": "חזור"
+      "discard": "חזור",
+      "statistics": "סטטיסטיקה",
+      "quickAdd": "הוספה מהירה"
     },
-    "overview": {
-      "overview": "סקירה כללית",
-      "monthly": "מבט חודשי",
-      "expectedSalary": "שכר משוער",
-      "totalTime": "סה'כ שעות עבודה",
-      "totalBreakTime": "סה'כ שעות הפסקה",
-      "workPlaceO": "מקום עבודה",
-      "currentlyEmployed": "מועסק כיום",
-      "wph": "שכר שעתי",
-      "startedWorkingAt": "תחילת עבודה",
+    "workplaceDict": {
+      "current": "נוכחי",
+      "totalH": "סה'כ שעות",
+      "HoursPW": "שעות בשבוע האחרון",
+      "HoursPM": "שעות בחודש האחרון",
       "employmentDuration": "תקופת העסקה",
-      "breaksDuration": "סה'כ הפסקות",
-      "shiftStackDict": {
+      "addWP": "הוספת מקום עבודה",
+      "removeWP": "מחק מקומות עבודה",
+      "addNewWP": "Add a New Work Place",
+      "wPName": "שם מקום העבודה",
+      "wph": "שכר שעתי",
+      "startDate": "תאריך תחילת עבודה",
+      "checkV": "סמן ב-V אם התשובה היא כן",
+      "currentlyEmployed": "מועסק שם כיום?",
+      "paidOnBreak": "משלמים לך על זמן ההפסקה?",
+      "addButton": "הוסף",
+      "discard": "חזור",
+      "edit": "Edit" 
+    },
+    "shiftStackDict": {
         "shifts": "משמרות",
         "noShifts": "אין משמרות החודש :(",
         "date": "תאריך",
@@ -90,8 +99,22 @@
         "BreakE": "סיום הפסקה",
         "paidOnBreak": "תשלום על הפסקה",
         "iWorkedOn": "עבדתי על",
-        "notes": "הערות"
-      }
+        "notes": "הערות",
+        "save": "שמור",
+        "discard": "חזור"
+      },
+    "overview": {
+      "overview": "סקירה כללית",
+      "monthly": "מבט חודשי",
+      "expectedSalary": "שכר משוער",
+      "totalTime": "סה'כ שעות עבודה",
+      "totalBreakTime": "סה'כ שעות הפסקה",
+      "workPlaceO": "מקום עבודה",
+      "currentlyEmployed": "מועסק כיום",
+      "wph": "שכר שעתי",
+      "startedWorkingAt": "תחילת עבודה",
+      "employmentDuration": "תקופת העסקה",
+      "breaksDuration": "סה'כ הפסקות"
     }
   }
 }

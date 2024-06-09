@@ -4,7 +4,7 @@ import ShiftCard from "./ShiftCard";
 import { Shift } from "@/types/types";
 import AddRemoveButtons from "@/components/AddRemoveButtons";
 import FramerSpringRotate from "@/components/FramerSpringRotate";
-import AddEditShift from "./AddEditShiftForm";
+import AddEditShiftForm from "./AddEditShiftForm";
 import {
   ArrowUpCircleIcon,
   EllipsisHorizontalCircleIcon,
@@ -25,8 +25,9 @@ import { useRouter } from "next/navigation";
 interface Props {
   shifts: Shift[];
   overviewDict: any
+  shiftStackDict: any
 }
-const MonthlyShiftsStack = ({ shifts, overviewDict }: Props) => {
+const MonthlyShiftsStack = ({ shifts, overviewDict, shiftStackDict }: Props) => {
   const removeButtons = useAppSelector(
     (state) => state.shiftSlice.shiftRemoveButtons,
   );
@@ -94,9 +95,10 @@ const MonthlyShiftsStack = ({ shifts, overviewDict }: Props) => {
       </div>
       {addShiftForm && (
         <FramerSpringRotate className="shadow-2xl rounded-2xl relative z-20">
-          <AddEditShift
+          <AddEditShiftForm
             addOrEdit="add"
             onClose={() => setAddEditShiftForm(false)}
+            shiftStackDict={shiftStackDict}
           />
         </FramerSpringRotate>
       )}

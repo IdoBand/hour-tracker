@@ -11,7 +11,7 @@ import {
   deleteIdFromRemoveArray,
   addIdToRemoveArray,
 } from "@/redux/shiftSlice";
-import AddEditShift from "./AddEditShiftForm";
+import AddEditShiftForm from "./AddEditShiftForm";
 import CheckOrX from "@/components/CheckOrX";
 import { Shift } from "@/types/types";
 import MotionArrow from "@/components/MotionArrow";
@@ -136,10 +136,11 @@ export default function ShiftCard({ removeButtons, shift, shiftStackDict }: Shif
           className={`w-full min-h-max shadow-md rounded-lg px-2 py-1 overflow-hidden cursor-default`}
         >
           {editMode ? (
-            <AddEditShift
+            <AddEditShiftForm
               addOrEdit="edit"
               onClose={() => setEditMode(false)}
               shift={shift}
+              shiftStackDict={shiftStackDict}
             />
           ) : (
             <div className="p-8 flex gap-4 relative md:flex-col md:p-2">

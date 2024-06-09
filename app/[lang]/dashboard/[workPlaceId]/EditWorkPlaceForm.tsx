@@ -13,9 +13,10 @@ import { setCurrentWorkPlace } from "@/redux/workPlaceSlice";
 interface EditWorkPlaceFormProps {
   workPlace: WorkPlace;
   onClose: () => void;
+  workPlaceDict: any
 }
 const formSectionContainer = "flex w-full justify-between gap-3 xs:flex-col";
-const EditWorkPlaceForm = ({ workPlace, onClose }: EditWorkPlaceFormProps) => {
+const EditWorkPlaceForm = ({ workPlace, onClose, workPlaceDict }: EditWorkPlaceFormProps) => {
   const router = useRouter();
   const currentWorkPlace = useAppSelector(
     (state) => state.workPlaceSlice.currentWorkPlace,
@@ -91,7 +92,7 @@ const EditWorkPlaceForm = ({ workPlace, onClose }: EditWorkPlaceFormProps) => {
       className="relative flex flex-col gap-4"
     >
       <div className={`${formSectionContainer} mt-7`}>
-        <label className="font-semibold">Name:</label>
+        <label className="font-semibold">{workPlaceDict.wPName}:</label>
         <input
           type="text"
           {...register("name")}
@@ -99,7 +100,7 @@ const EditWorkPlaceForm = ({ workPlace, onClose }: EditWorkPlaceFormProps) => {
         />
       </div>
       <div className={`${formSectionContainer}`}>
-        <label className="font-semibold">Currently Employed?</label>
+        <label className="font-semibold">{workPlaceDict.currentlyEmployed}</label>
         <input
           type="checkbox"
           defaultChecked={currentWorkPlace?.isCurrent}
@@ -107,7 +108,7 @@ const EditWorkPlaceForm = ({ workPlace, onClose }: EditWorkPlaceFormProps) => {
         />
       </div>
       <div className={`${formSectionContainer}`}>
-        <label className="font-semibold">Paid On Break?</label>
+        <label className="font-semibold">{workPlaceDict.paidOnBreak}</label>
         <input
           type="checkbox"
           defaultChecked={currentWorkPlace?.isBreakPaid}
@@ -115,12 +116,12 @@ const EditWorkPlaceForm = ({ workPlace, onClose }: EditWorkPlaceFormProps) => {
         />
       </div>
       <div className={`${formSectionContainer}`}>
-        <label className="font-semibold">Employment Start Date:</label>
+        <label className="font-semibold">{workPlaceDict.startDate}:</label>
         {calendarRow}
       </div>
       <div className={`${formSectionContainer} mb-7`}>
         <span className="flex items-center gap-5 xs:flex-col xs:gap-0 mb-5">
-          <span className="font-semibold">Wage Per Hour: </span>
+          <span className="font-semibold">{workPlaceDict.wph}: </span>
           <span>
             <input
               {...register("wagePerHour", { required: true })}

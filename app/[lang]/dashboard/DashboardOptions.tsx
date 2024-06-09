@@ -15,8 +15,9 @@ import { setIsFetching } from "@/redux/windowSlice";
 import { useToast } from "@/components/ui/use-toast";
 type DashBoardOptionsProps = {
   dashboardDict: any
+  shiftStackDict: any
 }
-export default function DashBoardOptions ({ dashboardDict }: DashBoardOptionsProps) {
+export default function DashBoardOptions ({ dashboardDict, shiftStackDict }: DashBoardOptionsProps) {
   
   const router = useRouter();
   const idsToRemove = useAppSelector(

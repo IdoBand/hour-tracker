@@ -27,7 +27,7 @@ export default async function Dashboard({ params: { lang }}: {params: { lang: Lo
     redirect(`/${lang}`);
   }
   const { page } = await getDictionary(lang);
-  const { dashboard: dashboardDict } = page;
+  const { dashboard: dashboardDict, shiftStackDict } = page;
   const workPlaces = await workPlaceService.getAllWorkPlacesById(
     session.user?.email as string,
   );
@@ -55,7 +55,7 @@ export default async function Dashboard({ params: { lang }}: {params: { lang: Lo
           {dashboardDict.hello}{session.user ? session.user.name : ""}
         </h1>
         </div>
-        <DashBoardOptions dashboardDict={dashboardDict} />
+        <DashBoardOptions dashboardDict={dashboardDict} shiftStackDict={shiftStackDict} />
         <div className="w-full grid grid-cols-4 gap-10 mb-28">
           {workPlaces && workPlaces.length > 0 ? (
             workPlaces.map((workPlace, idx) => {
@@ -75,6 +75,7 @@ export default async function Dashboard({ params: { lang }}: {params: { lang: Lo
                     hoursPastMonth={totals[idx].totalPastMonth}
                     employmentDuration={employmentDurations[idx]}
                     dashboardDict={dashboardDict}
+                    shiftStackDict={shiftStackDict}
                   />
                 </article>
               );

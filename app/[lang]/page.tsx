@@ -63,7 +63,7 @@ const motionChild = {
 ////////////////////////////////////////////////////////////////////////////////////////
 
 export default async function Home({
-  params: { lang },
+  params: { lang }
 }: {
   params: { lang: Locale };
 }) {
@@ -133,7 +133,7 @@ export default async function Home({
             lg:w-full
           "
           >
-            {/* <HomeImage width={isMobile ? '200' : '400'} height={isMobile ? '200' : '400'} className="z-10"/> */}
+            <HomeImage width={'400'} height={'400'} className="z-10"/>
           </div>
         </div>
         <div

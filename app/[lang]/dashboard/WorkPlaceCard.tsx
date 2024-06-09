@@ -16,7 +16,7 @@ import {
   setCurrentWorkPlace,
   setCurrentDate,
 } from "@/redux/workPlaceSlice";
-import AddEditShift from "./[workPlaceId]/AddEditShiftForm";
+import AddEditShiftForm from "./[workPlaceId]/AddEditShiftForm";
 import Modal from "../../../components/Modal";
 import { useState } from "react";
 import { startOfToday } from "date-fns";
@@ -37,6 +37,7 @@ interface WorkPlaceCardProps {
   hoursPastMonth: string | number;
   employmentDuration: string;
   dashboardDict: any
+  shiftStackDict: any
 }
 export default function WorkPlaceCard({
   workPlace,
@@ -44,7 +45,8 @@ export default function WorkPlaceCard({
   hoursPastWeek,
   hoursPastMonth,
   employmentDuration,
-  dashboardDict
+  dashboardDict,
+  shiftStackDict
 }: WorkPlaceCardProps) {
   const { locale } = useCurrentLocale()
   const removeButtons: boolean = useAppSelector(
@@ -141,7 +143,7 @@ export default function WorkPlaceCard({
         <div className={`flex justify-center items-end flex-col gap-4`}>
           <CustomButton
             className="shadow-xl rounded-full p-2 ml-4 mt-3 w-max group"
-            hoverText="Statistics"
+            hoverText={dashboardDict.statistics}
             where="down"
             onClick={() => {
               handleWorkPlaceClick(workPlace);
@@ -154,7 +156,7 @@ export default function WorkPlaceCard({
           </CustomButton>
           <CustomButton
             className="shadow-xl rounded-full p-2 ml-4 mt-3 w-max group"
-            hoverText="Quick Add"
+            hoverText={dashboardDict.quickAdd}
             where="down"
             onClick={(e: MouseEvent) => {
               e.preventDefault();
@@ -169,7 +171,7 @@ export default function WorkPlaceCard({
       </div>
       {quickAdd && (
         <Modal onClose={() => setQuickAdd(false)}>
-          <AddEditShift addOrEdit="add" onClose={() => setQuickAdd(false)} />
+          <AddEditShiftForm addOrEdit="add" onClose={() => setQuickAdd(false)} shiftStackDict={shiftStackDict} />
         </Modal>
       )}
     </div>

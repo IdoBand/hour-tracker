@@ -56,22 +56,30 @@
       "currentlyEmployed": "Currently Employed There?",
       "paidOnBreak": "Are you payed on break time?",
       "addButton": "Add",
-      "discard": "Discard"
-      
+      "discard": "Discard",
+      "statistics": "Statistics",
+      "quickAdd": "Quick Add"   
     },
-    "overview": {
-      "overview": "Overview",
-      "monthly": "Monthly Overview",
-      "expectedSalary": "Expected Salary",
-      "totalTime": "Total Time",
-      "totalBreakTime": "Total Break Time",
-      "workPlaceO": "Work Place Overview",
-      "currentlyEmployed": "Currently Employed",
-      "wph": "Wage Per Hour",
-      "startedWorkingAt": "Started Working at",
+    "workplaceDict": {
+      "current": "current",
+      "totalH": "Total Hours",
+      "HoursPW": "Hours Past Week",
+      "HoursPM": "Hours Past Month",
       "employmentDuration": "Employment Duration",
-      "breaksDuration": "Breaks Duration",
-      "shiftStackDict": {
+      "addWP": "Add a work place",
+      "removeWP": "Remove workplaces",
+      "addNewWP": "Add a New Work Place",
+      "wPName": "Work Place Name",
+      "wph": "Wage Per Hour",
+      "startDate": "Starting Date",
+      "checkV": "Check V if the answer is yes for the following questions",
+      "currentlyEmployed": "Currently Employed There?",
+      "paidOnBreak": "Are you payed on break time?",
+      "addButton": "Add",
+      "discard": "Discard",
+      "edit": "Edit" 
+    },
+    "shiftStackDict": {
         "shifts": "Shifts",
         "noShifts": "No shifts this month :(",
         "date": "Date",
@@ -91,8 +99,22 @@
         "BreakE": "Break End",
         "paidOnBreak": "Paid On Break",
         "iWorkedOn": "I Worked On",
-        "notes": "Notes"
-      }
+        "notes": "Notes",
+        "save": "Save",
+        "discard": "Discard"
+      },
+    "overview": {
+      "overview": "Overview",
+      "monthly": "Monthly Overview",
+      "expectedSalary": "Expected Salary",
+      "totalTime": "Total Time",
+      "totalBreakTime": "Total Break Time",
+      "workPlaceO": "Work Place Overview",
+      "currentlyEmployed": "Currently Employed",
+      "wph": "Wage Per Hour",
+      "startedWorkingAt": "Started Working at",
+      "employmentDuration": "Employment Duration",
+      "breaksDuration": "Breaks Duration"
     }
   }
 }

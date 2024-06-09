@@ -20,7 +20,7 @@ export default async function Overview ({ params }: OverviewProps) {
     redirect(`${params.lang}/`);
   }
   const { page } = await getDictionary(params.lang);
-  const { overview: overviewDict } = page;
+  const { overview: overviewDict, shiftStackDict, workplaceDict } = page;
   const workPlaceId = params.workPlaceId;
   const shifts = await shiftService.getAllShifts(workPlaceId);
 
@@ -30,8 +30,8 @@ export default async function Overview ({ params }: OverviewProps) {
         className={`w-10/12 flex justify-center items-start flex-col py-2 gap-4 md:w-[95%]`}
       >
         <div className={`${pageHeader} my-3 flex flex-col`}>{overviewDict.overview}</div>
-        <MainOverview shifts={shifts ? shifts : []} overviewDict={overviewDict} />
-        <MonthlyShiftsStack shifts={shifts ? shifts : []} overviewDict={overviewDict.shiftStackDict} />
+        <MainOverview shifts={shifts ? shifts : []} overviewDict={overviewDict} workplaceDict={workplaceDict} />
+        <MonthlyShiftsStack shifts={shifts ? shifts : []} overviewDict={shiftStackDict} shiftStackDict={shiftStackDict} />
       </div>
     </main>
   );
