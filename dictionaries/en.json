@@ -58,7 +58,12 @@
       "addButton": "Add",
       "discard": "Discard",
       "statistics": "Statistics",
-      "quickAdd": "Quick Add"   
+      "quickAdd": "Quick Add",
+      "years": "years",
+      "days": "days",
+      "hours": "hours",
+      "minutes": "mins",
+      "and": "and"
     },
     "workplaceDict": {
       "current": "current",
@@ -77,7 +82,7 @@
       "paidOnBreak": "Are you payed on break time?",
       "addButton": "Add",
       "discard": "Discard",
-      "edit": "Edit" 
+      "edit": "Edit"
     },
     "shiftStackDict": {
         "shifts": "Shifts",
@@ -101,7 +106,9 @@
         "iWorkedOn": "I Worked On",
         "notes": "Notes",
         "save": "Save",
-        "discard": "Discard"
+        "discard": "Discard",
+        "addShift": "Add a Shift",
+        "removeShift": "Remove Shifts"
       },
     "overview": {
       "overview": "Overview",

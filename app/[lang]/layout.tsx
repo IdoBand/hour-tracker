@@ -5,15 +5,18 @@ import Footer from "../../components/Footer";
 import { scrollBar } from "../[lang]/(hooks)/mixin";
 const inter = Inter({ subsets: ["latin"] });
 import { Providers } from "@/redux/provider";
-import SessionProvider from "../[lang]/(providers)/SessionProvider";
+import SessionProvider from "@/providers/SessionProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { Toaster } from "@/components/ui/toaster";
-import { Locale } from "@/i18n.config";
+import { Locale, i18n } from "@/i18n.config";
 export const metadata = {
   title: "Hour Tracker",
   description: "Track Your Work",
 };
+// export async function generateStaticParams() {
+//   return i18n.locales.map(locale => ({ lang: locale }))
+// }
 const dir = {
   en: "ltr",
   he: "rtl",
@@ -25,24 +28,26 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { lang: Locale };
 }) {
+
+  
   const session = await getServerSession(authOptions);
   return (
     <html lang={params.lang} dir={dir[params.lang]}>
-      <Providers>
-        <SessionProvider session={session}>
           <body
             className={`${inter.className} bg-light text-dark ${scrollBar}`}
           >
-          {/* @ts-expect-error Server Component */}
+        <SessionProvider session={session}>
+          <Providers>
+            {/* @ts-expect-error Server Component */}
             <Navbar lang={params.lang} />
             <div className="min-h-[calc(99vh-90px)] ">{children}</div>
             <Footer />
             <div id="modal-portal" className="z-50" />
             <div id="spinner-portal" className="relative z-[100]" />
             <Toaster />
-          </body>
+          </Providers>
         </SessionProvider>
-      </Providers>
+          </body>
     </html>
   );
 }

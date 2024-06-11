@@ -13,14 +13,6 @@ import { getDictionary } from "@/lib/dictionary";
 import { Locale } from "@/i18n.config";
 const workPlaceService = new WorkPlaceService();
 
-function generateEmploymentDurationString(workPlace: WorkPlace): string {
-  const start = workPlace.employmentStartDate;
-  const end = workPlace.employmentEndDate
-    ? workPlace.employmentEndDate
-    : startOfTomorrow();
-  return TimeHelper.generateYearlyDurationString(start as Date, end as Date);
-}
-
 export default async function Dashboard({ params: { lang }}: {params: { lang: Locale };}) {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -31,16 +23,30 @@ export default async function Dashboard({ params: { lang }}: {params: { lang: Lo
   const workPlaces = await workPlaceService.getAllWorkPlacesById(
     session.user?.email as string,
   );
+  function test(workPlace: WorkPlace) {
+    const start = workPlace.employmentStartDate;
+    const end = workPlace.employmentEndDate
+      ? workPlace.employmentEndDate
+      : startOfTomorrow();
+    const yearsAndDays = TimeHelper.generateYearlyDurationObject(start as Date, end as Date)
+    if (!yearsAndDays.years) {
+      return `${yearsAndDays.days} ${dashboardDict.days}`
+    } else if (!yearsAndDays.days) {
+      return `${yearsAndDays.years} ${dashboardDict.years}`
+    } else {
+      return `${yearsAndDays.years} ${dashboardDict.years} ${dashboardDict.and} ${yearsAndDays.days} ${dashboardDict.days}` 
+    }
+  }
   let totals: any[];
   let employmentDurations: string[];
-
   if (workPlaces && workPlaces.length > 0) {
+    
     const workPlacesIds = workPlaces.map((workPlace) => {
       return workPlace.id;
     });
     totals = await shiftService.getSumOfHours(workPlacesIds, "shift");
     employmentDurations = workPlaces.map((workPlace) => {
-      return generateEmploymentDurationString(workPlace as WorkPlace);
+      return test(workPlace as WorkPlace);
     });
   }
 

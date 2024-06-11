@@ -54,6 +54,9 @@ class TimeHelperClass {
   }
   generateYearlyDurationString(start: Date, end: Date) {
     /**
+    * @deprecated Use generateYearlyDurationObject() instead.
+    */
+    /**
      * This function receives 2 Date instances and calculates the time difference between them in days,
      * then returns a string description in years / days.
      * @returns {string} - time unit in years / days.
@@ -69,6 +72,73 @@ class TimeHelperClass {
       const yearsDifference = differenceInYears(end, start);
       return `${yearsDifference} Year${yearsDifference > 1 ? "s" : ""}`;
     }
+  }
+
+  generateYearlyDurationObject(start: Date, end: Date) {
+  /**
+ * Calculates the time difference between two Date instances in years and days.
+ * 
+ * This function receives two Date instances and calculates the time difference 
+ * between them in days. It then returns an object with the time difference 
+ * described in years and days.
+ * 
+ * @param {Date} start - The start date.
+ * @param {Date} end - The end date.
+ * @returns {Object} - An object with the properties 'years' and 'days' representing 
+ *                     the time difference.
+ * @returns {number} returns.years - The number of full years in the time difference.
+ * @returns {number} returns.days - The number of remaining days in the time difference.
+ */
+    const daysDifference = differenceInDays(end, start);
+    
+    if (daysDifference < 365) {
+      return {
+        years: 0,
+        days: daysDifference}
+    } else if (daysDifference > 365 && daysDifference % 365 !== 0) {
+      const yearsDifference = differenceInYears(end, start);
+      const remainingDays = daysDifference - yearsDifference * 365;
+      return {
+        years: yearsDifference,
+        days: remainingDays
+      }
+    } else {
+      const yearsDifference = differenceInYears(end, start);
+      return {
+        years: yearsDifference,
+        days: 0
+      }
+    }
+  }
+  generateHourlyDurationObject(minutes: number) {
+  /**
+ * Calculates the time difference between two Date instances in years and days.
+ * 
+ * This function receives two Date instances and calculates the time difference 
+ * between them in days. It then returns an object with the time difference 
+ * described in years and days.
+ * 
+ * @param {number} minutes - Total number of minutes.
+ * @returns {Object} - An object with the properties 'hours' and 'minutes' representing 
+ *                     the time difference.
+ * @returns {number} returns.hours - The number of full hours.
+ * @returns {number} returns.minutes - The number of remaining minutes.
+ */
+  let result = {
+    hours: 0,
+    minutes: 0
+  }
+  if (minutes === 0) {
+    return result;
+  } else if (minutes % 60 === 0) {
+    result.hours = minutes / 60
+  } else if (minutes / 60 < 1) {
+    result.minutes = minutes / 60
+  } else {
+    result.hours = Math.floor(minutes / 60)
+    result.minutes = minutes % 60
+  }
+  return result
   }
   validateShiftTimes(
     shiftStartDate: Date,

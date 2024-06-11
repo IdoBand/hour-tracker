@@ -65,8 +65,9 @@ const motionChild = {
 export default async function Home({
   params: { lang }
 }: {
-  params: { lang: Locale };
+  params: { lang: Locale }
 }) {
+
   const { navigation , page } = await getDictionary(lang);
   const { home } = page;
   

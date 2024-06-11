@@ -34,7 +34,7 @@
       "card1text": "בין אם המשכורת שעתית או גלובלית אפשר לחבר הכל",
       "card2header": "מספר מקומות עבודה",
       "card2text": "אם אתה עובד כפרילנס או בעל יותר ממקום עבודה אחד - זו לא בעיה",
-      "card3header": "עשה סדר במשימות",
+      "card3header": "עשו סדר במשימות",
       "card3text": "הישאר מאורגן בקלות"
     },
     "dashboard": {
@@ -42,7 +42,7 @@
       "add": "הוסף מקום עבודה על מנת להתחיל לעקוב :)",
       "hello": "שלום, ",
       "current": "נוכחי",
-      "totalH": "סה'כ שעות",
+      "totalH": "סה\"כ שעות",
       "HoursPW": "שעות בשבוע האחרון",
       "HoursPM": "שעות בחודש האחרון",
       "employmentDuration": "תקופת העסקה",
@@ -58,11 +58,16 @@
       "addButton": "הוסף",
       "discard": "חזור",
       "statistics": "סטטיסטיקה",
-      "quickAdd": "הוספה מהירה"
+      "quickAdd": "הוספה מהירה",
+      "years": "שנים",
+      "days": "ימים",
+      "hours": "שעות",
+      "minutes": "דקות",
+      "and": "ו-"
     },
     "workplaceDict": {
       "current": "נוכחי",
-      "totalH": "סה'כ שעות",
+      "totalH": "סה\"כ שעות",
       "HoursPW": "שעות בשבוע האחרון",
       "HoursPM": "שעות בחודש האחרון",
       "employmentDuration": "תקופת העסקה",
@@ -77,7 +82,7 @@
       "paidOnBreak": "משלמים לך על זמן ההפסקה?",
       "addButton": "הוסף",
       "discard": "חזור",
-      "edit": "Edit" 
+      "edit": "עריכה" 
     },
     "shiftStackDict": {
         "shifts": "משמרות",
@@ -101,7 +106,9 @@
         "iWorkedOn": "עבדתי על",
         "notes": "הערות",
         "save": "שמור",
-        "discard": "חזור"
+        "discard": "חזור",
+        "addShift": "הוספת משמרת",
+        "removeShift": "מחיקת משמרות"
       },
     "overview": {
       "overview": "סקירה כללית",
@@ -114,7 +121,7 @@
       "wph": "שכר שעתי",
       "startedWorkingAt": "תחילת עבודה",
       "employmentDuration": "תקופת העסקה",
-      "breaksDuration": "סה'כ הפסקות"
+      "breaksDuration": "סה\"כ הפסקות"
     }
   }
 }

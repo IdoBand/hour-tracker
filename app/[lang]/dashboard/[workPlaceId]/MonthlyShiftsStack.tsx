@@ -89,8 +89,8 @@ const MonthlyShiftsStack = ({ shifts, overviewDict, shiftStackDict }: Props) => 
           handleAddClick={() => setAddEditShiftForm(true)}
           handleSelectAll={handleSelectAllClick}
           handleRemovePermanentlyClick={handleRemovePermanentlyClick}
-          addHoverText="Add a Shift"
-          removeHoverText="Remove Shifts"
+          addHoverText={shiftStackDict.addShift}
+          removeHoverText={shiftStackDict.removeShift}
         />
       </div>
       {addShiftForm && (
