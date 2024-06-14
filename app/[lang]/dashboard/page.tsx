@@ -29,13 +29,7 @@ export default async function Dashboard({ params: { lang }}: {params: { lang: Lo
       ? workPlace.employmentEndDate
       : startOfTomorrow();
     const yearsAndDays = TimeHelper.generateYearlyDurationObject(start as Date, end as Date)
-    if (!yearsAndDays.years) {
-      return `${yearsAndDays.days} ${dashboardDict.days}`
-    } else if (!yearsAndDays.days) {
-      return `${yearsAndDays.years} ${dashboardDict.years}`
-    } else {
-      return `${yearsAndDays.years} ${dashboardDict.years} ${dashboardDict.and} ${yearsAndDays.days} ${dashboardDict.days}` 
-    }
+    return TimeHelper.yearlyStringFromDict(yearsAndDays, dashboardDict)
   }
   let totals: any[];
   let employmentDurations: string[];

@@ -59,11 +59,13 @@
       "discard": "Discard",
       "statistics": "Statistics",
       "quickAdd": "Quick Add",
-      "years": "years",
-      "days": "days",
-      "hours": "hours",
-      "minutes": "mins",
-      "and": "and"
+      "timeUnits": {
+        "years": "years",
+        "days": "days",
+        "hours": "hours",
+        "minutes": "mins",
+        "and": "and"
+      }
     },
     "workplaceDict": {
       "current": "current",
@@ -82,7 +84,15 @@
       "paidOnBreak": "Are you payed on break time?",
       "addButton": "Add",
       "discard": "Discard",
-      "edit": "Edit"
+      "edit": "Edit",
+      "timeUnits": {
+        "years": "years",
+        "days": "days",
+        "hours": "hours",
+        "minutes": "mins",
+        "and": "and"
+      }
+      
     },
     "shiftStackDict": {
         "shifts": "Shifts",
@@ -103,12 +113,20 @@
         "BreakS": "Break Start",
         "BreakE": "Break End",
         "paidOnBreak": "Paid On Break",
-        "iWorkedOn": "I Worked On",
-        "notes": "Notes",
+        "edit": "Edit",
         "save": "Save",
         "discard": "Discard",
         "addShift": "Add a Shift",
-        "removeShift": "Remove Shifts"
+        "addShiftTo": "Add a Shift to",
+        "editShift": "Edit a Shift for",
+        "removeShift": "Remove Shifts",
+        "timeUnits": {
+        "years": "years",
+        "days": "days",
+        "hours": "hours",
+        "minutes": "mins",
+        "and": "and"
+      }
       },
     "overview": {
       "overview": "Overview",
@@ -121,7 +139,9 @@
       "wph": "Wage Per Hour",
       "startedWorkingAt": "Started Working at",
       "employmentDuration": "Employment Duration",
-      "breaksDuration": "Breaks Duration"
+      "breaksDuration": "Breaks Duration",
+      "howToUseCalendarLabel": "How To Use Calender",
+      "howToUseCalendarExplain": "Use the arrow buttons or the month's name that are located at the top to select a month and then click any day in order to get a full list of the month's shifts."
     }
   }
 }

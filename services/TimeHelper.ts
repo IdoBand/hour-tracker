@@ -14,19 +14,20 @@ class TimeHelperClass {
     const totalHours = differenceInMinutes(end, start) / 60;
     return totalHours;
   }
-  calculateTimeTwoDates(start: Date, end: Date) {
+  hourlyStringFromTwoDatesAndDict(start: Date, end: Date, dict: any) {
     /**
      * This function receives 2 Date instances and calculates the difference in time between them.
-     * @returns {sting} - time in hours/hours+minutes.
+     * @returns {string} - time in hours/hours+minutes.
      */
     const minutesDifference = differenceInMinutes(end, start);
-    return this.generateHourlyDurationString(minutesDifference);
+    const hourlyObject = this.generateHourlyDurationObject(minutesDifference)
+    return this.hourlyStringFromDict(hourlyObject, dict);
   }
   calculateTimeMultipleDates(events: any[]) {
     /**
      * This function receives an array of objects which contain 2 properties start and end ISO 8601 strings,
      *  calculate the time for each, and returns the sum of all.
-     * @returns {sting} - time in hours/hours+minutes.
+     * @returns {string} - time in hours/hours+minutes.
      */
     let total = 0;
     for (const event of events) {
@@ -34,45 +35,60 @@ class TimeHelperClass {
       const end = new Date(event.end);
       total += differenceInMinutes(end, start);
     }
-    return this.generateHourlyDurationString(total);
+    return this.generateHourlyDurationObject(total);
   }
-  generateHourlyDurationString(minutes: number): string {
+  hourlyStringFromDict(hourlyObject: {hours: number, minutes: number}, dict: any) {
+    if (!hourlyObject.hours && !hourlyObject.minutes) {
+      return '0'
+    }
+    if (!hourlyObject.hours) {
+      return `${hourlyObject.minutes} ${dict.timeUnits.minutes}`
+    } else if (!hourlyObject.minutes) {
+      return `${hourlyObject.hours} ${dict.timeUnits.hours}`
+    } else {
+      return `${hourlyObject.hours} ${dict.timeUnits.hours} ${dict.timeUnits.and} ${hourlyObject.minutes} ${dict.timeUnits.minutes}` 
+    }
+  }
+  yearlyStringFromDict(yearlyObject: {years: number, days: number}, dict: any) {
+    if (!yearlyObject.years && !yearlyObject.days) {
+      return '0'
+    }
+    if (!yearlyObject.years) {
+      return `${yearlyObject.days} ${dict.timeUnits.days}`
+    } else if (!yearlyObject.days) {
+      return `${yearlyObject.years} ${dict.timeUnits.years}`
+    } else {
+      return `${yearlyObject.years} ${dict.timeUnits.years} ${dict.timeUnits.and} ${yearlyObject.days} ${dict.timeUnits.minutes}` 
+    }
+  }
+
+  generateHourlyDurationObject(minutes: number) {
     /**
-     * This function receives a number that represents minutes and returns time in hours/hours+minutes.
-     * for example: '1 Hr 30 mins', '7Hr' .
-     * @returns {sting} - time in hours/hours+minutes.
-     */
+   * receives a number of minuets, and returns an object with two properties: hours and the remaining minutes
+   * for example: minutes = 90 ---> {hours: 1, minutes: 30}
+   * 
+   * @param {number} minutes - Total number of minutes.
+   * @returns {Object} - An object with the properties 'hours' and 'minutes' representing 
+   *                     the time difference.
+   * @returns {number} returns.hours - The number of full hours.
+   * @returns {number} returns.minutes - The number of remaining minutes.
+   */
+    let result = {
+      hours: 0,
+      minutes: 0
+    }
     if (minutes === 0) {
-      return "0";
+      return result;
     } else if (minutes % 60 === 0) {
-      return `${minutes / 60} Hr`;
-    } else if (minutes / 60 < 1) {
-      return `${minutes} mins`;
+      result.hours = minutes / 60
+    } else if (minutes < 60) {
+      result.minutes = minutes 
     } else {
-      return `${Math.floor(minutes / 60)} Hr ${minutes % 60} mins`;
+      result.hours = Math.floor(minutes / 60)
+      result.minutes = minutes % 60
     }
-  }
-  generateYearlyDurationString(start: Date, end: Date) {
-    /**
-    * @deprecated Use generateYearlyDurationObject() instead.
-    */
-    /**
-     * This function receives 2 Date instances and calculates the time difference between them in days,
-     * then returns a string description in years / days.
-     * @returns {string} - time unit in years / days.
-     */
-    const daysDifference = differenceInDays(end, start);
-    if (daysDifference < 365) {
-      return `${daysDifference.toString()} days`;
-    } else if (daysDifference > 365 && daysDifference % 365 !== 0) {
-      const yearsDifference = differenceInYears(end, start);
-      const remainingDays = daysDifference - yearsDifference * 365;
-      return `${yearsDifference} Year${yearsDifference > 1 ? "s" : ""} and ${remainingDays} Days`;
-    } else {
-      const yearsDifference = differenceInYears(end, start);
-      return `${yearsDifference} Year${yearsDifference > 1 ? "s" : ""}`;
+    return result
     }
-  }
 
   generateYearlyDurationObject(start: Date, end: Date) {
   /**
@@ -110,36 +126,7 @@ class TimeHelperClass {
       }
     }
   }
-  generateHourlyDurationObject(minutes: number) {
-  /**
- * Calculates the time difference between two Date instances in years and days.
- * 
- * This function receives two Date instances and calculates the time difference 
- * between them in days. It then returns an object with the time difference 
- * described in years and days.
- * 
- * @param {number} minutes - Total number of minutes.
- * @returns {Object} - An object with the properties 'hours' and 'minutes' representing 
- *                     the time difference.
- * @returns {number} returns.hours - The number of full hours.
- * @returns {number} returns.minutes - The number of remaining minutes.
- */
-  let result = {
-    hours: 0,
-    minutes: 0
-  }
-  if (minutes === 0) {
-    return result;
-  } else if (minutes % 60 === 0) {
-    result.hours = minutes / 60
-  } else if (minutes / 60 < 1) {
-    result.minutes = minutes / 60
-  } else {
-    result.hours = Math.floor(minutes / 60)
-    result.minutes = minutes % 60
-  }
-  return result
-  }
+  
   validateShiftTimes(
     shiftStartDate: Date,
     shiftEndDate: Date,
@@ -252,7 +239,7 @@ class TimeHelperClass {
   ddmmyyyyDate(date: Date): string {
     /**
      * This function receives a Date instance and converts it to dd-mm-yyy string.
-     * @returns {sting} - dd-mm-yyy string.
+     * @returns {string} - dd-mm-yyy string.
      */
     const ISO8601String = formatISO(date);
     return (
@@ -264,7 +251,7 @@ class TimeHelperClass {
   extractHourFromDate(date: Date): string {
     /**
      * This function receives a Date instance and extracts the hour.
-     * @returns {sting} - hh:mm.
+     * @returns {string} - hh:mm.
      */
     const ISO8601String = formatISO(date);
     return ISO8601String.slice(11, 16);

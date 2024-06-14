@@ -55,15 +55,17 @@ export default function ShiftCard({ removeButtons, shift, shiftStackDict }: Shif
     shiftDate: TimeHelper.ddmmyyyyDate(shift.shiftStart as Date),
     shiftStart: TimeHelper.extractHourFromDate(shift.shiftStart as Date),
     shiftEnd: TimeHelper.extractHourFromDate(shift.shiftEnd as Date),
-    shiftDuration: TimeHelper.calculateTimeTwoDates(
+    shiftDuration: TimeHelper.hourlyStringFromTwoDatesAndDict(
       shift.shiftStart as Date,
       shift.shiftEnd as Date,
+      shiftStackDict
     ),
     breakStart: TimeHelper.extractHourFromDate(shift.breakStart as Date),
     breakEnd: TimeHelper.extractHourFromDate(shift.breakEnd as Date),
-    breakDuration: TimeHelper.calculateTimeTwoDates(
+    breakDuration: TimeHelper.hourlyStringFromTwoDatesAndDict(
       shift.breakStart as Date,
       shift.breakEnd as Date,
+      shiftStackDict
     ),
   };
   function handleCheckBoxClick(shiftId: string) {
@@ -210,7 +212,7 @@ export default function ShiftCard({ removeButtons, shift, shiftStackDict }: Shif
                         setShiftOptionsMenu(false);
                       }}
                       className="text-xs px-7"
-                      text="Edit"
+                      text={shiftStackDict.edit}
                       type="button"
                     />
                     <Button

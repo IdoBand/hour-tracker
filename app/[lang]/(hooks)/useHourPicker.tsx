@@ -50,7 +50,7 @@ export function useHourPicker(hour?: string) {
   }
 
   const visualHourPicker = (
-    <main className={`${flexCenter} gap-1 bg-white rounded-lg text-start`}>
+    <main className={`${flexCenter} gap-1 bg-white rounded-lg text-start rtl:flex-row-reverse`}>
       <div className={`${flexCenter} max-h-4`}>
         <select
           ref={hoursSelectRef}

@@ -59,11 +59,13 @@
       "discard": "חזור",
       "statistics": "סטטיסטיקה",
       "quickAdd": "הוספה מהירה",
-      "years": "שנים",
-      "days": "ימים",
-      "hours": "שעות",
-      "minutes": "דקות",
-      "and": "ו-"
+      "timeUnits": {
+        "years": "שנים",
+        "days": "ימים",
+        "hours": "שעות",
+        "minutes": "דקות",
+        "and": "ו-"
+      }
     },
     "workplaceDict": {
       "current": "נוכחי",
@@ -81,8 +83,15 @@
       "currentlyEmployed": "מועסק שם כיום?",
       "paidOnBreak": "משלמים לך על זמן ההפסקה?",
       "addButton": "הוסף",
-      "discard": "חזור",
-      "edit": "עריכה" 
+      "discard": "חזרה",
+      "edit": "עריכה",
+      "timeUnits": {
+        "years": "שנים",
+        "days": "ימים",
+        "hours": "שעות",
+        "minutes": "דקות",
+        "and": "ו-"
+      }
     },
     "shiftStackDict": {
         "shifts": "משמרות",
@@ -103,12 +112,20 @@
         "BreakS": "תחילת הפסקה",
         "BreakE": "סיום הפסקה",
         "paidOnBreak": "תשלום על הפסקה",
-        "iWorkedOn": "עבדתי על",
-        "notes": "הערות",
+        "edit": "עריכה",
         "save": "שמור",
-        "discard": "חזור",
+        "discard": "חזרה",
         "addShift": "הוספת משמרת",
-        "removeShift": "מחיקת משמרות"
+        "addShiftTo": "הוספת משמרת ל",
+        "editShift": "עריכת משמרת",
+        "removeShift": "מחיקת משמרות",
+        "timeUnits": {
+        "years": "שנים",
+        "days": "ימים",
+        "hours": "שעות",
+        "minutes": "דקות",
+        "and": "ו-"
+      }
       },
     "overview": {
       "overview": "סקירה כללית",
@@ -121,7 +138,9 @@
       "wph": "שכר שעתי",
       "startedWorkingAt": "תחילת עבודה",
       "employmentDuration": "תקופת העסקה",
-      "breaksDuration": "סה\"כ הפסקות"
+      "breaksDuration": "סה\"כ הפסקות",
+      "howToUseCalendarLabel": "איך להשתמש בלוח שנה",
+      "howToUseCalendarExplain": "לחצו על כפתורי החיצים או על החודש למעלה כדי לבחור חודש ואז לחצו על אחד הימים על מנת לקבל רשימה מלאה של משמרות עבור אותו חודש."
     }
   }
 }

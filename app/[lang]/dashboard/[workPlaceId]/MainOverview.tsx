@@ -23,22 +23,7 @@ interface MainOverviewProps {
   overviewDict: any
   workplaceDict: any
 }
-function totalHoursForPeriod(shifts: Shift[]) {
-  if (shifts.length) {
-    const dates =
-      ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts);
-    return TimeHelper.calculateTimeMultipleDates(dates);
-  }
-  return "0";
-}
-function totalBreakTime(shifts: Shift[]) {
-  if (shifts.length) {
-    const dates =
-      ShiftsManipulator.prepareBreakDatesForTotalCalculation(shifts);
-    return TimeHelper.calculateTimeMultipleDates(dates);
-  }
-  return "0";
-}
+
 const MainOverview = ({ shifts, overviewDict, workplaceDict }: MainOverviewProps) => {
   const { locale } = useCurrentLocale();
   const currentWorkPlace = useAppSelector(
@@ -66,6 +51,16 @@ const MainOverview = ({ shifts, overviewDict, workplaceDict }: MainOverviewProps
     const serializedDate = TimeHelper.serializeDate(day);
     dispatch(setCurrentDate(serializedDate));
   }
+  function totalBreakTime(shifts: Shift[]) {
+      const dates = ShiftsManipulator.prepareBreakDatesForTotalCalculation(shifts);
+      const hourlyObject = TimeHelper.calculateTimeMultipleDates(dates);
+      return TimeHelper.hourlyStringFromDict(hourlyObject, workplaceDict)
+  }
+  function totalHoursForPeriod(shifts: Shift[]) {
+      const dates = ShiftsManipulator.prepareShiftsDatesForTotalCalculation(shifts);
+      const hourlyObject = TimeHelper.calculateTimeMultipleDates(dates);
+      return TimeHelper.hourlyStringFromDict(hourlyObject, workplaceDict)
+  }
 
   return (
     <>
@@ -77,7 +72,7 @@ const MainOverview = ({ shifts, overviewDict, workplaceDict }: MainOverviewProps
             <CustomButton
               className=""
               where="right"
-              hoverText="How To Use Calender"
+              hoverText={overviewDict.howToUseCalendarLabel}
               onClick={() => setIsCalendarHelp((prev) => !prev)}
             >
               <InformationCircleIcon className="w-6" />
@@ -168,8 +163,8 @@ const MainOverview = ({ shifts, overviewDict, workplaceDict }: MainOverviewProps
         <Modal onClose={() => setIsCalendarHelp(false)}>
           <div className="w-full flex justify-center">
             <div className="p-10 max-w-lg">
-              <div className={`${pageHeader} pb-6`}>How To Use the Calendar</div>
-              {`Use the arrow buttons or the month's name that are located at the top to select a month and then click any day in order to get a full list of the month's shifts.`}
+              <div className={`${pageHeader} pb-6`}>{overviewDict.howToUseCalendarLabel}</div>
+              {overviewDict.howToUseCalendarExplain}
             </div>
           </div>
         </Modal>

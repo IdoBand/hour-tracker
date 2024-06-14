@@ -185,7 +185,7 @@ const AddEditShiftForm = ({ addOrEdit, onClose, shift, shiftStackDict }: AddEdit
       className={`min-w-[45rem] max-w-full flex flex-col rounded-br-2xl rounded-3xl p-8 bg-light lg:p-2 md:min-w-[5rem]`}
     >
       <h1 className={formHeader}>
-        Add a Shift to{" "}
+        {addOrEdit === "add" ? shiftStackDict.addShiftTo : shiftStackDict.editShift}{" "}
         {useAppSelector((state) => state.workPlaceSlice.currentWorkPlace?.name)}
       </h1>
       <div
