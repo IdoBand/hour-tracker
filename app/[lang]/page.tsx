@@ -5,6 +5,7 @@ import { MotionDiv } from "@/components/MotionDiv";
 import StartTracking from "./StartTracking";
 import { getDictionary } from "@/lib/dictionary";
 import { Locale } from "@/i18n.config";
+
 ////////////////////////////////////////////////////////////////////////////////////////
 interface BulletProps {
   header: string;
@@ -67,7 +68,7 @@ export default async function Home({
 }: {
   params: { lang: Locale }
 }) {
-
+  
   const { navigation , page } = await getDictionary(lang);
   const { home } = page;
   

@@ -1,21 +1,28 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { i18n } from "@/i18n.config";
-
 import Modal from "./Modal";
 import { useState } from "react";
 import Link from "next/link";
 import Button from "./Button";
+import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
 import il from "public/flags/IL.png";
 import us from "public/flags/US.png";
 import ae from "public/flags/AE.png";
 import Image from "next/image";
+import { Locale } from "@/i18n.config";
+import { useCookies } from 'next-client-cookies';
 type LocaleSwitcherProps = {
   localeDict: any
 }
 export default function LocaleSwitcher({ localeDict }: LocaleSwitcherProps) {
+  const cookies = useCookies()
   const pathName = usePathname();
   const [warningModal, setWarningModal] = useState<boolean>(false);
+  const [localePulldown, setLocalePulldown] = useState<boolean>(false)
+  function setLocaleInCookies(locale: Locale) {
+    cookies.set('locale', locale)
+  }
   const [redirectURL, setRedirectURL] = useState<string>("");
 
   function getCurrentLocale() {
@@ -24,7 +31,8 @@ export default function LocaleSwitcher({ localeDict }: LocaleSwitcherProps) {
     return segments[1];
   }
 
-  function redirectLanguage(locale: any) {
+  function redirectLanguage(locale: Locale) {
+    setLocaleInCookies(locale)
     if (!pathName) return "/";
     const segments = pathName.split("/");
     if (locale === segments[1]) {
@@ -37,21 +45,32 @@ export default function LocaleSwitcher({ localeDict }: LocaleSwitcherProps) {
 
   return (
     <>
-      <select
-        onChange={(e) => redirectLanguage(e.target.value)}
-        value={getCurrentLocale()}
-      >
+    <div className={`relative z-40 bg-white p-1 rounded-md min-w-max`} onClick={() => {setLocalePulldown(curr => !curr)}}>
+      {localePulldown ?
+      <div className="absolute top-0 border border-gray-400 rounded-md gap-1 p-1 min-w-max bg-white">
+        <span className="text-danger font-medium w-full flex flex-row-reverse cursor-pointer"
+          onClick={(e) => {e.stopPropagation(); setLocalePulldown(false)}}
+        >X</span>
         {i18n.locales.map((locale) => (
-          <option
-            key={`locale-${locale}`}
-            value={locale}
-            className="select-item"
+          <div
+          key={`locale-${locale}`}
+          className="select-item flex rtl:flex-row-reverse cursor-pointer gap-1"
+          onClick={() => redirectLanguage(locale as Locale)}
           >
+            <Image src={IMG[locale].flag} alt={IMG[locale].alt} width={20} />
             {locale}
-            {/* <Image src={IMG[locale].flag} alt={IMG[locale].alt} width={20} /> */}
-          </option>
+          </div>
         ))}
-      </select>
+      </div>
+    :
+      <div className="flex rtl:flex-row-reverse gap-1">
+        <Image src={IMG[getCurrentLocale()  as 'en'].flag} alt={IMG[getCurrentLocale() as 'en'].alt} width={20} />
+        {getCurrentLocale()}
+        <ArrowDownCircleIcon className="w-5" />
+      </div>
+    }
+    </div>
+      
       {warningModal && (
         <Modal onClose={() => setWarningModal(false)}>
           <div className="p-8 flex flex-col text-center gap-y-6">

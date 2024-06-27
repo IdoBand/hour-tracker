@@ -10,6 +10,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { Toaster } from "@/components/ui/toaster";
 import { Locale, i18n } from "@/i18n.config";
+import { CookiesProvider } from 'next-client-cookies/server';
+import { cookies } from "next/headers";
 export const metadata = {
   title: "Hour Tracker",
   description: "Track Your Work",
@@ -28,26 +30,35 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { lang: Locale };
 }) {
+  const cookieStore = cookies()
+  let locale
+  if (cookieStore.has('locale')) {
+    locale = params.lang
+  } else {
+    locale = params.lang
+  }
 
-  
   const session = await getServerSession(authOptions);
+  
   return (
-    <html lang={params.lang} dir={dir[params.lang]}>
-          <body
-            className={`${inter.className} bg-light text-dark ${scrollBar}`}
-          >
-        <SessionProvider session={session}>
-          <Providers>
-            {/* @ts-expect-error Server Component */}
-            <Navbar lang={params.lang} />
-            <div className="min-h-[calc(99vh-90px)] ">{children}</div>
-            <Footer />
-            <div id="modal-portal" className="z-50" />
-            <div id="spinner-portal" className="relative z-[100]" />
-            <Toaster />
-          </Providers>
-        </SessionProvider>
-          </body>
+    <html lang={locale} dir={dir[locale as 'en']}>
+        <body
+          className={`${inter.className} bg-light text-dark ${scrollBar}`}
+        >
+          <CookiesProvider>
+            <SessionProvider session={session}>
+              <Providers>
+                {/* @ts-expect-error Server Component */}
+                <Navbar lang={locale} />
+                <div className="min-h-[calc(99vh-90px)] ">{children}</div>
+                <Footer />
+                <div id="modal-portal" className="z-50" />
+                <div id="spinner-portal" className="relative z-[100]" />
+                <Toaster />
+              </Providers>
+            </SessionProvider>
+          </CookiesProvider>
+        </body>
     </html>
   );
 }

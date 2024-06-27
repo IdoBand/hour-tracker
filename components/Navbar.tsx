@@ -16,7 +16,6 @@ export default async function Navbar({ lang }: { lang: Locale }) {
   const { navigation } = await getDictionary(lang);
   const session = await getServerSession(authOptions)
   return (
-    <>
       <header
         className={`w-full ${flexCenter}  border-b border-solid border-grayBorder z-20 bg-light`}
       >
@@ -48,6 +47,5 @@ export default async function Navbar({ lang }: { lang: Locale }) {
           </div>
         </div>
       </header>
-    </>
   );
 }

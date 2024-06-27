@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
 import { i18n } from "@/i18n.config";
-
 import { match as matchLocale } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
+import { cookies } from 'next/headers'
 
 function getLocale(request: NextRequest): string | undefined {
   const negotiatorHeaders: Record<string, string> = {};
@@ -19,15 +18,20 @@ function getLocale(request: NextRequest): string | undefined {
 }
 
 export function middleware(request: NextRequest) {
+
+  const cookieStore = request.cookies
+  const localeFromCookies = cookieStore.get('locale') ? cookieStore.get('locale')!.value : ''
   const pathname = request.nextUrl.pathname;
+  
   const pathnameIsMissingLocale = i18n.locales.every(
     (locale) =>
       !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
 
-  // Redirect if there is no locale
+  // Redirect if there is no locale in url
   if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
+    // if there is no locale in cookies redirect to default (en)
+    const locale = localeFromCookies ? localeFromCookies : getLocale(request);
     return NextResponse.redirect(
       new URL(
         `/${locale}${pathname.startsWith("/") ? "" : "/"}${pathname}`,
